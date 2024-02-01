@@ -1,14 +1,15 @@
 <script setup lang="ts">
-const users = ref({});
+import Editor from '@tinymce/tinymce-vue';
+// const users = ref({});
 const username = ref('');
 const password = ref('');
 
-const fetchUsers = async () => {
-  const { data } = await useFetch('/api/users');
-  return users.value = data;
-};
+// const fetchUsers = async () => {
+//   const { data } = await useFetch('/api/users');
+//   users.value = data;
+// };
 
-fetchUsers();
+// fetchUsers();
 
 const handleSubmit = async () => {
   useFetch('/api/users', {
@@ -19,13 +20,15 @@ const handleSubmit = async () => {
     }
   });
   
-  fetchUsers();
+  // fetchUsers();
+  username.value = '';
+  password.value = '';
 }
 
 </script>
 
 <template>
-  <div class="content">{{users}}
+  <div class="content">{{username}}
     <form @submit.prevent="handleSubmit">
       <label>Username
         <input v-model="username" type="text">
@@ -37,11 +40,26 @@ const handleSubmit = async () => {
       <br>
       <button type="submit">Submit</button>
     </form>
+    <div class="editor">
+      <Editor 
+      api-key="j9zmlsfscynrcssyawis2dp00r22qej7ry4srjvz4k06rbo6"
+      :init="{
+        plugins: 'lists link image table code help wordcount autolink autosave media preview',
+        toolbar_mode: 'sliding',
+        language: 'ru'
+      }"
+    />
+    </div>
   </div>
 </template>
 
 <style>
 .content {
   text-align: center;
+}
+
+.editor {
+  max-width: 1000px;
+  margin: 0 auto;
 }
 </style>

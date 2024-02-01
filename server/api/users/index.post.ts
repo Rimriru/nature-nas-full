@@ -5,12 +5,6 @@ interface RequestBody {
   password: string;
 };
 
-interface userDataFromDb {
-  _id: string;
-  username: string;
-  password: string;
-};
-
 export default defineEventHandler(async (evt) => {
   console.log("POST /api/users");
   const { username, password } = await readBody<RequestBody>(evt);

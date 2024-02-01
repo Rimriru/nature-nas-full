@@ -15,6 +15,7 @@
     "vue-router": "^4.2.5"
   },
   "dependencies": {
+    "@tinymce/tinymce-vue": "^5.1.1",
     "mongoose": "^8.1.1",
     "mongoose-bcrypt": "^1.11.0"
   }
