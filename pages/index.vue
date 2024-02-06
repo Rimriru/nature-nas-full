@@ -1,12 +1,46 @@
 <script setup lang="ts">
-import Editor from '@tinymce/tinymce-vue';
+import CanvasOne from '~/components/CanvasOne.vue';
+import CanvasTwo from '~/components/CanvasTwo.vue';
+// import Editor from '@tinymce/tinymce-vue';
+
+const router = useRouter();
 const route = ref('');
-const canvas = ref('');
+const canvas = ref('canvas1');
+const routes = ref(router.getRoutes());
+
+const canvasToComponent = {
+  canvas1: CanvasOne,
+  canvas2: CanvasTwo
+};
+
+const getAllRoutes = () => {
+  routes.value = router.getRoutes();
+};
+
+const handleCreatePageFormSubmit = () => {
+  if (router.hasRoute(route.value)) {
+    // TODO: сделать нормальный попап
+    return alert('Такая страница уже существует');
+  } else {
+    router.addRoute({
+      name: route.value,
+      path: `/${route.value}`,
+      component: canvasToComponent[canvas.value as keyof typeof canvasToComponent]
+    });
+    route.value = '';
+    getAllRoutes();
+  }
+};
+
+const handleRouteRemove = (name: string) => {
+  router.removeRoute(name);
+  getAllRoutes();
+};
 </script>
 
 <template>
   <div class="content">
-    <form novalidate>
+    <form novalidate @submit.prevent="handleCreatePageFormSubmit">
       <label class="route-input"
         >http://www.nature-nas.by/
         <input v-model="route" type="text" placeholder="Название страницы латинницей" required />
@@ -15,7 +49,7 @@ const canvas = ref('');
       <fieldset>
         <p>Выберите шаблон страницы:</p>
         <label>
-          <input v-model="canvas" type="radio" value="canvas1" name="canvas" checked />
+          <input v-model="canvas" type="radio" value="canvas1" name="canvas" />
         </label>
         <label>
           <input v-model="canvas" type="radio" value="canvas2" name="canvas" />
@@ -35,7 +69,18 @@ const canvas = ref('');
       </fieldset>
       <button type="submit">Создать страницу</button>
     </form>
-    <div class="editor">
+    <ol>
+      <li v-for="{ name, path } in routes" :key="name">
+        {{ path }}
+        <button
+          v-if="!path.startsWith('/admin') && path !== '/'"
+          @click="handleRouteRemove(name as string)"
+          class="remove-btn-small"
+        ></button>
+      </li>
+    </ol>
+
+    <!-- <div class="editor">
       <Editor
         api-key="j9zmlsfscynrcssyawis2dp00r22qej7ry4srjvz4k06rbo6"
         :init="{
@@ -44,7 +89,7 @@ const canvas = ref('');
           language: 'ru'
         }"
       />
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -72,6 +117,28 @@ const canvas = ref('');
 
 fieldset {
   border: none;
+}
+
+ol {
+  /* list-style: none; */
+  padding-left: 0;
+}
+
+.remove-btn-small {
+  margin-left: 5px;
+  background-image: url('~/assets/images/remove-btn.svg');
+  background-repeat: no-repeat;
+  width: 24px;
+  height: 24px;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.remove-btn-small:hover {
+  cursor: pointer;
+  opacity: 0.7;
 }
 
 .editor {

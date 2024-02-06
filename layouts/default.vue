@@ -1,12 +1,5 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
-  <div class="layout">
+  <div>
     <slot />
   </div>
 </template>
-
-<style>
-</style>
