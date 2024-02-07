@@ -6,7 +6,7 @@ import CanvasTwo from '~/components/CanvasTwo.vue';
 const router = useRouter();
 const route = ref('');
 const canvas = ref('canvas1');
-const routes = ref(router.getRoutes());
+const routes = ref<any[]>([]);
 
 const canvasToComponent = {
   canvas1: CanvasOne,
@@ -15,20 +15,36 @@ const canvasToComponent = {
 
 const getAllRoutes = () => {
   routes.value = router.getRoutes();
+  console.log(router.getRoutes());
 };
 
-const handleCreatePageFormSubmit = () => {
+// TODO: disable submit button when the input isn't valid
+// router.hasRoute(route.value) не видит только что добавленные роуты
+// следовательно не может их валидировать
+const handleCreatePageFormSubmit = async () => {
   if (router.hasRoute(route.value)) {
     // TODO: сделать нормальный попап
     return alert('Такая страница уже существует');
   } else {
+    const routeName = route.value.charAt(0).toUpperCase() + route.value.slice(1);
+    const routePath = `/${route.value}`;
+    const componentCanvas = canvas.value as keyof typeof canvasToComponent;
     router.addRoute({
-      name: route.value,
-      path: `/${route.value}`,
+      name: routeName,
+      path: routePath,
       component: canvasToComponent[canvas.value as keyof typeof canvasToComponent]
-    });
+    }); // component заменить
+    await useFetch('/api/routes', {
+      method: 'post',
+      body: {
+        name: routeName,
+        path: routePath,
+        component: canvasToComponent[canvas.value as keyof typeof canvasToComponent]
+      }
+    }); // component заменить
     route.value = '';
     getAllRoutes();
+    //routes.value = data as any;
   }
 };
 
@@ -36,6 +52,10 @@ const handleRouteRemove = (name: string) => {
   router.removeRoute(name);
   getAllRoutes();
 };
+
+onMounted(() => {
+  getAllRoutes();
+});
 </script>
 
 <template>
