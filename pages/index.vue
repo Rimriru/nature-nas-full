@@ -19,32 +19,32 @@ const getAllRoutes = () => {
 };
 
 // TODO: disable submit button when the input isn't valid
-// router.hasRoute(route.value) не видит только что добавленные роуты
-// следовательно не может их валидировать
+
 const handleCreatePageFormSubmit = async () => {
   if (router.hasRoute(route.value)) {
     // TODO: сделать нормальный попап
     return alert('Такая страница уже существует');
   } else {
-    const routeName = route.value.charAt(0).toUpperCase() + route.value.slice(1);
+    const routeName = route.value;
     const routePath = `/${route.value}`;
     const componentCanvas = canvas.value as keyof typeof canvasToComponent;
     router.addRoute({
       name: routeName,
       path: routePath,
-      component: canvasToComponent[canvas.value as keyof typeof canvasToComponent]
-    }); // component заменить
+      component: canvasToComponent[componentCanvas]
+    });
     await useFetch('/api/routes', {
       method: 'post',
       body: {
         name: routeName,
         path: routePath,
-        component: canvasToComponent[canvas.value as keyof typeof canvasToComponent]
+        file: canvasToComponent[componentCanvas]
       }
-    }); // component заменить
+    });
     route.value = '';
     getAllRoutes();
-    //routes.value = data as any;
+    // console.log(await useFetch('/api/routes'));
+    // routes.value = data as any;
   }
 };
 
