@@ -1,0 +1,13 @@
+@use '../variables.scss' as *;
+
+.menu-button {
+  color: #fff;
+  background-color: $dark-blue;
+  width: clamp(200px, 20vw, 320px);
+  border-radius: 15px;
+  padding-block: 12px;
+
+  &_active {
+    background-color: $light-blue;
+  }
+}
