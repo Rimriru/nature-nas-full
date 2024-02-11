@@ -1,9 +1,5 @@
 <script setup lang="ts">
-const ADMIN_PAGES = [
-  { id: 'page-creation', title: 'СОЗДАТЬ СТРАНИЦУ' },
-  { id: 'pages-list', title: 'СПИСОК СТРАНИЦ' },
-  { id: 'add-news', title: 'ДОБАВИТЬ НОВОСТЬ' }
-];
+import ADMIN_PAGES from '~/utils/constants';
 
 const whatPageIsShown = ref('page-creation');
 
@@ -25,6 +21,7 @@ const handleMenuButtonClick = (pageId: string) => {
       </li>
     </ul>
     <PageCreation v-if="whatPageIsShown === 'page-creation'" />
+    <PagesList v-if="whatPageIsShown === 'pages-list'" />
   </div>
 </template>
 

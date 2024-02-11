@@ -1,5 +1,5 @@
 import { routes } from '../../models/index';
-import type RouteDataFromDb from '~/components/PageCreation/PageCreation.types';
+import type RouteDataFromDb from '~/types/RouteDataFromDb';
 
 export default defineEventHandler(async () => {
   console.log('GET /api/routes');

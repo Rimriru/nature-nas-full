@@ -17,21 +17,21 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-input {
-  appearance: none;
-  border: none;
-  outline: none;
-  background: none;
-}
-
 button {
   border: none;
   outline: none;
   background: none;
   cursor: pointer;
+  padding: 0;
+}
+
+fieldset {
+  border: none;
+  padding: 0;
 }
 
 ul,
 ol {
   list-style: none;
+  padding-left: 0;
 }

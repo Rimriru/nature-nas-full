@@ -1,23 +1,15 @@
 <script setup lang="ts">
 import CanvasOne from '~/components/CanvasOne.vue';
 import CanvasTwo from '~/components/CanvasTwo.vue';
-import type RouteDataFromDb from './PageCreation';
 // import Editor from '@tinymce/tinymce-vue';
 
 const router = useRouter();
 const route = ref('');
 const canvas = ref('canvas1');
-const routes = ref<RouteDataFromDb[]>([]);
 
 const canvasToComponent = {
   canvas1: CanvasOne,
   canvas2: CanvasTwo
-};
-
-const getAllRoutes = async () => {
-  const { data: routesFromDb } = await useFetch('/api/routes');
-  console.log(routesFromDb);
-  //routes.value = routesFromDb;
 };
 
 // TODO: disable submit button when the input isn't valid
@@ -30,11 +22,11 @@ const handleCreatePageFormSubmit = async () => {
     const routeName = route.value;
     const routePath = `/${route.value}`;
     const componentCanvas = canvas.value as keyof typeof canvasToComponent;
-    router.addRoute({
-      name: routeName,
-      path: routePath,
-      component: canvasToComponent[componentCanvas]
-    });
+    // router.addRoute({
+    //   name: routeName,
+    //   path: routePath,
+    //   component: canvasToComponent[componentCanvas]
+    // });
     await useFetch('/api/routes', {
       method: 'post',
       body: {
@@ -44,64 +36,48 @@ const handleCreatePageFormSubmit = async () => {
       }
     });
     route.value = '';
-    await getAllRoutes();
-    // console.log(await useFetch('/api/routes'));
-    // routes.value = data as any;
   }
 };
-
-const handleRouteRemove = async (name: string) => {
-  router.removeRoute(name);
-  await getAllRoutes();
-};
-
-onMounted(async () => {
-  await getAllRoutes();
-});
 </script>
 
 <template>
-  <div class="content">
+  <div class="page-creation">
     <p>Ты на странице создания</p>
-    <form novalidate @submit.prevent="handleCreatePageFormSubmit">
-      <label class="route-input"
+    <form class="page-creation__form" novalidate @submit.prevent="handleCreatePageFormSubmit">
+      <label class="page-creation__text-filed"
         >http://www.nature-nas.by/
         <input v-model="route" type="text" placeholder="Название страницы латинницей" required />
         <span class="required">*</span>
       </label>
-      <fieldset>
+      <fieldset class="page-creation__canvases">
         <p>Выберите шаблон страницы:</p>
-        <label>
+        <label class="page-creation__canvas">
           <input v-model="canvas" type="radio" value="canvas1" name="canvas" />
+          <img src="../assets/images/canvas-1.png" />
         </label>
-        <label>
+        <label class="page-creation__canvas">
           <input v-model="canvas" type="radio" value="canvas2" name="canvas" />
+          <img src="../assets/images/canvas-2.png" />
         </label>
-        <label>
+        <label class="page-creation__canvas">
           <input v-model="canvas" type="radio" value="canvas3" name="canvas" />
+          <img src="../assets/images/canvas-3.png" />
         </label>
-        <label>
+        <label class="page-creation__canvas">
           <input v-model="canvas" type="radio" value="canvas4" name="canvas" />
+          <img src="../assets/images/canvas-4.png" />
         </label>
-        <label>
+        <label class="page-creation__canvas">
           <input v-model="canvas" type="radio" value="canvas5" name="canvas" />
+          <img src="../assets/images/canvas-5.png" />
         </label>
-        <label>
+        <label class="page-creation__canvas">
           <input v-model="canvas" type="radio" value="canvas6" name="canvas" />
+          <img src="../assets/images/canvas-6.png" />
         </label>
       </fieldset>
-      <button type="submit">Создать страницу</button>
+      <button class="page-creation__submit-btn" type="submit">Создать страницу</button>
     </form>
-    <ol>
-      <li v-for="{ name, path } in routes" :key="name">
-        {{ path }}
-        <button
-          v-if="!path.startsWith('/admin') && path !== '/'"
-          @click="handleRouteRemove(name as string)"
-          class="remove-btn-small"
-        ></button>
-      </li>
-    </ol>
 
     <!-- <div class="editor">
       <Editor
@@ -116,57 +92,6 @@ onMounted(async () => {
   </div>
 </template>
 
-<style>
-.content {
-  text-align: center;
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-}
-
-.required {
-  color: red;
-}
-
-.route-input input {
-  width: clamp(100px, 15vw, 230px);
-  padding-block: 8px;
-  border-radius: 10px;
-  border: none;
-  outline: black solid 1px;
-  margin-bottom: 30px;
-  margin-right: 5px;
-}
-
-fieldset {
-  border: none;
-}
-
-ol {
-  /* list-style: none; */
-  padding-left: 0;
-}
-
-.remove-btn-small {
-  margin-left: 5px;
-  background-image: url('~/assets/images/remove-btn.svg');
-  background-repeat: no-repeat;
-  width: 24px;
-  height: 24px;
-  background-color: transparent;
-  border: none;
-  padding: 0;
-  transition: opacity 0.3s ease-in-out;
-}
-
-.remove-btn-small:hover {
-  cursor: pointer;
-  opacity: 0.7;
-}
-
-.editor {
-  max-width: 1000px;
-  margin: 0 auto;
-}
+<style lang="scss">
+@import url('../assets/styles/components/pageCreation.scss');
 </style>
-./PageCreation.types
