@@ -8,7 +8,7 @@ export default defineEventHandler(async () => {
     const allCustomRoutes: RouteDataFromDb[] = await routes.find();
     return allCustomRoutes;
   } catch (error: any) {
-    console.dir(error);
+    console.error(error);
     throw createError({
       statusCode: 500,
       statusMessage: error.message

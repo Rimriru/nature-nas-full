@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import CanvasOne from '~/components/CanvasOne.vue';
 import CanvasTwo from '~/components/CanvasTwo.vue';
+import { useRouteFind } from '~/composables/routes';
 // import Editor from '@tinymce/tinymce-vue';
 
-const router = useRouter();
+const { data } = useNuxtData('routes');
 const route = ref('');
 const canvas = ref('canvas1');
 
@@ -12,21 +13,18 @@ const canvasToComponent = {
   canvas2: CanvasTwo
 };
 
+console.log(useRouteFind(data.value, route.value));
+
 // TODO: disable submit button when the input isn't valid
 
 const handleCreatePageFormSubmit = async () => {
-  if (router.hasRoute(route.value)) {
+  if (!useRouteFind(data.value, route.value)) {
     // TODO: сделать нормальный попап
     return alert('Такая страница уже существует');
   } else {
     const routeName = route.value;
     const routePath = `/${route.value}`;
     const componentCanvas = canvas.value as keyof typeof canvasToComponent;
-    // router.addRoute({
-    //   name: routeName,
-    //   path: routePath,
-    //   component: canvasToComponent[componentCanvas]
-    // });
     await useFetch('/api/routes', {
       method: 'post',
       body: {

@@ -3,8 +3,7 @@ import type RouteDataFromDb from '~/types/RouteDataFromDb';
 const routes = ref<RouteDataFromDb[]>([]);
 
 const getAllRoutes = async () => {
-  const { data: routesFromDb } = await useFetch('/api/routes');
-  //console.log(routesFromDb.value);
+  const { data: routesFromDb } = useNuxtData('routes');
   routes.value = routesFromDb.value as RouteDataFromDb[];
 };
 
