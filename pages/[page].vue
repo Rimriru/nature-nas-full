@@ -1,29 +1,18 @@
 <script setup lang="ts">
-import { useRoutes, useRouteFind } from '~/composables/routes';
-import type RouteDataFromDb from '~/types/RouteDataFromDb';
+import { useRouteFind, useAllRoutes } from '~/composables/routes';
 
 definePageMeta({
   middleware: async (to) => {
-    const routesStore = useRoutes();
-    const { data } = await useAsyncData('routes', async () => {
-      // const oldRoutes = useNuxtData('routes').data.value;
-      // if (oldRoutes) {
-      //   routes.value = oldRoutes;
-      //   return oldRoutes;
-      // }
-      const lookingForRoutes = await $fetch('/api/routes');
-      routesStore.value = lookingForRoutes;
-      return lookingForRoutes;
-    });
+    const routes = await useAllRoutes();
 
-    if (routesStore.value === null) {
+    if (routes === null) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Произошла ошибка при обращении к GET "/api/routes"'
+        statusMessage: `Произошла ошибка при обращении к GET "/api/routes". Routes = ${routes}`
       });
     }
 
-    const isInDb = useRouteFind(routesStore.value, to.path);
+    const isInDb = useRouteFind(routes, to.path);
 
     if (!isInDb) {
       throw createError({

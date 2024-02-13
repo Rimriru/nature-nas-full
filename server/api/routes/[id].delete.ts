@@ -6,7 +6,7 @@ export default defineEventHandler(async (evt) => {
   try {
     console.log('Delete route');
     const deletedRoute = await routes.findByIdAndDelete(id);
-    return { message: 'Страница удалена' };
+    return deletedRoute;
   } catch (error: any) {
     console.error(error);
     throw createError({

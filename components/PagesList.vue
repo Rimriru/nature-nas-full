@@ -1,29 +1,19 @@
 <script setup lang="ts">
-import type RouteDataFromDb from '~/types/RouteDataFromDb';
-const routes = ref<RouteDataFromDb[]>([]);
-
-const getAllRoutes = async () => {
-  const { data: routesFromDb } = useNuxtData('routes');
-  routes.value = routesFromDb.value as RouteDataFromDb[];
-};
+const props = defineProps(['routesFromDb']);
+const emit = defineEmits(['remove']);
 
 const handleRouteRemove = async (routeId: string) => {
-  const routeRemovalRequest = await useFetch(`/api/routes/${routeId}`, {
+  const removedRoute = await useFetch(`/api/routes/${routeId}`, {
     method: 'delete'
   });
-  console.log(routeRemovalRequest);
-  await getAllRoutes();
+  emit('remove', removedRoute.data.value);
 };
-
-onMounted(async () => {
-  await getAllRoutes();
-});
 </script>
 
 <template>
   <ol class="pages-list">
     Список созданных страниц:
-    <li v-for="{ name, path, _id } in routes" :key="name">
+    <li v-for="{ path, _id } in props.routesFromDb" :key="_id">
       {{ path }}
       <button
         v-if="!path.startsWith('/admin')"
