@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import { useRouteFind, useAllRoutes } from '~/composables/routes';
+import { useRouteFindByPath, useAllRoutes } from '~/composables/routes';
+import type RouteDataFromDb from '~/types/RouteDataFromDb';
+
+const nuxtApp = useNuxtApp();
+const { component } = nuxtApp.$currentPage as RouteDataFromDb;
+
+const CanvasComponent = defineAsyncComponent(() => import(`~/components/${component}.vue`));
 
 definePageMeta({
   middleware: async (to) => {
     const routes = await useAllRoutes();
+    const nuxtApp = useNuxtApp();
 
     if (routes === null) {
       throw createError({
@@ -12,7 +19,8 @@ definePageMeta({
       });
     }
 
-    const isInDb = useRouteFind(routes, to.path);
+    const isInDb = useRouteFindByPath(routes, to.path);
+    nuxtApp.provide('currentPage', isInDb);
 
     if (!isInDb) {
       throw createError({
@@ -25,5 +33,8 @@ definePageMeta({
 </script>
 
 <template>
-  <p>{{ $route.params.page }}</p>
+  <main>
+    <p>{{ $route.params.page }}</p>
+    <CanvasComponent :heading="'hi!!'" :description="'Lol, how about that'" :plain-text="'LOL'" />
+  </main>
 </template>

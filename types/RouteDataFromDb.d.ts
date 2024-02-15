@@ -1,10 +1,7 @@
 interface RouteDataFromDb {
   name: string;
   path: string;
-  file?: {
-    __hmrId?: string;
-    __file?: string;
-  };
+  component: string;
   _id: string;
 }
 

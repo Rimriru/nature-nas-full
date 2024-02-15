@@ -13,11 +13,11 @@ const handleRouteRemove = async (routeId: string) => {
 <template>
   <ol class="pages-list">
     Список созданных страниц:
-    <li v-for="{ path, _id } in props.routesFromDb" :key="_id">
+    <li v-for="{ path, _id: id } in props.routesFromDb" :key="id">
       {{ path }}
       <button
         v-if="!path.startsWith('/admin')"
-        @click="handleRouteRemove(_id)"
+        @click="handleRouteRemove(id)"
         class="remove-btn-small"
       ></button>
     </li>
@@ -29,4 +29,3 @@ const handleRouteRemove = async (routeId: string) => {
   list-style: decimal;
 }
 </style>
-../../types/PagesList

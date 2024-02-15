@@ -12,8 +12,9 @@ const routeSchema = new mongoose.Schema(
       required: [true, 'Требуется путь страницы'],
       unique: true
     },
-    file: {
-      type: mongoose.Schema.Types.Mixed
+    component: {
+      type: String,
+      required: [true, 'Требуется шаблон страницы']
     }
   },
   { versionKey: false }

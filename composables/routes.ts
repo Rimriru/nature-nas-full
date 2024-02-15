@@ -1,6 +1,6 @@
 import type RouteDataFromDb from '~/types/RouteDataFromDb';
 
-export const useRouteFind = (routes: RouteDataFromDb[], path: string) =>
+export const useRouteFindByPath = (routes: RouteDataFromDb[], path: string) =>
   routes.find((route) => route.path === path);
 
 export const useAllRoutes = async () => {
