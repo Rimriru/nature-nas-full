@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useAllRoutes } from '~/composables/routes';
 import ADMIN_PAGES from '~/utils/constants';
 import type RouteDataFromDb from '~/types/RouteDataFromDb';
 

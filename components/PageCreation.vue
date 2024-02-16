@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useRouteFindByPath } from '~/composables/routes';
-
 const route = ref('');
 const canvas = ref('CanvasOne');
 

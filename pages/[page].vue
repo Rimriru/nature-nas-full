@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useRouteFindByPath, useAllRoutes } from '~/composables/routes';
 import type RouteDataFromDb from '~/types/RouteDataFromDb';
 
 const nuxtApp = useNuxtApp();

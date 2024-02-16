@@ -3,8 +3,8 @@
 <template>
   <main>
     <p>Ты на главной!</p>
-    <NuxtLink to="/puull">To correct</NuxtLink>
-    <NuxtLink to="/kekawo">To false</NuxtLink>
+    <NuxtLink to="/admin">To admin</NuxtLink>
+    <NuxtLink to="/look">To Canvas One</NuxtLink>
   </main>
 </template>
 

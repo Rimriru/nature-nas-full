@@ -1,28 +1,22 @@
 <script setup lang="ts">
-import Editor from '@tinymce/tinymce-vue';
+type Section = {
+  title: string;
+  text: string;
+};
 
 const heading = ref('');
 const description = ref('');
 const plainText = ref('');
 const photos = ref(null);
-const sectionButtons = ref(['first', 'second']);
-const sections = ref([
-  { title: 'first', text: 'First' },
-  { title: 'second', text: 'Second' }
-]);
+const sections: Ref<Section[]> = ref([]);
 const isInEditMode = ref(false);
 const whatSectionShown = ref('');
+const isAddSectionPopupOpened = usePopupOpeningState();
 
 const props = defineProps(['heading', 'description', 'plainText']);
 
 const onPhotosSelected = (event: any) => (photos.value = event.target.files);
 const changeEditModeState = () => (isInEditMode.value = !isInEditMode.value);
-
-const handleclock = (button: any) => {
-  whatSectionShown.value = button;
-  console.log(button);
-  console.log(whatSectionShown.value);
-};
 </script>
 
 <template>
@@ -38,16 +32,7 @@ const handleclock = (button: any) => {
         <p v-else class="canvas__description">
           {{ description }}
         </p>
-        <Editor
-          v-if="isInEditMode"
-          v-model="plainText"
-          api-key="j9zmlsfscynrcssyawis2dp00r22qej7ry4srjvz4k06rbo6"
-          :init="{
-            plugins: 'lists link image table code help wordcount autolink autosave media preview',
-            toolbar_mode: 'sliding',
-            language: 'ru'
-          }"
-        />
+        <ContentEditor v-if="isInEditMode" v-model="plainText" />
         <p v-else class="canvas__plain-text">
           {{ plainText }}
         </p>
@@ -61,11 +46,18 @@ const handleclock = (button: any) => {
           </template>
         </Carousel> -->
         <div class="canvas__sections">
-          <ul class="canvas__sections-titles">
-            <li v-for="button in sectionButtons" :key="button">
-              <button type="button" @click="handleclock(button)">{{ button }}</button>
-            </li>
-          </ul>
+          <div>
+            <ul class="canvas__sections-titles">
+              <li v-for="{ title } in sections" :key="title">
+                <button type="button" @click="() => (whatSectionShown = title)">{{ title }}</button>
+              </li>
+            </ul>
+            <button
+              class="canvas__sections-add"
+              @click="isAddSectionPopupOpened = true"
+              type="button"
+            ></button>
+          </div>
           <p class="canvas__sections-text">
             {{
               sections.length
@@ -73,11 +65,6 @@ const handleclock = (button: any) => {
                 : ''
             }}
           </p>
-          <!-- <ul class="canvas__sections-text">
-            <li v-for="{ title, text } in sections" :key="text" v-show="whatSectionShown === title">
-              {{ text }}
-            </li>
-          </ul> -->
         </div>
         <button v-if="!isInEditMode" @click="changeEditModeState" type="button">
           Редактировать
@@ -90,3 +77,18 @@ const handleclock = (button: any) => {
     </article>
   </div>
 </template>
+
+<style>
+.canvas__sections-add {
+  background-image: url('../assets/images/add-btn-stretch.svg');
+  background-size: 100%;
+  background-repeat: no-repeat;
+  width: clamp(100px, 15vw, 150px);
+  transition: opacity 0.3s ease;
+  height: 35px;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+</style>
