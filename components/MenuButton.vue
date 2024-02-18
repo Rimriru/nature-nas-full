@@ -1,14 +1,28 @@
 <script setup lang="ts">
+type ButtonType = 'button' | 'submit' | 'reset';
 defineProps({
-  id: String,
-  title: String,
-  whatPageIsShown: String
+  isActive: {
+    type: Boolean,
+    default: false
+  },
+  isSmall: {
+    type: Boolean,
+    default: false
+  },
+  buttonType: {
+    type: String as () => ButtonType,
+    default: 'button'
+  }
 });
 </script>
 
 <template>
-  <button :class="whatPageIsShown === id ? 'menu-button_active' : ''" class="menu-button">
-    {{ title }}
+  <button
+    :class="{ 'menu-button_active': isActive, 'menu-button_size_small': isSmall }"
+    class="menu-button"
+    :type="buttonType"
+  >
+    <slot />
   </button>
 </template>
 

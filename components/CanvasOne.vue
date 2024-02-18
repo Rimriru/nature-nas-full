@@ -4,9 +4,9 @@ type Section = {
   text: string;
 };
 
-const heading = ref('');
-const description = ref('');
-const plainText = ref('');
+const heading = ref('Заголовок');
+const description = ref('Описание');
+const plainText = ref('Текст');
 const photos = ref(null);
 const sections: Ref<Section[]> = ref([]);
 const isInEditMode = ref(false);
@@ -15,70 +15,120 @@ const isAddSectionPopupOpened = usePopupOpeningState();
 
 const props = defineProps(['heading', 'description', 'plainText']);
 
+const originalStates = {
+  heading: '',
+  description: '',
+  plainText: '',
+  photos: null
+};
+
 const onPhotosSelected = (event: any) => (photos.value = event.target.files);
-const changeEditModeState = () => (isInEditMode.value = !isInEditMode.value);
+
+const onEditorInput = (val: string) => {
+  plainText.value = val;
+  console.log(plainText.value);
+  console.log(val);
+};
+const enableEditMode = () => {
+  originalStates.heading = heading.value;
+  originalStates.description = description.value;
+  originalStates.plainText = plainText.value;
+  originalStates.photos = photos.value;
+
+  isInEditMode.value = true;
+};
+
+const disableEditMode = () => (isInEditMode.value = false);
+
+const handleCancelBtnClick = () => {
+  heading.value = originalStates.heading;
+  description.value = originalStates.description;
+  plainText.value = originalStates.plainText;
+  photos.value = originalStates.photos;
+
+  disableEditMode();
+};
 </script>
 
 <template>
   <div>
-    <article class="canvas">
-      <form class="novalidate">
-        <!-- Здесь компонент карточки -->
-        <input v-if="isInEditMode" v-model="heading" type="text" />
-        <h1 v-else class="canvas__heading">
-          {{ heading }}
-        </h1>
-        <textarea v-if="isInEditMode" v-model="description" />
-        <p v-else class="canvas__description">
-          {{ description }}
-        </p>
-        <ContentEditor v-if="isInEditMode" v-model="plainText" />
-        <p v-else class="canvas__plain-text">
-          {{ plainText }}
-        </p>
-        <input v-if="isInEditMode" type="file" multiple @change="onPhotosSelected" />
-        <!-- <Carousel v-else>
-          <Slide v-for="slide in photos" :key="slide">
-            <div class="carousel__item">{{ slide }}</div>
-          </Slide>
-          <template #addons>
-            <Navigation />
-          </template>
-        </Carousel> -->
-        <div class="canvas__sections">
-          <div>
-            <ul class="canvas__sections-titles">
-              <li v-for="{ title } in sections" :key="title">
-                <button type="button" @click="() => (whatSectionShown = title)">{{ title }}</button>
-              </li>
-            </ul>
-            <button
-              class="canvas__sections-add"
-              @click="isAddSectionPopupOpened = true"
-              type="button"
-            ></button>
-          </div>
-          <p class="canvas__sections-text">
-            {{
-              sections.length
-                ? sections.find((section) => section.title === whatSectionShown)?.text
-                : ''
-            }}
-          </p>
-        </div>
-        <button v-if="!isInEditMode" @click="changeEditModeState" type="button">
-          Редактировать
-        </button>
-        <div v-else>
-          <button @click="changeEditModeState">Отменить</button>
-          <button type="submit">Сохранить</button>
-        </div>
-      </form>
+    <article v-if="!isInEditMode" class="canvas">
+      <h1 class="canvas__heading">
+        {{ heading }}
+      </h1>
+      <p class="canvas__description">
+        {{ description }}
+      </p>
+      <p class="canvas__plain-text">
+        {{ plainText }}
+      </p>
+      <Carousel>
+        <Slide v-for="slide in photos" :key="slide">
+          <div class="carousel__item">{{ slide }}</div>
+        </Slide>
+        <template #addons>
+          <Navigation />
+        </template>
+      </Carousel>
+      <MenuButton @click="enableEditMode" :is-small="true" :button-type="'button'">
+        Редактировать
+      </MenuButton>
     </article>
+    <form v-else novalidate>
+      <label for="heading">
+        Заголовок страницы
+        <input id="heading" v-model="heading" type="text" />
+      </label>
+      <label for="description">
+        Описание
+        <textarea id="description" v-model="description" />
+      </label>
+      <ClientOnly>
+        <ContentEditor v-model="plainText" />
+      </ClientOnly>
+      <label for="carousel" v-if="isInEditMode">
+        Загрузить фото для галереи:
+        <input id="carousel" type="file" multiple @change="onPhotosSelected" />
+      </label>
+      <div>
+        <MenuButton @click="handleCancelBtnClick" :is-small="true"> Отменить </MenuButton>
+        <MenuButton :is-small="true" :is-active="true" :button-type="'submit'">
+          Сохранить
+        </MenuButton>
+      </div>
+    </form>
+    <!-- Секции -->
+    <div class="canvas__sections">
+      <div class="canvas__sections-btns">
+        <ul class="canvas__sections-titles" v-if="sections.length">
+          <li v-for="{ title } in sections" :key="title">
+            <MenuButton type="button" @click="() => (whatSectionShown = title)">{{
+              title
+            }}</MenuButton>
+          </li>
+        </ul>
+        <button
+          class="canvas__sections-add"
+          @click="isAddSectionPopupOpened = true"
+          type="button"
+        ></button>
+      </div>
+      <p class="canvas__sections-text">
+        {{
+          sections.length
+            ? sections.find((section) => section.title === whatSectionShown)?.text
+            : ''
+        }}
+      </p>
+    </div>
   </div>
 </template>
 
 <style>
+.canvas__sections-btns {
+  display: flex;
+  gap: 20px;
+}
 .canvas__sections-add {
   background-image: url('../assets/images/add-btn-stretch.svg');
   background-size: 100%;

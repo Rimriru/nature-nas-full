@@ -32,7 +32,7 @@ definePageMeta({
 </script>
 
 <template>
-  <main>
+  <main class="page-content">
     <p>{{ $route.params.page }}</p>
     <CanvasComponent :heading="'hi!!'" :description="'Lol, how about that'" :plain-text="'LOL'" />
   </main>

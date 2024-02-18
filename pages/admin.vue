@@ -27,11 +27,10 @@ const handleRouteRemoval = (existingRoute: RouteDataFromDb) => {
     <ul>
       <li v-for="({ id, title }, index) in ADMIN_PAGES" :key="index">
         <MenuButton
-          :title="title"
-          :id="id"
-          :what-page-is-shown="whatPageIsShown"
+          :is-active="whatPageIsShown === id ? true : false"
           @click="handleMenuButtonClick(id)"
-        />
+          >{{ title }}</MenuButton
+        >
       </li>
     </ul>
     <PageCreation

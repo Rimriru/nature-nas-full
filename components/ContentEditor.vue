@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import Editor from '@tinymce/tinymce-vue';
 
-const props = defineProps(['output']);
+const props = defineProps({
+  output: {
+    type: String,
+    default: 'html'
+  }
+});
 </script>
 
 <template>
@@ -17,6 +22,6 @@ const props = defineProps(['output']);
       min_height: 500
     }"
     model-events="change keydown focus paste undo redo"
-    :output-format="props.output ? props.output : 'html'"
+    :output-format="props.output"
   />
 </template>
