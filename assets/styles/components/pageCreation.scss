@@ -48,20 +48,4 @@
       opacity: .7;
     }
   }
-  
-  .remove-btn-small {
-    margin-left: 5px;
-    background-image: url('~/assets/images/remove-btn.svg');
-    background-repeat: no-repeat;
-    width: 24px;
-    height: 24px;
-    background-color: transparent;
-    border: none;
-    padding: 0;
-    transition: opacity 0.3s ease-in-out;
-  
-    &:hover {
-      opacity: 0.7;
-    }
-  }
 }
