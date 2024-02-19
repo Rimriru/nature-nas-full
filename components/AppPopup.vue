@@ -2,11 +2,11 @@
 const isOpened = usePopupOpeningState();
 const isAddSectionPopupOpened = usePopupOpeningState();
 
-const handleClickOutsidePopup = () => (isAddSectionPopupOpened.value = false);
+const emit = defineEmits(['onClose']);
 </script>
 
 <template>
-  <div class="popup" :class="{ popup__opened: isOpened }" @click.self="handleClickOutsidePopup">
+  <div class="popup" :class="{ popup__opened: isOpened }" @click.self="emit('onClose')">
     <div class="popup__container">
       <slot />
     </div>

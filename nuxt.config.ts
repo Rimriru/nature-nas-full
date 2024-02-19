@@ -16,8 +16,11 @@ export default defineNuxtConfig({
     mongoDbUrl: process.env.MONGODB_URL
   },
   css: ['~/assets/styles/base.css', '~/assets/styles/main.scss'],
-  modules: ['vue3-carousel-nuxt', '@nuxt/image'],
+  modules: ['vue3-carousel-nuxt', '@nuxt/image', '@nuxt/ui'],
   nitro: {
     plugins: ['~/server/index.ts']
+  },
+  colorMode: {
+    preference: 'light'
   }
 });
