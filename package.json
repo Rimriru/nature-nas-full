@@ -17,6 +17,7 @@
     "vue-router": "^4.2.5"
   },
   "dependencies": {
+    "@iconify-json/material-symbols": "^1.1.73",
     "@nuxt/kit": "^3.10.1",
     "@nuxt/ui": "^2.13.0",
     "@tinymce/tinymce-vue": "^5.1.1",

@@ -1,19 +1,15 @@
 import mongoose from 'mongoose';
 
-const personaCardSchema = new mongoose.Schema({
+const personaSchema = new mongoose.Schema({
   name: {
-    type: String,
-  },
-  position: {
-    type: String,
-    required: [true, 'Требуется должность персоны'],
+    type: String
   },
   phoneNumber: {
     type: String,
     default: ''
   },
   faxNumber: {
-    type: String,
+    type: String
   },
   email: {
     type: String,
@@ -26,8 +22,8 @@ const personaCardSchema = new mongoose.Schema({
   photo: {
     type: mongoose.Schema.Types.Mixed,
     default: {}
-  },
+  }
 });
 
-const PersonaCard = mongoose.model('personaCard', personaCardSchema);
+const PersonaCard = mongoose.model('personaCard', personaSchema);
 export default PersonaCard;

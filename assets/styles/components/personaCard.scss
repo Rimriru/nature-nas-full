@@ -1,0 +1,32 @@
+.persona-card {
+  width: clamp(250px, 50vw, 500px);
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+
+  .persona-card__main-block {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+
+    img {
+      flex-basis: 200px;
+      border-radius: 10px;
+    }
+
+    .persona-card__info {
+      h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+      }
+
+      p {
+        font-size: 17px;
+
+        &:not(:last-child) {
+          margin-bottom: 8px;
+        }
+      }
+    }
+  }
+}
