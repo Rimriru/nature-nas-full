@@ -15,6 +15,15 @@ const routeSchema = new mongoose.Schema(
     component: {
       type: String,
       required: [true, 'Требуется шаблон страницы']
+    },
+    content: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'content',
+      default: {}
+    },
+    link: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'link'
     }
   },
   { versionKey: false }
