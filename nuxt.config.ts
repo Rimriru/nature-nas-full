@@ -2,6 +2,9 @@
 export default defineNuxtConfig({
   app: {
     head: {
+      htmlAttrs: {
+        lang: 'ru'
+      },
       title: 'Институт природопользования НАН Беларуси',
       // meta: [{ name: 'description', content: 'My amazing site.' }],
       // bodyAttrs: {
