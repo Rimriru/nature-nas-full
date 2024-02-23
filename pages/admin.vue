@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ADMIN_PAGES from '~/utils/constants';
+import { ADMIN_PAGES } from '~/utils/constants';
 import type RouteDataFromDb from '~/types/RouteDataFromDb';
 
 const whatPageIsShown = ref('page-creation');

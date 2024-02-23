@@ -4,7 +4,6 @@
   <NuxtLayout>
     <AppHeader />
     <NuxtPage />
-    <SectionForm />
     <AppFooter />
   </NuxtLayout>
 </template>

@@ -35,7 +35,7 @@ const handleSubmit = async (evt: FormSubmitEvent<any>) => {
 </script>
 
 <template>
-  <AppPopup @on-close="onClose">
+  <AppPopup @on-close="onClose" :is-opened="isAddSectionPopupOpened">
     <UForm
       :state="sectionValue"
       :validate="validate"
@@ -43,7 +43,7 @@ const handleSubmit = async (evt: FormSubmitEvent<any>) => {
       ref="form"
       @submit="handleSubmit"
     >
-      <h2 class="section-form__heading">Добавить новую секцию</h2>
+      <h3 class="section-form__heading">Добавить новую секцию</h3>
 
       <UFormGroup name="title" class="section-form__label">
         Заголовок секции
@@ -60,7 +60,7 @@ const handleSubmit = async (evt: FormSubmitEvent<any>) => {
       </UFormGroup>
 
       <div class="section-form__btns">
-        <MenuButton @click="onClose" :is-small="true">Закрыть</MenuButton>
+        <MenuButton @click="onClose" :is-small="true">Отмена</MenuButton>
         <MenuButton :is-active="true" :button-type="'submit'" :is-small="true">Добавить</MenuButton>
       </div>
     </UForm>

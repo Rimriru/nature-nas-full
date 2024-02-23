@@ -1,44 +1,41 @@
 <script setup lang="ts">
-const HEADER_LINK_GROUPS = [
+import { HEADER_LINK_GROUPS } from '~/utils/constants';
+
+const isAddLinkPopupOpened = ref(false);
+const groupingLink = reactive({
+  title: '',
+  group: ''
+});
+
+const links = reactive([
   {
-    id: 1,
-    title: 'ОБ ИНСТИТУТЕ',
-    group: 'about'
+    title: 'Учёный совет',
+    group: 'about',
+    to: '/council'
   },
   {
-    id: 2,
-    title: 'СТРУКТУРА',
-    group: 'structure'
-  },
-  {
-    id: 3,
-    title: 'НОВОСТИ',
-    group: 'news'
-  },
-  {
-    id: 4,
-    title: 'НАУЧНЫЕ ИЗДАНИЯ',
-    group: 'publications'
-  },
-  {
-    id: 5,
-    title: 'ИССЛЕДОВАНИЯ И РАЗРАБОТКИ',
-    group: 'research'
-  },
-  {
-    id: 6,
-    title: 'УСЛУГИ',
-    group: 'service'
-  },
-  {
-    id: 7,
-    title: 'КОНТАКТЫ'
-  },
-  {
-    id: 8,
-    title: 'КАРТА САЙТА'
+    title: 'Администрация',
+    group: 'structure',
+    to: '/something'
   }
-];
+]);
+
+const onAddLinkButtonClick = (mainLinkTitle: string, mainLinkGroup: string) => {
+  isAddLinkPopupOpened.value = true;
+  groupingLink.title = mainLinkTitle;
+  groupingLink.group = mainLinkGroup;
+};
+
+const onCloseBtnClick = () => {
+  isAddLinkPopupOpened.value = false;
+  groupingLink.title = '';
+  groupingLink.group = '';
+};
+
+const onAddLinkFormSubmit = (title: string, path: string) => {
+  links.push({ title, group: groupingLink.group, to: `/${path}` });
+  console.log(links);
+};
 </script>
 
 <template>
@@ -61,11 +58,22 @@ const HEADER_LINK_GROUPS = [
             <NuxtImg src="/logo.png" alt="Логотип" width="60" />
           </NuxtLink>
           <li v-for="{ id, title, group } of HEADER_LINK_GROUPS" :key="id">
-            <DropdownMenu :title="title" />
+            <DropdownMenu
+              :title="title"
+              :group="group"
+              :items="links"
+              @on-add-link="onAddLinkButtonClick"
+            />
           </li>
         </ul>
       </nav>
     </div>
+    <LinkForm
+      :is-opened="isAddLinkPopupOpened"
+      :grouping-link-title="groupingLink.title"
+      @on-close="onCloseBtnClick"
+      @on-submit="onAddLinkFormSubmit"
+    />
   </header>
 </template>
 
@@ -73,7 +81,7 @@ const HEADER_LINK_GROUPS = [
 @use '~/assets/styles/variables.scss' as *;
 
 .header {
-  color: white;
+  color: #fff;
 
   .header__top-bg {
     background-color: $dark-blue;
