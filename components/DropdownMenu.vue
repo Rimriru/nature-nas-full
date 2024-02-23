@@ -17,7 +17,7 @@ const linksOfTheGroup = computed(() => {
     <a class="dropdown-menu__main-link" href="#">{{ title }}</a>
     <ul v-if="isSubMenuVisible && group" class="dropdown-menu__sub-menu">
       <li v-for="item of linksOfTheGroup" :key="JSON.stringify(item)">
-        <NuxtLink :to="item.to" v-if="item.group === props.group">
+        <NuxtLink :to="item.to" v-if="item.group === props.group" external>
           {{ item.title }}
         </NuxtLink>
       </li>

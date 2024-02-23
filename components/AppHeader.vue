@@ -11,7 +11,7 @@ const links = reactive([
   {
     title: 'Учёный совет',
     group: 'about',
-    to: '/council'
+    to: '/look'
   },
   {
     title: 'Администрация',
