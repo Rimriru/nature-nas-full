@@ -22,7 +22,6 @@
     "@nuxt/ui": "^2.13.0",
     "@tinymce/tinymce-vue": "^5.1.1",
     "mongoose": "^8.1.1",
-    "mongoose-bcrypt": "^1.11.0",
-    "vue3-carousel-nuxt": "^1.1.0"
+    "mongoose-bcrypt": "^1.11.0"
   }
 }
