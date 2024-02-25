@@ -27,5 +27,5 @@ defineProps({
 </template>
 
 <style lang="scss">
-@import url('../assets/styles/components/menuButton.scss');
+@import url('~/assets/styles/components/menuButton.scss');
 </style>

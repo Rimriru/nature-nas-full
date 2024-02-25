@@ -18,8 +18,7 @@ const routeSchema = new mongoose.Schema(
     },
     content: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'content',
-      default: {}
+      ref: 'content'
     },
     link: {
       type: mongoose.Schema.Types.ObjectId,

@@ -1,24 +1,14 @@
 <script setup lang="ts">
 import { HEADER_LINK_GROUPS } from '~/utils/constants';
 
-const isAddLinkPopupOpened = ref(false);
 const groupingLink = reactive({
   title: '',
   group: ''
 });
+const linksState = useLinksState();
+const isAddLinkPopupOpened = ref(false);
 
-const links = reactive([
-  {
-    title: 'Учёный совет',
-    group: 'about',
-    to: '/look'
-  },
-  {
-    title: 'Администрация',
-    group: 'structure',
-    to: '/something'
-  }
-]);
+linksState.value = await useLinks();
 
 const onAddLinkButtonClick = (mainLinkTitle: string, mainLinkGroup: string) => {
   isAddLinkPopupOpened.value = true;
@@ -32,9 +22,13 @@ const onCloseBtnClick = () => {
   groupingLink.group = '';
 };
 
-const onAddLinkFormSubmit = (title: string, path: string) => {
-  links.push({ title, group: groupingLink.group, to: `/${path}` });
-  console.log(links);
+const onAddLinkFormSubmit = async (title: string, to: string) => {
+  const newLinkBody = { title, to: `/${to}`, group: groupingLink.group, createdByAdmin: true };
+  const newLink = await useFetch('/api/links', {
+    method: 'post',
+    body: newLinkBody
+  });
+  linksState.value.push(newLinkBody);
 };
 </script>
 
@@ -61,14 +55,14 @@ const onAddLinkFormSubmit = (title: string, path: string) => {
             <DropdownMenu
               :title="title"
               :group="group"
-              :items="links"
+              :items="linksState"
               @on-add-link="onAddLinkButtonClick"
             />
           </li>
         </ul>
       </nav>
     </div>
-    <LinkForm
+    <LazyLinkForm
       :is-opened="isAddLinkPopupOpened"
       :grouping-link-title="groupingLink.title"
       @on-close="onCloseBtnClick"

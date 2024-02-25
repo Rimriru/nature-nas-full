@@ -1,4 +1,4 @@
-import { routes } from '../../models/index';
+import { routes, links } from '../../models/index';
 
 export default defineEventHandler(async (evt) => {
   console.log('DELETE /api/routes');
@@ -6,6 +6,9 @@ export default defineEventHandler(async (evt) => {
   try {
     console.log('Delete route');
     const deletedRoute = await routes.findByIdAndDelete(id);
+    if (deletedRoute) {
+      await links.findOneAndDelete({ route: deletedRoute });
+    }
     return deletedRoute;
   } catch (error: any) {
     console.error(error);

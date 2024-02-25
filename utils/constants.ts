@@ -1,6 +1,7 @@
 const ADMIN_PAGES = [
   { id: 'page-creation', title: 'СОЗДАТЬ СТРАНИЦУ' },
   { id: 'pages-list', title: 'СПИСОК СТРАНИЦ' },
+  { id: 'links-list', title: 'СПИСОК ССЫЛОК' },
   { id: 'add-news', title: 'ДОБАВИТЬ НОВОСТЬ' }
 ];
 

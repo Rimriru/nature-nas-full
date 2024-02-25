@@ -12,12 +12,9 @@ export default defineNuxtConfig({
       // },
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1'
-    },
-    pageTransition: {
-      name: 'fade',
-      mode: 'out-in'
     }
   },
+  components: [{ path: '~/components/ui', pathPrefix: false }, '~/components'],
   devtools: { enabled: true },
   runtimeConfig: {
     mongoDbUrl: process.env.MONGODB_URL

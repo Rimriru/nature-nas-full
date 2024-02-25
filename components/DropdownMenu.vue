@@ -2,10 +2,6 @@
 const isSubMenuVisible = ref(false);
 const props = defineProps(['title', 'group', 'items']);
 const emit = defineEmits(['onAddLink']);
-
-const linksOfTheGroup = computed(() => {
-  return props.items.filter((item) => item.group === props.group);
-});
 </script>
 
 <template>
@@ -16,11 +12,7 @@ const linksOfTheGroup = computed(() => {
   >
     <a class="dropdown-menu__main-link" href="#">{{ title }}</a>
     <ul v-if="isSubMenuVisible && group" class="dropdown-menu__sub-menu">
-      <li v-for="item of linksOfTheGroup" :key="JSON.stringify(item)">
-        <NuxtLink :to="item.to" v-if="item.group === props.group" external>
-          {{ item.title }}
-        </NuxtLink>
-      </li>
+      <LinksMenuItem :links-array="items" :group="props.group" :is-in-admin-page="false" />
       <div class="dropdown-menu__btn-bg" @click="emit('onAddLink', title, props.group)">
         <button class="dropdown-menu__add-btn" type="button" />
       </div>
@@ -61,6 +53,7 @@ const linksOfTheGroup = computed(() => {
 
     li {
       padding: 8px;
+      cursor: pointer;
       &:hover {
         background-color: #7195bf;
       }

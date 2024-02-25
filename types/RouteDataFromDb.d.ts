@@ -11,6 +11,7 @@ interface RouteDataFromDb {
     personas: [String];
     photos: [{}];
   };
+  link: string;
 }
 
 export default RouteDataFromDb;

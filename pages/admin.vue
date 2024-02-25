@@ -23,7 +23,7 @@ const handleRouteRemoval = (existingRoute: RouteDataFromDb) => {
 </script>
 
 <template>
-  <div class="admin">
+  <main class="admin">
     <ul>
       <li v-for="({ id, title }, index) in ADMIN_PAGES" :key="index">
         <MenuButton
@@ -43,15 +43,19 @@ const handleRouteRemoval = (existingRoute: RouteDataFromDb) => {
       :routes-from-db="routes"
       @remove="handleRouteRemoval"
     />
-  </div>
+    <LinksList v-if="whatPageIsShown === 'links-list'" :is-in-admin-page="true" />
+    <NewsCreation v-if="whatPageIsShown === 'add-news'" />
+  </main>
 </template>
 
 <style lang="scss">
 @import url('../assets/styles/base.css');
 .admin {
+  max-width: 1400px;
   display: flex;
   margin: 0 auto;
-  gap: 80px;
+  gap: 50px;
+  padding-block: 50px;
 
   ul li:not(:last-of-type) {
     margin-bottom: 10px;

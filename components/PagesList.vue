@@ -2,10 +2,13 @@
 const props = defineProps(['routesFromDb']);
 const emit = defineEmits(['remove']);
 
-const handleRouteRemove = async (routeId: string) => {
+const links = useLinksState();
+
+const handleRouteRemove = async (routeId: string, path: string) => {
   const removedRoute = await useFetch(`/api/routes/${routeId}`, {
     method: 'delete'
   });
+  links.value = links.value.filter((link) => link.to !== path);
   emit('remove', removedRoute.data.value);
 };
 </script>
@@ -15,11 +18,7 @@ const handleRouteRemove = async (routeId: string) => {
     Список созданных страниц:
     <li v-for="{ path, _id: id } in props.routesFromDb" :key="id">
       {{ path }}
-      <button
-        v-if="!path.startsWith('/admin')"
-        @click="handleRouteRemove(id)"
-        class="remove-btn-small"
-      ></button>
+      <RemoveBtn @click="handleRouteRemove(id, path)" />
     </li>
   </ol>
 </template>
