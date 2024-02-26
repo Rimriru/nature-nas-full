@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const isSubMenuVisible = ref(false);
-const props = defineProps(['title', 'group', 'items']);
+const props = defineProps(['title', 'group', 'to', 'items']);
 const emit = defineEmits(['onAddLink']);
 </script>
 
@@ -10,7 +10,8 @@ const emit = defineEmits(['onAddLink']);
     @mouseover="isSubMenuVisible = true"
     @mouseleave="isSubMenuVisible = false"
   >
-    <a class="dropdown-menu__main-link" href="#">{{ title }}</a>
+    <a v-if="!props.to" class="dropdown-menu__main-link" href="#">{{ title }}</a>
+    <NuxtLink v-else :to="props.to" class="dropdown-menu__main-link">{{ title }}</NuxtLink>
     <ul v-if="isSubMenuVisible && group" class="dropdown-menu__sub-menu">
       <LinksMenuItem :links-array="items" :group="props.group" :is-in-admin-page="false" />
       <div class="dropdown-menu__btn-bg" @click="emit('onAddLink', title, props.group)">
@@ -21,67 +22,5 @@ const emit = defineEmits(['onAddLink']);
 </template>
 
 <style lang="scss">
-@use '~/assets/styles/variables.scss' as *;
-
-.dropdown-menu {
-  position: relative;
-
-  .dropdown-menu__main-link {
-    font-size: 15px;
-    font-weight: 600;
-    position: relative;
-    text-align: center;
-    display: flex;
-    padding: 20px;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-
-    &:hover {
-      background-color: $light-blue;
-    }
-  }
-
-  .dropdown-menu__sub-menu {
-    position: absolute;
-    top: 64px;
-    background-color: #587495;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-    width: clamp(100%, 10vw, 150%);
-    display: flex;
-    flex-direction: column;
-
-    li {
-      padding: 8px;
-      cursor: pointer;
-      &:hover {
-        background-color: #7195bf;
-      }
-    }
-
-    .dropdown-menu__btn-bg {
-      background-color: $dark-blue;
-      border-bottom-left-radius: 8px;
-      border-bottom-right-radius: 8px;
-      width: 100%;
-      height: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      transition: opacity 0.3s ease-in-out;
-
-      &:hover {
-        opacity: 0.7;
-      }
-
-      .dropdown-menu__add-btn {
-        background-image: url('~/assets/images/plus-icon.svg');
-        width: 20px;
-        height: 20px;
-        background-repeat: no-repeat;
-      }
-    }
-  }
-}
+@import url('~/assets/styles/components/dropdownMenu.scss');
 </style>

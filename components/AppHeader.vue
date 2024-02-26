@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { HEADER_LINK_GROUPS } from '~/utils/constants';
+import type { Link, Group } from '~/types/LinkDataFromDb';
 
 const groupingLink = reactive({
   title: '',
@@ -23,7 +24,12 @@ const onCloseBtnClick = () => {
 };
 
 const onAddLinkFormSubmit = async (title: string, to: string) => {
-  const newLinkBody = { title, to: `/${to}`, group: groupingLink.group, createdByAdmin: true };
+  const newLinkBody: Link = {
+    title,
+    to: `/${to}`,
+    group: groupingLink.group as Group,
+    createdByAdmin: true
+  };
   const newLink = await useFetch('/api/links', {
     method: 'post',
     body: newLinkBody
@@ -51,11 +57,12 @@ const onAddLinkFormSubmit = async (title: string, to: string) => {
           <NuxtLink to="/" class="header__bottom-logo">
             <NuxtImg src="/logo.png" alt="Логотип" width="60" />
           </NuxtLink>
-          <li v-for="{ id, title, group } of HEADER_LINK_GROUPS" :key="id">
+          <li v-for="{ id, title, group, to } of HEADER_LINK_GROUPS" :key="id">
             <DropdownMenu
-              :title="title"
+              :title="title.toUpperCase()"
               :group="group"
               :items="linksState"
+              :to="to"
               @on-add-link="onAddLinkButtonClick"
             />
           </li>

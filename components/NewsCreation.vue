@@ -1,11 +1,7 @@
-<script setup lang="ts">
-const links = await useFetch('/api/links');
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <div>
-    {{ links }}
-  </div>
+  <div></div>
 </template>
 
 <style lang="scss"></style>

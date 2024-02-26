@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { RouteLocationRaw } from 'vue-router';
-import type Link from '~/types/LinkDataFromDb';
+import type { Link } from '~/types/LinkDataFromDb';
 
 const props = defineProps({
   linksArray: {
@@ -39,7 +39,10 @@ const linksOfTheGroup = computed(() => {
 
 <style lang="scss">
 .li-admin {
-  display: flex;
-  gap: 10px;
+  div {
+    margin-left: 12px;
+    display: inline-flex;
+    gap: 5px;
+  }
 }
 </style>

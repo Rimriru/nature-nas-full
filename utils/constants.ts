@@ -1,3 +1,12 @@
+import fillHomeIcon from '~/assets/images/fill-home-icon.svg';
+import structureIcon from '~/assets/images/structure-icon.svg';
+import newsIcon from '~/assets/images/news-icon.svg';
+import publicationsIcon from '~/assets/images/publications-icon.svg';
+import researchIcon from '~/assets/images/research-icon.svg';
+import serviceIcon from '~/assets/images/service-icon.svg';
+import contactsIcon from '~/assets/images/contacts-icon.svg';
+import siteMapIcon from '~/assets/images/fill-map-icon.svg';
+
 const ADMIN_PAGES = [
   { id: 'page-creation', title: 'СОЗДАТЬ СТРАНИЦУ' },
   { id: 'pages-list', title: 'СПИСОК СТРАНИЦ' },
@@ -8,41 +17,51 @@ const ADMIN_PAGES = [
 const HEADER_LINK_GROUPS = [
   {
     id: 1,
-    title: 'ОБ ИНСТИТУТЕ',
-    group: 'about'
+    title: 'Об институте',
+    group: 'about',
+    icon: fillHomeIcon
   },
   {
     id: 2,
-    title: 'СТРУКТУРА',
-    group: 'structure'
+    title: 'Структура',
+    group: 'structure',
+    icon: structureIcon
   },
   {
     id: 3,
-    title: 'НОВОСТИ',
-    group: 'news'
+    title: 'Новости',
+    group: 'news',
+    icon: newsIcon
   },
   {
     id: 4,
-    title: 'НАУЧНЫЕ ИЗДАНИЯ',
-    group: 'publications'
+    title: 'Научные издания',
+    group: 'publications',
+    icon: publicationsIcon
   },
   {
     id: 5,
-    title: 'ИССЛЕДОВАНИЯ И РАЗРАБОТКИ',
-    group: 'research'
+    title: 'Исследования и разработки',
+    group: 'research',
+    icon: researchIcon
   },
   {
     id: 6,
-    title: 'УСЛУГИ',
-    group: 'service'
+    title: 'Услуги',
+    group: 'service',
+    icon: serviceIcon
   },
   {
     id: 7,
-    title: 'КОНТАКТЫ'
+    title: 'Контакты',
+    to: '/contacts',
+    icon: contactsIcon
   },
   {
     id: 8,
-    title: 'КАРТА САЙТА'
+    title: 'Карта сайта',
+    to: '/site-map',
+    icon: siteMapIcon
   }
 ];
 

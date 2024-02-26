@@ -53,12 +53,7 @@ onMounted(() => {
     background-size: 100%;
     background-repeat: no-repeat;
     width: clamp(100px, 15vw, 150px);
-    transition: opacity 0.3s ease;
     height: 35px;
-
-    &:hover {
-      opacity: 0.7;
-    }
   }
 }
 </style>

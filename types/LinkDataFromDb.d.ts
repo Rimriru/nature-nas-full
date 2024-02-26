@@ -1,8 +1,11 @@
+type Group = 'about' | 'structure' | 'news' | 'publications' | 'research' | 'service';
+
 type Link = {
   title: String;
   to: String;
-  group: String;
+  group: Group;
   route?: String;
+  createdByAdmin: Boolean;
 };
 
-export default Link;
+export type { Link, Group };
