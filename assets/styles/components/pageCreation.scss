@@ -13,11 +13,11 @@
     display: flex;
     flex-wrap: wrap;
     gap: 30px 20px;
-  
+
     p {
       flex-basis: 100%;
     }
-  
+
     .page-creation__canvas {
       display: flex;
       flex-direction: column;
@@ -35,7 +35,7 @@
     margin-bottom: 30px;
     margin-right: 5px;
   }
-  
+
   .page-creation__submit-btn {
     width: clamp(120px, 15vw, 180px);
     border: 1px solid black;
@@ -43,9 +43,9 @@
     padding-block: 8px;
     justify-self: right;
     transition: opacity 0.3s ease;
-  
+
     &:hover {
-      opacity: .7;
+      opacity: 0.7;
     }
   }
 }
