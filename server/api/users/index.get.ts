@@ -9,7 +9,7 @@ export default defineEventHandler(async (evt) => {
   } catch (error: any) {
     console.dir(error);
     throw createError({
-      status: 500,
+      status: error.statusCode,
       statusText: error.message
     });
   }

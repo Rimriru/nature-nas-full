@@ -1,5 +1,5 @@
 import { routes } from '../../models/index';
-import { conflictRouteErrorMessage } from '~/utils/errorMessages';
+import { CONFLICT_ROUTE_ERROR_MESSAGE } from '~/utils/errorMessages';
 
 export default defineEventHandler(async (evt) => {
   console.log('POST /api/routes');
@@ -13,13 +13,13 @@ export default defineEventHandler(async (evt) => {
     if (error.code === 11000) {
       throw createError({
         statusCode: 409,
-        statusMessage: conflictRouteErrorMessage
+        statusText: CONFLICT_ROUTE_ERROR_MESSAGE
       });
     } else {
       console.dir(error);
       throw createError({
-        statusCode: 500,
-        statusMessage: error.message
+        status: error.statusCode,
+        statusText: error.message
       });
     }
   }

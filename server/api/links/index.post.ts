@@ -1,22 +1,16 @@
 import { links, routes } from '../../models/index';
-import { notFoundRouteErrorMesssage } from '~/utils/errorMessages';
-
-interface RequestBody {
-  title: string;
-  to: string;
-  group: string;
-  createdByAdmin: Boolean;
-}
+import { NOT_FOUND_ERROR_MESSAGE } from '~/utils/errorMessages';
+import type { NewLinkRequestBody } from './types/links';
 
 export default defineEventHandler(async (evt) => {
   console.log('POST /api/links');
-  const { title, to, group, createdByAdmin } = await readBody<RequestBody>(evt);
+  const { title, to, group } = await readBody<NewLinkRequestBody>(evt);
   try {
     const route = await routes.findOne({ path: to });
     if (!route) {
       throw createError({
         status: 404,
-        statusMessage: notFoundRouteErrorMesssage
+        message: NOT_FOUND_ERROR_MESSAGE
       });
     }
 
@@ -24,17 +18,15 @@ export default defineEventHandler(async (evt) => {
       title,
       group,
       to,
-      createdByAdmin,
       route
     });
     setResponseStatus(evt, 201);
 
     return newLink;
   } catch (error: any) {
-    console.error(error);
     throw createError({
       status: error.statusCode,
-      statusMessage: error.message
+      message: error.message
     });
   }
 });
