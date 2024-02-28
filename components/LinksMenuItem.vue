@@ -16,6 +16,8 @@ const props = defineProps({
   }
 });
 
+const emit = defineEmits(['onEdit', 'onRemove']);
+
 const linksOfTheGroup = computed(() => {
   return props.linksArray.filter((item: Link) => item.group === props.group);
 });
@@ -25,24 +27,47 @@ const linksOfTheGroup = computed(() => {
   <li
     v-for="item of linksOfTheGroup"
     :key="JSON.stringify(item)"
-    :class="{ 'li-admin': isInAdminPage }"
+    :class="{ li_admin: isInAdminPage }"
   >
-    <NuxtLink :to="(item.to as RouteLocationRaw)" external>
+    <NuxtLink
+      :to="(item.to as RouteLocationRaw)"
+      external
+      :class="{ 'li__link_not-admin': !isInAdminPage }"
+    >
       {{ item.title }}
     </NuxtLink>
     <div v-if="isInAdminPage">
-      <EditBtn />
+      <EditBtn @click="emit('onEdit', item._id, item.title, item.to)" />
       <RemoveBtn />
     </div>
   </li>
 </template>
 
 <style lang="scss">
-.li-admin {
+.li_admin {
+  display: flex;
+  position: relative;
+  gap: 25px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    transform: translateY(-50%);
+    top: 75%;
+    border-radius: 50%;
+    left: -12px;
+    margin-top: -7px;
+    width: 6px;
+    height: 6px;
+    background: #000;
+  }
   div {
-    margin-left: 12px;
     display: inline-flex;
     gap: 5px;
   }
+}
+
+.li__link_not-admin {
+  display: flex;
 }
 </style>

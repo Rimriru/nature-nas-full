@@ -18,10 +18,6 @@ const linkSchema = new mongoose.Schema(
     route: {
       type: mongoose.Schema.Types.ObjectId,
       required: [true, 'Необходимо передать роут']
-    },
-    createdByAdmin: {
-      type: Boolean,
-      required: [true, 'Требуется указать, создана ли ссылка админом']
     }
   },
   { versionKey: false }

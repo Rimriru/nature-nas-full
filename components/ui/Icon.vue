@@ -11,7 +11,5 @@ const props = defineProps(['icon']);
   width: 24px;
   height: 24px;
   background-size: 100%;
-  display: inline-block;
-  margin-right: 16px;
 }
 </style>

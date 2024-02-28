@@ -6,7 +6,7 @@ type Section = {
 
 const sections: Ref<Section[]> = ref([]);
 const whatSectionShown = ref('');
-const isAddSectionPopupOpened = usePopupOpeningState();
+const isAddSectionPopupOpened = useSectionPopupOpeningState();
 
 const props = defineProps(['sections']);
 

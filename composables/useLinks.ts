@@ -1,4 +1,4 @@
-import type Link from '~/types/LinkDataFromDb';
+import type { Link } from '~/types/LinkDataFromDb';
 
 export const useLinksState: () => globalThis.Ref<Link[]> = () => useState('links', () => []);
 

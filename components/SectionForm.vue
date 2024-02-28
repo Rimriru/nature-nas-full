@@ -6,7 +6,7 @@ const sectionValue = reactive({
   text: ''
 });
 const form = ref(null);
-const isAddSectionPopupOpened = usePopupOpeningState();
+const isAddSectionPopupOpened = useSectionPopupOpeningState();
 
 const resetFormFields = () => {
   sectionValue.title = '';

@@ -14,7 +14,7 @@ definePageMeta({
     if (routes === null) {
       throw createError({
         statusCode: 500,
-        statusMessage: `Произошла ошибка при обращении к GET "/api/routes". Routes = ${routes}`
+        message: `Произошла ошибка при обращении к GET "/api/routes".`
       });
     }
 
@@ -24,7 +24,7 @@ definePageMeta({
     if (!isInDb) {
       throw createError({
         statusCode: 404,
-        statusMessage: `Страница ${to.path} не найдена`
+        message: `Страница ${to.path} не найдена`
       });
     }
   }

@@ -1,12 +1,16 @@
 <script setup lang="ts">
-defineProps(['error']);
+import type { NuxtError } from '#app';
+
+const props = defineProps({
+  error: Object as () => NuxtError
+});
 </script>
 
 <template>
   <div class="error">
-    <h1>{{ error.statusCode }}</h1>
-    <p>{{ error.message }}</p>
-    <NuxtLink to="/">Вернуться на главную</NuxtLink>
+    <h1>{{ props.error?.statusCode }}</h1>
+    <p>{{ props.error?.message }}</p>
+    <NuxtLink to="/" replace external>Вернуться на главную</NuxtLink>
   </div>
 </template>
 

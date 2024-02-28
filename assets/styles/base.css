@@ -30,6 +30,16 @@ button {
   }
 }
 
+a,
+a:visited {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  color: #f6bf25;
+}
+
 fieldset {
   border: none;
   padding: 0;

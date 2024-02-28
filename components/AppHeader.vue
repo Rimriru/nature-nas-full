@@ -1,15 +1,30 @@
 <script setup lang="ts">
 import { HEADER_LINK_GROUPS } from '~/utils/constants';
+import homeIcon from '~/assets/images/home-icon.svg';
+import mapIcon from '~/assets/images/map-icon.svg';
 import type { Link, Group } from '~/types/LinkDataFromDb';
+import type { Form } from '#ui/types';
 
+const linkValue = reactive({
+  title: '',
+  to: ''
+});
 const groupingLink = reactive({
   title: '',
   group: ''
 });
+const linkForm: Ref<Form<string> | null> = ref(null);
 const linksState = useLinksState();
 const isAddLinkPopupOpened = ref(false);
+const addLinkError = ref('');
 
-linksState.value = await useLinks();
+callOnce(async () => {
+  linksState.value = await useLinks();
+});
+
+const onLinkFormMount = (form: Form<string>) => {
+  linkForm.value = form;
+};
 
 const onAddLinkButtonClick = (mainLinkTitle: string, mainLinkGroup: string) => {
   isAddLinkPopupOpened.value = true;
@@ -17,8 +32,17 @@ const onAddLinkButtonClick = (mainLinkTitle: string, mainLinkGroup: string) => {
   groupingLink.group = mainLinkGroup;
 };
 
-const onCloseBtnClick = () => {
+const resetFormFields = () => {
+  linkValue.title = '';
+  linkValue.to = '';
+
+  if (linkForm?.value) return linkForm.value.clear();
+};
+
+const onCloseLinkForm = () => {
+  resetFormFields();
   isAddLinkPopupOpened.value = false;
+  addLinkError.value = '';
   groupingLink.title = '';
   groupingLink.group = '';
 };
@@ -27,14 +51,18 @@ const onAddLinkFormSubmit = async (title: string, to: string) => {
   const newLinkBody: Link = {
     title,
     to: `/${to}`,
-    group: groupingLink.group as Group,
-    createdByAdmin: true
+    group: groupingLink.group as Group
   };
-  const newLink = await useFetch('/api/links', {
+  const { data, error } = await useFetch('/api/links', {
     method: 'post',
     body: newLinkBody
   });
-  linksState.value.push(newLinkBody);
+  if (data.value) {
+    linksState.value.push(data.value as unknown as Link);
+    onCloseLinkForm();
+  } else {
+    addLinkError.value = error.value?.data.message;
+  }
 };
 </script>
 
@@ -44,10 +72,10 @@ const onAddLinkFormSubmit = async (title: string, to: string) => {
       <nav class="header__top">
         <span class="header__name">Институт природопользования НАН Беларуси</span>
         <NuxtLink to="/">
-          <div class="header__icon header__icon_home"></div>
+          <Icon :icon="homeIcon" />
         </NuxtLink>
         <NuxtLink to="/site-map">
-          <div class="header__icon header__icon_map"></div>
+          <Icon :icon="mapIcon" />
         </NuxtLink>
       </nav>
     </div>
@@ -70,10 +98,14 @@ const onAddLinkFormSubmit = async (title: string, to: string) => {
       </nav>
     </div>
     <LazyLinkForm
+      :link-value="linkValue"
       :is-opened="isAddLinkPopupOpened"
       :grouping-link-title="groupingLink.title"
-      @on-close="onCloseBtnClick"
+      :error="addLinkError"
+      :place="'header'"
+      @on-close="onCloseLinkForm"
       @on-submit="onAddLinkFormSubmit"
+      @on-mount="onLinkFormMount"
     />
   </header>
 </template>

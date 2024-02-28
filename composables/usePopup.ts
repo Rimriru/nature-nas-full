@@ -1,1 +1,1 @@
-export const usePopupOpeningState = () => useState('popup', () => false);
+export const useSectionPopupOpeningState = () => useState('popup', () => false);
