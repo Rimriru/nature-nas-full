@@ -47,10 +47,10 @@ const onCloseLinkForm = () => {
   groupingLink.group = '';
 };
 
-const onAddLinkFormSubmit = async (title: string, to: string) => {
+const onAddLinkFormSubmit = async () => {
   const newLinkBody: Link = {
-    title,
-    to: `/${to}`,
+    title: linkValue.title,
+    to: linkValue.to,
     group: groupingLink.group as Group
   };
   const { data, error } = await useFetch('/api/links', {

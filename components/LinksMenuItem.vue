@@ -38,7 +38,7 @@ const linksOfTheGroup = computed(() => {
     </NuxtLink>
     <div v-if="isInAdminPage">
       <EditBtn @click="emit('onEdit', item._id, item.title, item.to)" />
-      <RemoveBtn />
+      <RemoveBtn @click="emit('onRemove', item._id, item.title)" />
     </div>
   </li>
 </template>

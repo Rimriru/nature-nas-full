@@ -36,13 +36,8 @@ a:visited {
   color: inherit;
 }
 
-a:hover {
+a[href]:hover {
   color: #f6bf25;
-}
-
-fieldset {
-  border: none;
-  padding: 0;
 }
 
 ul,

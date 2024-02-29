@@ -10,8 +10,10 @@ const validate = (state: any): FormError[] => {
   const errors = [];
   if (!state.title)
     errors.push({ path: 'title', message: 'Поле "Название" является обязательным' });
-  if (!state.path)
-    errors.push({ path: 'path', message: 'Поле "Ссылка на страницу" является обязательным' });
+  if (!state.to)
+    errors.push({ path: 'to', message: 'Поле "Ссылка на страницу" является обязательным' });
+  if (!/^\/(?!\/)/.test(state.to))
+    errors.push({ path: 'to', message: 'Ссылка должна начинаться с /' });
   return errors;
 };
 
@@ -27,10 +29,15 @@ onMounted(() => {
       :validate="validate"
       ref="form"
       class="link-form"
-      @submit="emit('onSubmit', props.linkValue.title, props.linkValue.path)"
+      @submit="emit('onSubmit')"
     >
-      <h3 v-if="props.place === 'header'">Добавить ссылку в "{{ props.groupingLinkTitle }}"</h3>
-      <h3 v-if="props.place === 'link-list'">Редактировать ссылку</h3>
+      <h3>
+        {{
+          props.place === 'header'
+            ? `Добавить ссылку в ${props.groupingLinkTitle}`
+            : 'Редактировать ссылку'
+        }}
+      </h3>
       <UFormGroup name="title">
         Название
         <span class="required">*</span>
@@ -40,10 +47,10 @@ onMounted(() => {
           placeholder="Введите название ссылки"
         />
       </UFormGroup>
-      <UFormGroup name="path">
-        Ссылка (http://www.nature-nas.by/*ссылка*)
+      <UFormGroup name="to" :eager-validation="true">
+        Ссылка (http://www.nature-nas.by*ссылка*)
         <span class="required">*</span>
-        <UInput color="blue" v-model="props.linkValue.path" placeholder="Введите ссылку" />
+        <UInput color="blue" v-model="props.linkValue.to" placeholder="Введите ссылку: /..." />
       </UFormGroup>
       <span class="error" v-if="props.error">{{ props.error }}</span>
       <div class="link-form__btns">

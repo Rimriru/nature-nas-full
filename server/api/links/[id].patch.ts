@@ -10,12 +10,12 @@ export default defineEventHandler(async (evt) => {
   try {
     const linkToEdit = (await links.findById(id)) as Link;
     if (linkToEdit && to === linkToEdit.to) {
-      const editedTitleLinkData: Link | null = await links.findByIdAndUpdate(
+      const editedLinkData: Link | null = await links.findByIdAndUpdate(
         id,
         { title },
         { new: true }
       );
-      return editedTitleLinkData;
+      return { editedLinkData, message: `Ссылка "${title}" была изменена` };
     } else {
       const route = await routes.findOne({ path: to });
       const editedLinkData: Link | null = await links.findByIdAndUpdate(
@@ -23,7 +23,7 @@ export default defineEventHandler(async (evt) => {
         { title, to, route },
         { new: true }
       );
-      return editedLinkData;
+      return { editedLinkData, message: `Ссылка "${title}" была изменена` };
     }
   } catch (error: any) {
     console.error(error);
