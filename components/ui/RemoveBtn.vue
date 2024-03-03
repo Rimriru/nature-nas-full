@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <button class="remove-btn" />
+  <button type="button" class="remove-btn" />
 </template>
 
 <style lang="scss">

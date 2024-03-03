@@ -1,19 +1,46 @@
 <script setup lang="ts">
 import type RouteDataFromDb from '~/types/RouteDataFromDb';
 
+const isConfirmPopupOpen = ref(false);
+const routeDataForRemove = reactive({
+  id: '',
+  path: ''
+});
 const removeRouteError = ref('');
 
 const links = useLinksState();
 const routesFromDb = useRoutesState();
 const notifications = useToast();
 
-const handleRouteRemove = async (routeId: string, path: string) => {
-  const { data, error } = await useFetch(`/api/routes/${routeId}`, {
+const routesArrayForAdmin = computed(() => {
+  return routesFromDb.value.map((route, index) => ({
+    order: index + 1,
+    path: route.path,
+    actions: 'remove' // Replace 'remove' with the desired action
+  }));
+});
+const onRemoveBtnClick = (routeId: string, path: string) => {
+  isConfirmPopupOpen.value = true;
+  routeDataForRemove.id = routeId;
+  routeDataForRemove.path = path;
+};
+
+const onConfirmPopupClose = () => {
+  isConfirmPopupOpen.value = false;
+  routeDataForRemove.id = '';
+  routeDataForRemove.path = '';
+};
+
+const handleRouteRemove = async () => {
+  const { data, error } = await useFetch(`/api/routes/${routeDataForRemove.id}`, {
     method: 'delete'
   });
-  if (data.value?.message) {
-    links.value = links.value.filter((link) => link.to !== path);
-    routesFromDb.value = routesFromDb.value.filter((route: RouteDataFromDb) => route.path !== path);
+  if (data.value) {
+    links.value = links.value.filter((link) => link.to !== routeDataForRemove.path);
+    routesFromDb.value = routesFromDb.value.filter(
+      (route: RouteDataFromDb) => route.path !== routeDataForRemove.path
+    );
+    onConfirmPopupClose();
     notifications.add({ id: 'route-remove', title: data.value.message });
   } else {
     removeRouteError.value = error.value?.data.message;
@@ -22,20 +49,66 @@ const handleRouteRemove = async (routeId: string, path: string) => {
 </script>
 
 <template>
-  <div>
-    <UAlert v-if="removeRouteError" :title="removeRouteError" color="sky" variant="soft" />
-    <ol class="pages-list">
-      Список созданных страниц:
-      <li v-for="{ path, _id: id } in routesFromDb" :key="id">
-        {{ path }}
-        <RemoveBtn @click="handleRouteRemove(id, path)" />
-      </li>
-    </ol>
+  <div class="pages-list">
+    Список созданных вами страниц:
+    <table class="pages-list__table">
+      <thead>
+        <tr>
+          <th>№</th>
+          <th>Страница</th>
+          <th>Действия</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="({ path, _id: id }, index) in routesFromDb" :key="id">
+          <td>{{ index + 1 }}</td>
+          <td>{{ path }}</td>
+          <td><RemoveBtn @click="onRemoveBtnClick(id, path)" /></td>
+        </tr>
+      </tbody>
+    </table>
+    <ConfirmPopup
+      :is-open="isConfirmPopupOpen"
+      :what-is-removed="'route'"
+      :removed-item-title="routeDataForRemove.path"
+      :error="removeRouteError"
+      @on-close="onConfirmPopupClose"
+      @on-agree="handleRouteRemove"
+    />
   </div>
 </template>
 
-<style>
+<style lang="scss">
 .pages-list {
-  list-style: decimal;
+  width: 100%;
+  margin-right: 60px;
+
+  .pages-list__table {
+    width: 100%;
+
+    th {
+      border-bottom: 1px solid #ddd;
+    }
+
+    &,
+    th,
+    td {
+      text-align: center;
+      padding-block: 4px;
+    }
+
+    tr:not(:last-of-type) {
+      border-bottom: 1px solid #eeececb7;
+    }
+
+    tr td:last-of-type {
+      display: flex;
+      justify-content: center;
+    }
+
+    tbody tr:hover {
+      background-color: rgba(69, 138, 242, 0.243);
+    }
+  }
 }
 </style>

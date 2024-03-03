@@ -10,9 +10,12 @@ const emit = defineEmits(['onClose', 'onAgree']);
         {{
           props.whatIsRemoved === 'link'
             ? `Вы уверены, что хотите удалить ссылку "${removedItemTitle}"?`
-            : `Вы уверены, что хотите удалить страницу "${removedItemTitle}"`
+            : `Вы уверены, что хотите удалить страницу "${removedItemTitle}"?`
         }}
       </h3>
+      <p v-if="props.whatIsRemoved === 'route'">
+        Обратите внимание: будут удалены все ссылки, ведущие на эту страницу
+      </p>
       <span v-if="props.error" class="error">{{ props.error }}</span>
       <div class="confirm-popup__btns">
         <MenuButton :is-small="true" @click="emit('onClose')">Нет</MenuButton>
@@ -27,10 +30,10 @@ const emit = defineEmits(['onClose', 'onAgree']);
   display: flex;
   flex-direction: column;
   gap: 30px;
+  max-width: 300px;
+  text-align: center;
 
   h3 {
-    text-align: center;
-    max-width: 300px;
     font-size: 18px;
   }
 

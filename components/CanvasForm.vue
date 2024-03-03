@@ -24,7 +24,6 @@ const onCancel = () => {
 };
 
 const onSubmit = () => {
-  console.log(formValues);
   emit('submit', formValues);
 };
 </script>
