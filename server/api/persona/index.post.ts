@@ -13,7 +13,7 @@ export default defineEventHandler(async (evt) => {
     console.dir(error);
     throw createError({
       statusCode: 500,
-      statusText: error.message
+      message: error.message
     });
   }
 });

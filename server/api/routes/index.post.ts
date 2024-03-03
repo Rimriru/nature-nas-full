@@ -6,6 +6,7 @@ export default defineEventHandler(async (evt) => {
   const routeData = await readBody(evt);
   try {
     console.log('Creating new route in DB');
+    console.log(routeData);
     const newRoute = await routes.create(routeData);
     setResponseStatus(evt, 201);
     return newRoute;
@@ -13,13 +14,13 @@ export default defineEventHandler(async (evt) => {
     if (error.code === 11000) {
       throw createError({
         statusCode: 409,
-        statusText: CONFLICT_ROUTE_ERROR_MESSAGE
+        message: CONFLICT_ROUTE_ERROR_MESSAGE
       });
     } else {
       console.dir(error);
       throw createError({
         status: error.statusCode,
-        statusText: error.message
+        message: error.message
       });
     }
   }

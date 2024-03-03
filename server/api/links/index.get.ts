@@ -9,7 +9,7 @@ export default defineEventHandler(async (evt) => {
     console.error(error);
     throw createError({
       status: error.statusCode,
-      statusText: error.message
+      message: error.message
     });
   }
 });

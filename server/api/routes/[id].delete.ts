@@ -9,12 +9,12 @@ export default defineEventHandler(async (evt) => {
     if (deletedRoute) {
       await links.deleteMany({ route: deletedRoute });
     }
-    return { message: 'Страница с ссылками удалена' };
+    return { deletedRoute, message: `Страница с ссылками удалена` };
   } catch (error: any) {
     console.error(error);
     throw createError({
       status: error.statusCode,
-      statusText: error.message
+      message: error.message
     });
   }
 });
