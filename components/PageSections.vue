@@ -20,9 +20,9 @@ onMounted(() => {
     <div class="canvas__sections-btns">
       <ul class="canvas__sections-titles" v-if="sections.length">
         <li v-for="{ title } in sections" :key="title">
-          <MenuButton type="button" @click="() => (whatSectionShown = title)">{{
-            title
-          }}</MenuButton>
+          <MenuButton type="button" @click="() => (whatSectionShown = title)">
+            {{ title }}
+          </MenuButton>
         </li>
       </ul>
       <button

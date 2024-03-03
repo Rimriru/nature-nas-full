@@ -9,5 +9,5 @@ export const useLinks = async () => {
     const lookingForRoutes = await $fetch('/api/links');
     return lookingForRoutes;
   });
-  return data.value;
+  return data;
 };

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { HEADER_LINK_GROUPS } from '~/utils/constants';
+import { HEADER_LINK_GROUPS } from '~/utils/linksData';
 import homeIcon from '~/assets/images/home-icon.svg';
 import mapIcon from '~/assets/images/map-icon.svg';
 import type { Link, Group } from '~/types/LinkDataFromDb';
@@ -17,10 +17,6 @@ const linkForm: Ref<Form<string> | null> = ref(null);
 const linksState = useLinksState();
 const isAddLinkPopupOpened = ref(false);
 const addLinkError = ref('');
-
-callOnce(async () => {
-  linksState.value = await useLinks();
-});
 
 const onLinkFormMount = (form: Form<string>) => {
   linkForm.value = form;

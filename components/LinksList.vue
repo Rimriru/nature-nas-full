@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { HEADER_LINK_GROUPS } from '~/utils/constants';
+import { HEADER_LINK_GROUPS } from '~/utils/linksData';
 import type { Link } from '~/types/LinkDataFromDb';
 import type { Form } from '#ui/types';
 
@@ -168,3 +168,4 @@ const onRemoveLinkPopupAgree = async () => {
   }
 }
 </style>
+~/utils/linksData

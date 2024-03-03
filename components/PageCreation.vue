@@ -1,72 +1,86 @@
 <script setup lang="ts">
-const route = ref('');
-const canvas = ref('CanvasOne');
+import CANVAS_OPTIONS from '~/utils/canvasesData';
+import type { Form, FormError } from '#ui/types';
+import type RouteDataFromDb from '~/types/RouteDataFromDb';
 
-const props = defineProps(['routesFromDb']);
-const emit = defineEmits(['submit']);
+const newRouteValues = reactive({
+  route: '',
+  canvas: 'CanvasOne'
+});
+const form = ref(null);
 
-// TODO: disable submit button when the input isn't valid
+const routesFromDb = useRoutesState();
+const notifications = useToast();
+
+const validate = (state: any): FormError[] => {
+  const errors = [];
+  if (!state.route) errors.push({ path: 'route', message: 'Поле "Ссылка" является обязательным' });
+  if (!/^\/(?!\/)/.test(state.route))
+    errors.push({ path: 'route', message: 'Ссылка должна начинаться с /' });
+  return errors;
+};
 
 const handleCreatePageFormSubmit = async () => {
-  if (useRouteFindByPath(props.routesFromDb, route.value)) {
-    // TODO: сделать нормальный попап
-    return alert('Такая страница уже существует');
-  } else {
-    const routeName = route.value;
-    const routePath = `/${route.value}`;
-    const component = canvas.value;
-    const newRoute = await useFetch('/api/routes', {
-      method: 'post',
-      body: {
-        name: routeName,
-        path: routePath,
-        component
-      }
+  if (useRouteFindByPath(routesFromDb.value, newRouteValues.route)) {
+    return notifications.add({
+      id: 'route-create',
+      title: 'Такая страница уже существует!'
     });
-    emit('submit', newRoute.data.value);
-    route.value = '';
+  } else {
+    const newRouteBody = {
+      path: newRouteValues.route,
+      component: newRouteValues.canvas
+    };
+    const { data, error } = await useFetch('/api/routes', {
+      method: 'post',
+      body: newRouteBody
+    });
+    if (data.value) {
+      routesFromDb.value.push(data.value as unknown as RouteDataFromDb);
+      notifications.add({ id: 'route-create', title: 'Страница создана!' });
+      newRouteValues.route = '';
+      newRouteValues.canvas = 'CanvasOne';
+      (form.value as unknown as Form<string>).clear();
+    } else {
+      notifications.add({ id: 'route-create', title: error.value?.data.message });
+    }
   }
 };
 </script>
 
 <template>
   <div class="page-creation">
-    <p>Ты на странице создания</p>
-    <form class="page-creation__form" novalidate @submit.prevent="handleCreatePageFormSubmit">
-      <label class="page-creation__text-filed"
-        >http://www.nature-nas.by/
-        <input v-model="route" type="text" placeholder="Название страницы латинницей" required />
+    <UForm
+      :state="newRouteValues"
+      :validate="validate"
+      ref="form"
+      class="page-creation__form"
+      @submit="handleCreatePageFormSubmit"
+    >
+      <UFormGroup name="route" class="page-creation__text-field">
+        Путь на будущую страницу: (http://www.nature-nas.by*ссылка*)
         <span class="required">*</span>
-      </label>
-      <fieldset class="page-creation__canvases">
-        <p>Выберите шаблон страницы:</p>
-        <label class="page-creation__canvas">
-          <input v-model="canvas" type="radio" value="CanvasOne" name="canvas" />
-          <img src="../assets/images/canvas-1.png" />
-        </label>
-        <label class="page-creation__canvas">
-          <input v-model="canvas" type="radio" value="canvas2" name="canvas" />
-          <img src="../assets/images/canvas-2.png" />
-        </label>
-        <label class="page-creation__canvas">
-          <input v-model="canvas" type="radio" value="canvas3" name="canvas" />
-          <img src="../assets/images/canvas-3.png" />
-        </label>
-        <label class="page-creation__canvas">
-          <input v-model="canvas" type="radio" value="canvas4" name="canvas" />
-          <img src="../assets/images/canvas-4.png" />
-        </label>
-        <label class="page-creation__canvas">
-          <input v-model="canvas" type="radio" value="canvas5" name="canvas" />
-          <img src="../assets/images/canvas-5.png" />
-        </label>
-        <label class="page-creation__canvas">
-          <input v-model="canvas" type="radio" value="canvas6" name="canvas" />
-          <img src="../assets/images/canvas-6.png" />
-        </label>
-      </fieldset>
+        <UInput
+          color="blue"
+          v-model="newRouteValues.route"
+          placeholder="Введите ссылку на страницу латинницей: /..."
+        />
+      </UFormGroup>
+      <URadioGroup
+        v-model="newRouteValues.canvas"
+        class="page-creation__canvases"
+        :options="CANVAS_OPTIONS"
+        legend="Выберите шаблон страницы:"
+      >
+        <template #label="{ option }">
+          <div
+            class="page-creation__canvas"
+            :style="{ backgroundImage: `url(${option.img})` }"
+          ></div>
+        </template>
+      </URadioGroup>
       <button class="page-creation__submit-btn" type="submit">Создать страницу</button>
-    </form>
+    </UForm>
   </div>
 </template>
 

@@ -1,24 +1,10 @@
 <script setup lang="ts">
-import { ADMIN_PAGES } from '~/utils/constants';
-import type RouteDataFromDb from '~/types/RouteDataFromDb';
+import { ADMIN_PAGES } from '~/utils/linksData';
 
 const whatPageIsShown = ref('page-creation');
-const routes = ref<RouteDataFromDb[]>([]);
-
-// Fetching all routes from database
-const data = await useAllRoutes();
-routes.value = data ? data : [];
 
 const handleMenuButtonClick = (pageId: string) => {
   whatPageIsShown.value = pageId;
-};
-
-const handleRouteCreation = (newRoute: RouteDataFromDb) => {
-  routes.value.push(newRoute);
-};
-
-const handleRouteRemoval = (existingRoute: RouteDataFromDb) => {
-  routes.value = routes.value.filter((route) => route.path !== existingRoute.path);
 };
 </script>
 
@@ -29,20 +15,13 @@ const handleRouteRemoval = (existingRoute: RouteDataFromDb) => {
         <MenuButton
           :is-active="whatPageIsShown === id ? true : false"
           @click="handleMenuButtonClick(id)"
-          >{{ title }}</MenuButton
         >
+          {{ title }}
+        </MenuButton>
       </li>
     </ul>
-    <PageCreation
-      v-if="whatPageIsShown === 'page-creation'"
-      :routes-from-db="routes"
-      @submit="handleRouteCreation"
-    />
-    <PagesList
-      v-if="whatPageIsShown === 'pages-list'"
-      :routes-from-db="routes"
-      @remove="handleRouteRemoval"
-    />
+    <PageCreation v-if="whatPageIsShown === 'page-creation'" />
+    <PagesList v-if="whatPageIsShown === 'pages-list'" />
     <LinksList v-if="whatPageIsShown === 'links-list'" :is-in-admin-page="true" />
     <NewsCreation v-if="whatPageIsShown === 'add-news'" />
     <UNotifications />
@@ -63,3 +42,4 @@ const handleRouteRemoval = (existingRoute: RouteDataFromDb) => {
   }
 }
 </style>
+~/utils/linksData
