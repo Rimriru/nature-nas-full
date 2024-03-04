@@ -5,6 +5,10 @@ const props = defineProps({
   output: {
     type: String,
     default: 'html'
+  },
+  placeholder: {
+    type: String,
+    default: 'Начните печатать...'
   }
 });
 </script>
@@ -19,7 +23,8 @@ const props = defineProps({
       language: 'ru',
       statusbar: false,
       resize: true,
-      min_height: 500
+      min_height: 500,
+      placeholder: props.placeholder
     }"
     model-events="change keydown focus paste undo redo"
     :output-format="props.output"

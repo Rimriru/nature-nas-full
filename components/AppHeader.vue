@@ -17,6 +17,7 @@ const linkForm: Ref<Form<string> | null> = ref(null);
 const linksState = useLinksState();
 const isAddLinkPopupOpened = ref(false);
 const addLinkError = ref('');
+const notifications = useToast();
 
 const onLinkFormMount = (form: Form<string>) => {
   linkForm.value = form;
@@ -55,6 +56,7 @@ const onAddLinkFormSubmit = async () => {
   });
   if (data.value) {
     linksState.value.push(data.value as unknown as Link);
+    notifications.add({ id: 'link-create', title: `Ссылка ${newLinkBody.title} создана!` });
     onCloseLinkForm();
   } else {
     addLinkError.value = error.value?.data.message;

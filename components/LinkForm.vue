@@ -12,8 +12,11 @@ const validate = (state: any): FormError[] => {
     errors.push({ path: 'title', message: 'Поле "Название" является обязательным' });
   if (!state.to)
     errors.push({ path: 'to', message: 'Поле "Ссылка на страницу" является обязательным' });
-  if (!/^\/(?!\/)/.test(state.to))
-    errors.push({ path: 'to', message: 'Ссылка должна начинаться с /' });
+  if (!/^\/(?!\/)[a-zA-Z]/.test(state.to))
+    errors.push({
+      path: 'to',
+      message: 'Ссылка должна начинаться с / и содержать латинские символы после'
+    });
   return errors;
 };
 
@@ -67,6 +70,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  max-width: 350px;
 
   .link-form__btns {
     display: flex;

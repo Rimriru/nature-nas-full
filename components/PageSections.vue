@@ -42,6 +42,9 @@ onMounted(() => {
 <style lang="scss">
 .canvas__sections {
   margin-block: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   .canvas__sections-btns {
     display: flex;

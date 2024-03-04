@@ -29,7 +29,13 @@ const onSubmit = () => {
 </script>
 
 <template>
-  <UForm :state="formValues" ref="canvasForm" :validate="validate" @submit="onSubmit">
+  <UForm
+    class="canvas-form"
+    :state="formValues"
+    ref="canvasForm"
+    :validate="validate"
+    @submit="onSubmit"
+  >
     <UFormGroup name="heading">
       Заголовок страницы
       <span class="required">*</span>
@@ -67,4 +73,9 @@ const onSubmit = () => {
   </UForm>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.canvas-form {
+  max-width: 900px;
+  margin: 0 auto;
+}
+</style>

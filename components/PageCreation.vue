@@ -60,11 +60,10 @@ const handleCreatePageFormSubmit = async () => {
       class="page-creation__form"
       @submit="handleCreatePageFormSubmit"
     >
-      <UFormGroup name="route" class="page-creation__text-field">
+      <UFormGroup name="route" class="page-creation__text-field" :eager-validation="true">
         Путь на будущую страницу: (http://www.nature-nas.by*ссылка*)
         <span class="required">*</span>
         <UInput
-          color="blue"
           v-model="newRouteValues.route"
           placeholder="Введите ссылку на страницу латинницей: /..."
         />
@@ -82,7 +81,7 @@ const handleCreatePageFormSubmit = async () => {
           ></div>
         </template>
       </URadioGroup>
-      <button class="page-creation__submit-btn" type="submit">Создать страницу</button>
+      <SubmitBtn>Создать страницу</SubmitBtn>
     </UForm>
   </div>
 </template>

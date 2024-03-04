@@ -12,6 +12,7 @@ linksState.value = links.value;
 <template>
   <NuxtLayout>
     <AppHeader />
+    <HeadingImage />
     <NuxtPage />
     <AppFooter />
   </NuxtLayout>

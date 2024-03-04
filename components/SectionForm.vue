@@ -55,7 +55,7 @@ const handleSubmit = async (evt: FormSubmitEvent<any>) => {
         Содержимое
         <span class="required">*</span>
         <ClientOnly>
-          <ContentEditor name="text" v-model="sectionValue.text" />
+          <ContentEditor v-model="sectionValue.text" />
         </ClientOnly>
       </UFormGroup>
 

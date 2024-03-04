@@ -46,19 +46,25 @@ const handleCanvasFormSubmit = (newVal: any) => {
   contentValues.value = newVal;
   console.log(contentValues);
   disableEditMode();
+
+  // add seo to server!!!!
+  // useSeoMeta({
+  //   title: contentValues.value.heading,
+  //   description: contentValues.value.description
+  // });
 };
 </script>
 
 <template>
   <div>
-    <article v-if="!isInEditMode" class="canvas">
-      <h1 class="canvas__heading">
+    <article v-if="!isInEditMode" class="page">
+      <h1 class="page__heading">
         {{ contentValues.heading }}
       </h1>
-      <p class="canvas__description">
+      <p class="page__description">
         {{ contentValues.description }}
       </p>
-      <div v-html="contentValues.plainText" class="canvas__plain-text"></div>
+      <div v-html="contentValues.plainText" class="page__plain-text"></div>
       <!-- <Carousel>
         <Slide v-for="slide in contentValues.photos" :key="slide">
           <div class="carousel__item">{{ slide }}</div>
@@ -68,7 +74,7 @@ const handleCanvasFormSubmit = (newVal: any) => {
         </template>
       </Carousel> -->
       <!-- <UCarousel></UCarousel> -->
-      <MenuButton @click="enableEditMode" :is-small="true" :button-type="'button'">
+      <MenuButton class="page__edit-btn" :is-small="true" @click="enableEditMode">
         Редактировать
       </MenuButton>
     </article>
@@ -104,7 +110,16 @@ const handleCanvasFormSubmit = (newVal: any) => {
 </template>
 
 <style lang="scss">
-.canvas__plain-text {
-  margin-bottom: 50px;
+.page {
+  display: flex;
+  flex-direction: column;
+
+  .page__plain-text {
+    margin-bottom: 50px;
+  }
+
+  .page__edit-btn {
+    margin: 0 auto;
+  }
 }
 </style>

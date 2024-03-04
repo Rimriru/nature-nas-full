@@ -21,12 +21,16 @@
   .dropdown-menu__sub-menu {
     position: absolute;
     top: 64px;
-    background-color: #587495;
+    background: rgba(88, 116, 149, 0.5);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(100px);
+    -webkit-backdrop-filter: blur(100px);
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
     width: clamp(100%, 10vw, 150%);
     display: flex;
     flex-direction: column;
+    z-index: 100;
 
     li {
       padding: 8px;

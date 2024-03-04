@@ -18,7 +18,7 @@ definePageMeta({
       });
     }
 
-    const isInDb = useRouteFindByPath(routes, to.path);
+    const isInDb = useRouteFindByPath(routes.value, to.path);
     nuxtApp.provide('currentPage', isInDb);
 
     if (!isInDb) {
@@ -33,7 +33,6 @@ definePageMeta({
 
 <template>
   <main class="page-content">
-    <!-- <p>{{ $route.params.page }}</p> -->
     <CanvasComponent :heading="'hi!!'" :description="'Lol, how about that'" :plain-text="'LOL'" />
     <LazySectionForm />
   </main>
