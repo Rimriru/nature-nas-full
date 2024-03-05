@@ -4,7 +4,9 @@
   <main>
     <p>Ты на главной!</p>
     <NuxtLink to="/admin">To admin</NuxtLink>
-    <NuxtLink to="/look" external>To Canvas One</NuxtLink>
+    <ClientOnly>
+      <NuxtLink to="/look" external>To Canvas One</NuxtLink>
+    </ClientOnly>
   </main>
 </template>
 

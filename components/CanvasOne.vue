@@ -6,6 +6,14 @@ const contentValues = ref({
   photos: []
 });
 const isInEditMode = ref(false);
+const pageTitle = usePageTitle();
+
+watch(
+  () => contentValues.value.heading,
+  (newValue, oldValue) => {
+    pageTitle.value = newValue;
+  }
+);
 
 const props = defineProps(['heading', 'description', 'plainText']);
 
@@ -111,8 +119,10 @@ const handleCanvasFormSubmit = (newVal: any) => {
 
 <style lang="scss">
 .page {
+  max-width: 1400px;
   display: flex;
   flex-direction: column;
+  margin: 0 auto;
 
   .page__plain-text {
     margin-bottom: 50px;

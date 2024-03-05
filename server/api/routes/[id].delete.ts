@@ -1,7 +1,6 @@
 import { routes, links } from '../../models/index';
 
 export default defineEventHandler(async (evt) => {
-  console.log('DELETE /api/routes');
   const id = getRouterParam(evt, 'id');
   try {
     console.log('Delete route');

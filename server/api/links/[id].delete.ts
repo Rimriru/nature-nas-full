@@ -2,7 +2,6 @@ import { links } from '../../models/index';
 import type { Link } from '~/types/LinkDataFromDb';
 
 export default defineEventHandler(async (evt) => {
-  console.log('DELETE /api/links/[id]');
   const id = getRouterParam(evt, 'id');
   try {
     const deletedLink = (await links.findByIdAndDelete(id)) as Link;

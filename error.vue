@@ -10,7 +10,9 @@ const props = defineProps({
   <div class="error">
     <h1>{{ props.error?.statusCode }}</h1>
     <p>{{ props.error?.message }}</p>
-    <NuxtLink to="/" replace external>Вернуться на главную</NuxtLink>
+    <ClientOnly>
+      <NuxtLink to="/" replace external>Вернуться на главную</NuxtLink>
+    </ClientOnly>
   </div>
 </template>
 

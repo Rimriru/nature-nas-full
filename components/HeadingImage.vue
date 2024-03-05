@@ -15,6 +15,7 @@ router.beforeEach(() => {
 
 <style lang="scss">
 .heading-image {
+  max-width: 1920px;
   width: 100%;
   height: 227px;
   position: relative;
@@ -34,8 +35,6 @@ router.beforeEach(() => {
     background-image: url('~/assets/images/main-photo.jpg');
     width: 100%;
     height: 100%;
-    background-size: cover;
-    background-position: bottom;
     background-repeat: no-repeat;
   }
 }
