@@ -1,10 +1,11 @@
 <script setup lang="ts">
-useHead({
-  title: 'Карта сайта'
+const title = 'Карта сайта';
+
+useSeoMeta({
+  title
 });
 
-const pageTitle = usePageTitle();
-pageTitle.value = 'Карта сайта';
+usePageTitleChange(title);
 </script>
 
 <template>

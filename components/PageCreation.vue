@@ -75,10 +75,9 @@ const handleCreatePageFormSubmit = async () => {
         legend="Выберите шаблон страницы:"
       >
         <template #label="{ option }">
-          <div
-            class="page-creation__canvas"
-            :style="{ backgroundImage: `url(${option.img})` }"
-          ></div>
+          <div class="page-creation__canvas" :style="{ backgroundImage: `url(${option.img})` }">
+            <span class="page-creation__tooltip">{{ option.tooltipText }}</span>
+          </div>
         </template>
       </URadioGroup>
       <SubmitBtn>Создать страницу</SubmitBtn>

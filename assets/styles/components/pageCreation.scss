@@ -22,6 +22,28 @@
       height: 264px;
       background-size: cover;
       cursor: pointer;
+
+      &:hover .page-creation__tooltip {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      .page-creation__tooltip {
+        visibility: hidden;
+        opacity: 0;
+        max-width: 120px;
+        background-color: rgb(85, 85, 85);
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 10px;
+        position: absolute;
+        z-index: 1;
+        top: 105%;
+        left: 50%;
+        margin-left: -40px;
+        transition: opacity 0.2s ease-in;
+        text-wrap: pretty;
+      }
     }
   }
 

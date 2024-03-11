@@ -109,56 +109,5 @@ const onAddLinkFormSubmit = async () => {
 </template>
 
 <style lang="scss">
-@use '~/assets/styles/variables.scss' as *;
-
-.header {
-  color: #fff;
-
-  .header__top-bg {
-    background-color: $dark-blue;
-  }
-  .header__top {
-    margin-left: 15%;
-    padding: 5px;
-    display: flex;
-    gap: 14px;
-
-    .header__name {
-      font-weight: 500;
-    }
-
-    .header__icon {
-      width: 24px;
-      height: 24px;
-      background-size: 100%;
-
-      &.header__icon_home {
-        background-image: url('~/assets/images/home-icon.svg');
-      }
-
-      &.header__icon_map {
-        background-image: url('~/assets/images/map-icon.svg');
-      }
-    }
-  }
-
-  .header__bottom-bg {
-    background-color: $mid-blue;
-
-    .header__bottom {
-      padding-inline: 5px;
-
-      .header__bottom-logo {
-        width: 72px;
-      }
-
-      .header__bottom-links {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 16px;
-      }
-    }
-  }
-}
+@import '~/assets/styles/components/appHeader.scss';
 </style>

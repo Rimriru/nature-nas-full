@@ -33,9 +33,11 @@ router.beforeEach(() => {
 
   .heading-image__img {
     background-image: url('~/assets/images/main-photo.jpg');
+    position: relative;
     width: 100%;
     height: 100%;
     background-repeat: no-repeat;
+    z-index: 1;
   }
 }
 </style>

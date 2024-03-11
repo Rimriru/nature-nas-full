@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const newsData = reactive({
   title: '',
+  photo: '',
   content: ''
 });
 
@@ -21,6 +22,11 @@ const validate = (state: any) => {
         Заголовок новости
         <span class="required">*</span>
         <UInput v-model="newsData.title" placeholder="Введите заголовок новости..." />
+      </UFormGroup>
+      <UFormGroup name="cover">
+        Обложка
+        <span class="required">*</span>
+        <UInput v-model="newsData.photo" type="file" />
       </UFormGroup>
       <UFormGroup name="content">
         Содержимое

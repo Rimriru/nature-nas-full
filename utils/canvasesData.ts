@@ -8,27 +8,33 @@ import canvasSix from '~/assets/images/canvas-6.png';
 const CANVAS_OPTIONS = [
   {
     value: 'CanvasOne',
-    img: canvasOne
+    img: canvasOne,
+    tooltipText: 'Контакт, описание, текст, галерея, секции'
   },
   {
     value: 'CanvasTwo',
-    img: canvasTwo
+    img: canvasTwo,
+    tooltipText: 'Описание, контакт, текст, галерея, секции'
   },
   {
     value: 'CanvasThree',
-    img: canvasThree
+    img: canvasThree,
+    tooltipText: 'Контакт (2), описание, текст, галерея, секции'
   },
   {
     value: 'CanvasFour',
-    img: canvasFour
+    img: canvasFour,
+    tooltipText: 'Галерея, текст, контакт (2), описание, секции'
   },
   {
     value: 'CanvasFive',
-    img: canvasFive
+    img: canvasFive,
+    tooltipText: 'Галерея, текст, секции'
   },
   {
     value: 'CanvasSix',
-    img: canvasSix
+    img: canvasSix,
+    tooltipText: 'Текст, галерея, текст, секции'
   }
 ];
 
