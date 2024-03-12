@@ -31,6 +31,7 @@ const handleMenuButtonClick = (pageId: string) => {
 <style lang="scss">
 .admin {
   max-width: 1400px;
+  width: 100%;
   display: flex;
   margin: 0 auto;
   gap: 50px;

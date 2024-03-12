@@ -15,11 +15,11 @@ const props = defineProps({
           <ErrorEye />
           <p class="error__code-title">4</p>
         </div>
-        <span class="error__code-text">Страница не найдена!</span>
+        <span class="error__code-text">{{ props.error?.message }}!</span>
       </template>
       <template v-else>
         <h1 class="error__code-title">{{ props.error?.statusCode }}</h1>
-        <p>{{ props.error?.message }}</p>
+        <p class="error__code-text">{{ props.error?.message }}</p>
       </template>
       <ClientOnly>
         <NuxtLink class="error__link" to="/" replace external> Вернуться на главную </NuxtLink>

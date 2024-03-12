@@ -8,9 +8,6 @@ export default defineNuxtConfig({
       },
       title: 'Институт природопользования НАН Беларуси',
       // meta: [{ name: 'description', content: 'My amazing site.' }],
-      // bodyAttrs: {
-      //   class: 'test'
-      // },
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1'
     }
@@ -19,8 +16,21 @@ export default defineNuxtConfig({
   runtimeConfig: {
     mongoDbUrl: process.env.MONGODB_URL
   },
+  security: {
+    headers: {
+      crossOriginEmbedderPolicy:
+        process.env.NODE_ENV === 'development' ? 'unsafe-none' : 'require-corp',
+      contentSecurityPolicy: {
+        'img-src': ["'self'", 'https:', 'data:']
+      }
+    },
+    rateLimiter: {
+      tokensPerInterval: 30,
+      interval: 10000
+    }
+  },
   css: ['~/assets/styles/base.css', '~/assets/styles/main.scss'],
-  modules: ['@nuxt/image', '@nuxt/ui', '@vueuse/nuxt'],
+  modules: ['@nuxt/image', '@nuxt/ui', '@vueuse/nuxt', 'nuxt-security'],
   nitro: {
     plugins: ['~/server/index.ts']
   },
