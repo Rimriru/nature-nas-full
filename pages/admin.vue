@@ -29,7 +29,6 @@ const handleMenuButtonClick = (pageId: string) => {
 </template>
 
 <style lang="scss">
-@import url('../assets/styles/base.css');
 .admin {
   max-width: 1400px;
   display: flex;

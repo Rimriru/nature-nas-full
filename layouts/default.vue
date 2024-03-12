@@ -1,13 +1,17 @@
 <template>
   <div class="layout">
+    <AppHeader />
     <slot />
+    <AppFooter />
   </div>
 </template>
 
 <style lang="scss">
 .layout {
+  min-height: 100vh;
   width: 100%;
   margin: 0 auto;
-  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 </style>

@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     mongoDbUrl: process.env.MONGODB_URL
   },
   css: ['~/assets/styles/base.css', '~/assets/styles/main.scss'],
-  modules: ['@nuxt/image', '@nuxt/ui'],
+  modules: ['@nuxt/image', '@nuxt/ui', '@vueuse/nuxt'],
   nitro: {
     plugins: ['~/server/index.ts']
   },

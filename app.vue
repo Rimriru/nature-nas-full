@@ -11,9 +11,7 @@ linksState.value = links.value;
 
 <template>
   <NuxtLayout>
-    <AppHeader />
     <HeadingImage v-if="$route.path !== '/admin'" />
     <NuxtPage />
-    <AppFooter />
   </NuxtLayout>
 </template>
