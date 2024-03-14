@@ -15,7 +15,7 @@ watch(
   }
 );
 
-const props = defineProps(['heading', 'description', 'plainText']);
+// const props = defineProps(['heading', 'description', 'plainText']);
 
 const originalState = {
   heading: '',
@@ -52,7 +52,7 @@ const handleCancelBtnClick = () => {
 
 const handleCanvasFormSubmit = (newVal: any) => {
   contentValues.value = newVal;
-  console.log(contentValues);
+  console.log(contentValues.value);
   disableEditMode();
 
   // add seo to server!!!!
@@ -64,23 +64,15 @@ const handleCanvasFormSubmit = (newVal: any) => {
 </script>
 
 <template>
-  <div>
+  <main class="page-content">
     <article v-if="!isInEditMode" class="page">
-      <h1 class="page__heading">
-        {{ contentValues.heading }}
-      </h1>
-      <p class="page__description">
-        {{ contentValues.description }}
-      </p>
+      <div class="page__container">
+        <PersonaCard></PersonaCard>
+        <p class="page__description">
+          {{ contentValues.description }}
+        </p>
+      </div>
       <div v-html="contentValues.plainText" class="page__plain-text"></div>
-      <!-- <Carousel>
-        <Slide v-for="slide in contentValues.photos" :key="slide">
-          <div class="carousel__item">{{ slide }}</div>
-        </Slide>
-        <template #addons>
-          <Navigation />
-        </template>
-      </Carousel> -->
       <!-- <UCarousel></UCarousel> -->
       <MenuButton class="page__edit-btn" :is-small="true" @click="enableEditMode">
         Редактировать
@@ -92,6 +84,14 @@ const handleCanvasFormSubmit = (newVal: any) => {
       @on-cancel="handleCancelBtnClick"
       @submit="handleCanvasFormSubmit"
     >
+      <!-- <fieldset>
+        <legend>Контакт</legend>
+        Выбрать существующий: <UInputMenu></UInputMenu>
+        Создать новый:
+        <UFormGroup></UFormGroup>
+        <UFormGroup></UFormGroup>
+        <UInput />
+      </fieldset> -->
       <label for="carousel" v-if="isInEditMode">
         Загрузить фото для галереи:
         <input
@@ -104,7 +104,7 @@ const handleCanvasFormSubmit = (newVal: any) => {
           @change="onPhotosSelected"
         />
         <UButton color="blue" variant="soft" @click="($refs.fileInput as HTMLInputElement).click()">
-          Pick file
+          Выбрать файл
         </UButton>
         <p>
           Последний загруженный файл:
@@ -114,7 +114,7 @@ const handleCanvasFormSubmit = (newVal: any) => {
     </CanvasForm>
     <!-- Секции -->
     <PageSections />
-  </div>
+  </main>
 </template>
 
 <style lang="scss">
@@ -123,6 +123,11 @@ const handleCanvasFormSubmit = (newVal: any) => {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
+
+  .page__container {
+    display: flex;
+    gap: 20px;
+  }
 
   .page__plain-text {
     margin-bottom: 50px;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Form, FormError } from '@nuxt/ui/dist/runtime/types';
+import type { Form, FormError } from '#ui/types';
 const canvasForm = ref(null);
 const props = defineProps(['contentValues']);
 const emit = defineEmits(['onCancel', 'submit']);
@@ -64,7 +64,7 @@ const onSubmit = () => {
     </UFormGroup>
     <slot />
 
-    <div>
+    <div class="canvas-form__btns-container">
       <MenuButton @click="onCancel" :is-small="true"> Отменить </MenuButton>
       <MenuButton :is-small="true" :is-active="true" :button-type="'submit'">
         Сохранить
@@ -75,7 +75,16 @@ const onSubmit = () => {
 
 <style lang="scss">
 .canvas-form {
-  max-width: 900px;
   margin: 0 auto;
+  display: grid;
+  grid-column: 1fr;
+  gap: 30px;
+
+  .canvas-form__btns-container {
+    display: flex;
+    max-width: fit-content;
+    margin: 0 auto;
+    gap: 30px;
+  }
 }
 </style>

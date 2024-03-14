@@ -1,13 +1,23 @@
 <script setup lang="ts"></script>
 
 <template>
-  <main>
-    <p>Ты на главной!</p>
-    <NuxtLink to="/admin">To admin</NuxtLink>
-    <ClientOnly>
-      <NuxtLink to="/look" external>To Canvas One</NuxtLink>
-    </ClientOnly>
+  <main class="page-content">
+    <p class="title">Ты на главной!</p>
+    <div class="links">
+      <NuxtLink to="/admin">To admin</NuxtLink>
+      <NuxtLink to="/look">To Canvas One</NuxtLink>
+    </div>
   </main>
 </template>
 
-<style></style>
+<style lang="scss">
+.title {
+  font-size: 19px;
+  text-align: center;
+  margin-bottom: 5px;
+}
+.links {
+  display: flex;
+  gap: 10px;
+}
+</style>

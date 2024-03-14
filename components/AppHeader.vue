@@ -69,7 +69,7 @@ const onAddLinkFormSubmit = async () => {
     <div class="header__top-bg">
       <nav class="header__top">
         <span class="header__name">Институт природопользования НАН Беларуси</span>
-        <NuxtLink to="/">
+        <NuxtLink to="/" external>
           <Icon :icon="homeIcon" />
         </NuxtLink>
         <NuxtLink to="/site-map">

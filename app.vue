@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const router = useRouter();
+
 const routesState = useRoutesState();
 const linksState = useLinksState();
 
@@ -7,6 +9,11 @@ const links = await useLinks();
 
 routesState.value = routes.value;
 linksState.value = links.value;
+
+routesState.value.forEach((route) => {
+  const CanvasComponent = () => import(`~/components/${route.component}.vue`);
+  router.addRoute({ path: route.path, name: route.path, component: CanvasComponent, props: true });
+});
 </script>
 
 <template>

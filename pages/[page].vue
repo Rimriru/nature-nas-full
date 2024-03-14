@@ -2,14 +2,19 @@
 import type RouteDataFromDb from '~/types/RouteDataFromDb';
 
 const nuxtApp = useNuxtApp();
-const { component } = nuxtApp.$currentPage as RouteDataFromDb;
-
-const CanvasComponent = defineAsyncComponent(() => import(`~/components/${component}.vue`));
+const router = useRouter();
+const { path, component } = nuxtApp.$currentPage as RouteDataFromDb;
 
 definePageMeta({
   middleware: async (to) => {
     const routes = await useAllRoutes();
+
+    const links = await useLinks();
+    const linksState = useLinksState();
+    linksState.value = links.value;
+
     const nuxtApp = useNuxtApp();
+    const router = useRouter();
 
     if (routes === null) {
       throw createError({
@@ -19,21 +24,35 @@ definePageMeta({
     }
 
     const isInDb = useRouteFindByPath(routes.value, to.path);
-    nuxtApp.provide('currentPage', isInDb);
 
     if (!isInDb) {
       throw createError({
         statusCode: 404,
         message: `Страница ${to.path} не найдена`
       });
+    } else {
+      nuxtApp.provide('currentPage', isInDb);
+      const CanvasComponent = () => import(`~/components/${isInDb.component}.vue`);
+
+      router.addRoute({
+        path: isInDb.path,
+        name: isInDb.path,
+        component: CanvasComponent,
+        props: true
+      });
+
+      router.push(isInDb.path);
     }
   }
 });
 </script>
 
 <template>
-  <main class="page-content">
+  <router-view :heading="'hi!!'">
+    <!-- <component :is="Component" :key="path" :heading="'hi!!'" /> -->
+  </router-view>
+  <!-- <main class="page-content">
     <CanvasComponent :heading="'hi!!'" :description="'Lol, how about that'" :plain-text="'LOL'" />
     <LazySectionForm />
-  </main>
+  </main> -->
 </template>

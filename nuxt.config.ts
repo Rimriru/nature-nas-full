@@ -12,6 +12,17 @@ export default defineNuxtConfig({
       viewport: 'width=device-width, initial-scale=1'
     }
   },
+  vite: {
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            canvases: ['./components/CanvasOne', './components/CanvasTwo']
+          }
+        }
+      }
+    }
+  },
   components: [{ path: '~/components/ui', pathPrefix: false }, '~/components'],
   runtimeConfig: {
     mongoDbUrl: process.env.MONGODB_URL

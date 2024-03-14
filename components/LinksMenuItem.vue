@@ -29,11 +29,7 @@ const linksOfTheGroup = computed(() => {
     :key="JSON.stringify(item)"
     :class="{ li_admin: isInAdminPage }"
   >
-    <NuxtLink
-      :to="(item.to as RouteLocationRaw)"
-      external
-      :class="{ 'li__link_not-admin': !isInAdminPage }"
-    >
+    <NuxtLink :to="(item.to as RouteLocationRaw)" :class="{ 'li__link_not-admin': !isInAdminPage }">
       {{ item.title }}
     </NuxtLink>
     <div v-if="isInAdminPage">
