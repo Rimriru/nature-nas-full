@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type RouteDataFromDb from '~/types/RouteDataFromDb';
 const contentValues = ref({
   heading: '',
   description: '',
@@ -15,7 +16,12 @@ watch(
   }
 );
 
-// const props = defineProps(['heading', 'description', 'plainText']);
+const props = defineProps(['routeData']);
+
+// const { data } = useLazyFetch(`/api/content/${props.routeData._id}`);
+// if (data.value) {
+//   console.log('Data fetched!');
+// }
 
 const originalState = {
   heading: '',
@@ -64,57 +70,64 @@ const handleCanvasFormSubmit = (newVal: any) => {
 </script>
 
 <template>
-  <main class="page-content">
-    <article v-if="!isInEditMode" class="page">
-      <div class="page__container">
-        <PersonaCard></PersonaCard>
-        <p class="page__description">
-          {{ contentValues.description }}
-        </p>
-      </div>
-      <div v-html="contentValues.plainText" class="page__plain-text"></div>
-      <!-- <UCarousel></UCarousel> -->
-      <MenuButton class="page__edit-btn" :is-small="true" @click="enableEditMode">
-        Редактировать
-      </MenuButton>
-    </article>
-    <CanvasForm
-      v-else
-      :content-values="contentValues"
-      @on-cancel="handleCancelBtnClick"
-      @submit="handleCanvasFormSubmit"
-    >
-      <!-- <fieldset>
-        <legend>Контакт</legend>
-        Выбрать существующий: <UInputMenu></UInputMenu>
-        Создать новый:
-        <UFormGroup></UFormGroup>
-        <UFormGroup></UFormGroup>
-        <UInput />
-      </fieldset> -->
-      <label for="carousel" v-if="isInEditMode">
-        Загрузить фото для галереи:
-        <input
-          style="display: none"
-          id="carousel"
-          type="file"
-          multiple
-          ref="fileInput"
-          accept="image/gif, image/jpeg, image/png"
-          @change="onPhotosSelected"
-        />
-        <UButton color="blue" variant="soft" @click="($refs.fileInput as HTMLInputElement).click()">
-          Выбрать файл
-        </UButton>
-        <p>
-          Последний загруженный файл:
-          {{ contentValues.photos.length > 0 ? (contentValues.photos[0] as File).name : '' }}
-        </p>
-      </label>
-    </CanvasForm>
-    <!-- Секции -->
-    <PageSections />
-  </main>
+  <ClientOnly>
+    <main class="page-content">
+      <article v-if="!isInEditMode" class="page">
+        <h3>{{ props.routeData._id }}</h3>
+        <div class="page__container">
+          <PersonaCard></PersonaCard>
+          <p class="page__description">
+            {{ contentValues.description }}
+          </p>
+        </div>
+        <div v-html="contentValues.plainText" class="page__plain-text"></div>
+        <!-- <UCarousel></UCarousel> -->
+        <MenuButton class="page__edit-btn" :is-small="true" @click="enableEditMode">
+          Редактировать
+        </MenuButton>
+      </article>
+      <CanvasForm
+        v-else
+        :content-values="contentValues"
+        @on-cancel="handleCancelBtnClick"
+        @submit="handleCanvasFormSubmit"
+      >
+        <!-- <fieldset>
+          <legend>Контакт</legend>
+          Выбрать существующий: <UInputMenu></UInputMenu>
+          Создать новый:
+          <UFormGroup></UFormGroup>
+          <UFormGroup></UFormGroup>
+          <UInput />
+        </fieldset> -->
+        <label for="carousel" v-if="isInEditMode">
+          Загрузить фото для галереи:
+          <input
+            style="display: none"
+            id="carousel"
+            type="file"
+            multiple
+            ref="fileInput"
+            accept="image/gif, image/jpeg, image/png"
+            @change="onPhotosSelected"
+          />
+          <UButton
+            color="blue"
+            variant="soft"
+            @click="($refs.fileInput as HTMLInputElement).click()"
+          >
+            Выбрать файл
+          </UButton>
+          <p>
+            Последний загруженный файл:
+            {{ contentValues.photos.length > 0 ? (contentValues.photos[0] as File).name : '' }}
+          </p>
+        </label>
+      </CanvasForm>
+      <!-- Секции -->
+      <PageSections />
+    </main>
+  </ClientOnly>
 </template>
 
 <style lang="scss">

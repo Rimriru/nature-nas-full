@@ -7,7 +7,6 @@ export default defineEventHandler(async (evt) => {
     const deletedYoungScientist = await personas.findByIdAndDelete(id);
     return { message: 'Карточка персоны удалена' };
   } catch (error: any) {
-    console.error(error);
     throw createError({
       status: error.statusCode,
       message: error.message

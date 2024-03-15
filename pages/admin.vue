@@ -6,6 +6,10 @@ const whatPageIsShown = ref('page-creation');
 const handleMenuButtonClick = (pageId: string) => {
   whatPageIsShown.value = pageId;
 };
+
+useServerSeoMeta({
+  robots: 'none noarchive nositelinkssearchbox'
+});
 </script>
 
 <template>

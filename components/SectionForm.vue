@@ -35,36 +35,40 @@ const handleSubmit = async (evt: FormSubmitEvent<any>) => {
 </script>
 
 <template>
-  <AppPopup @on-close="onClose" :is-opened="isAddSectionPopupOpened">
-    <UForm
-      :state="sectionValue"
-      :validate="validate"
-      class="section-form"
-      ref="form"
-      @submit="handleSubmit"
-    >
-      <h3 class="section-form__heading">Добавить новую секцию</h3>
+  <ClientOnly>
+    <AppPopup @on-close="onClose" :is-opened="isAddSectionPopupOpened">
+      <UForm
+        :state="sectionValue"
+        :validate="validate"
+        class="section-form"
+        ref="form"
+        @submit="handleSubmit"
+      >
+        <h3 class="section-form__heading">Добавить новую секцию</h3>
 
-      <UFormGroup name="title" class="section-form__label">
-        Заголовок секции
-        <span class="required">*</span>
-        <UInput color="blue" v-model="sectionValue.title" placeholder="Введите заголовок" />
-      </UFormGroup>
+        <UFormGroup name="title" class="section-form__label">
+          Заголовок секции
+          <span class="required">*</span>
+          <UInput color="blue" v-model="sectionValue.title" placeholder="Введите заголовок" />
+        </UFormGroup>
 
-      <UFormGroup name="text" class="section-form__label">
-        Содержимое
-        <span class="required">*</span>
-        <ClientOnly>
-          <ContentEditor v-model="sectionValue.text" />
-        </ClientOnly>
-      </UFormGroup>
+        <UFormGroup name="text" class="section-form__label">
+          Содержимое
+          <span class="required">*</span>
+          <ClientOnly>
+            <ContentEditor v-model="sectionValue.text" />
+          </ClientOnly>
+        </UFormGroup>
 
-      <div class="section-form__btns">
-        <MenuButton @click="onClose" :is-small="true">Отмена</MenuButton>
-        <MenuButton :is-active="true" :button-type="'submit'" :is-small="true">Добавить</MenuButton>
-      </div>
-    </UForm>
-  </AppPopup>
+        <div class="section-form__btns">
+          <MenuButton @click="onClose" :is-small="true">Отмена</MenuButton>
+          <MenuButton :is-active="true" :button-type="'submit'" :is-small="true"
+            >Добавить</MenuButton
+          >
+        </div>
+      </UForm>
+    </AppPopup>
+  </ClientOnly>
 </template>
 
 <style lang="scss">

@@ -3,7 +3,6 @@ import type { PatchLinkRequestBody } from './types/links';
 import type { Link } from '~/types/LinkDataFromDb';
 
 export default defineEventHandler(async (evt) => {
-  console.log('PATCH /api/links/[id]');
   const id = getRouterParam(evt, 'id');
   const { title, to } = await readBody<PatchLinkRequestBody>(evt);
 
@@ -26,7 +25,6 @@ export default defineEventHandler(async (evt) => {
       return { editedLinkData, message: `Ссылка "${title}" была изменена` };
     }
   } catch (error: any) {
-    console.error(error);
     throw createError({
       status: error.statusCode,
       message: error.message

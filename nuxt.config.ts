@@ -27,12 +27,19 @@ export default defineNuxtConfig({
   runtimeConfig: {
     mongoDbUrl: process.env.MONGODB_URL
   },
+  routeRules: {
+    '/api/**': { cors: true }
+  },
   security: {
     headers: {
       crossOriginEmbedderPolicy:
         process.env.NODE_ENV === 'development' ? 'unsafe-none' : 'require-corp',
       contentSecurityPolicy: {
-        'img-src': ["'self'", 'https:', 'data:']
+        'script-src': ["'self'", "'unsafe-inline'", 'https:', '*.tinymce.com', '*.tiny.cloud'],
+        'connect-src': ["'self'", '*.tinymce.com', '*.tiny.cloud', 'blob:'],
+        'img-src': ["'self'", '*.tinymce.com', '*.tiny.cloud', 'data:'],
+        'style-src': ["'self'", "'unsafe-inline'", '*.tinymce.com', '*.tiny.cloud'],
+        'font-src': ["'self'", '*.tinymce.com', '*.tiny.cloud']
       }
     },
     rateLimiter: {
@@ -59,5 +66,8 @@ export default defineNuxtConfig({
       lg: 1024,
       xl: 1280
     }
+  },
+  experimental: {
+    asyncContext: true
   }
 });

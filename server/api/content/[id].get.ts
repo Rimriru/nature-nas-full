@@ -1,9 +1,10 @@
-import { links } from '../../models/index';
+import { contents } from '../../models/index';
 
 export default defineEventHandler(async (evt) => {
+  const id = getRouterParam(evt, 'id');
   try {
-    const linksData = links.find();
-    return linksData;
+    const content = await contents.findOne({ route: { _id: id } });
+    return content;
   } catch (error: any) {
     throw createError({
       status: error.statusCode,

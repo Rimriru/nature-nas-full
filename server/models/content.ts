@@ -10,16 +10,18 @@ const contentSchema = new mongoose.Schema(
     description: String,
     sections: {
       type: [mongoose.Schema.Types.ObjectId],
-      ref: 'section',
-      default: []
+      ref: 'section'
     },
     personas: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: 'persona'
     },
     photos: {
-      type: [mongoose.Schema.Types.Mixed],
-      default: []
+      type: [mongoose.Schema.Types.Mixed]
+    },
+    route: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: [true, 'Необходимо передать роут']
     }
   },
   { versionKey: false }

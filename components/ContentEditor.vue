@@ -24,7 +24,8 @@ const props = defineProps({
       statusbar: false,
       resize: true,
       min_height: 500,
-      placeholder: props.placeholder
+      placeholder: props.placeholder,
+      referrer_policy: 'origin'
     }"
     model-events="change keydown focus paste undo redo"
     :output-format="props.output"
