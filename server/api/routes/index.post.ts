@@ -1,15 +1,13 @@
 import { routes } from '../../models/index';
 import { CONFLICT_ROUTE_ERROR_MESSAGE } from '~/utils/errorMessages';
+import type RouteDataFromDb from '~/types/RouteDataFromDb';
 
 export default defineEventHandler(async (evt) => {
-  console.log('POST /api/routes');
   const routeData = await readBody(evt);
   try {
-    console.log('Creating new route in DB');
-    console.log(routeData);
     const newRoute = await routes.create(routeData);
     setResponseStatus(evt, 201);
-    return newRoute;
+    return newRoute as unknown as RouteDataFromDb;
   } catch (error: any) {
     if (error.code === 11000) {
       throw createError({

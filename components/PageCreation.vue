@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CANVAS_OPTIONS from '~/utils/canvasesData';
+import { CANVAS_OPTIONS, canvases } from '~/utils/canvasesData';
 import type { Form, FormError } from '#ui/types';
 import type RouteDataFromDb from '~/types/RouteDataFromDb';
 
@@ -11,6 +11,7 @@ const form = ref(null);
 
 const routesFromDb = useRoutesState();
 const notifications = useToast();
+const router = useRouter();
 
 const validate = (state: any): FormError[] => {
   const errors = [];
@@ -41,7 +42,17 @@ const handleCreatePageFormSubmit = async () => {
         body: newRouteBody
       });
 
-      routesFromDb.value.push(data as unknown as RouteDataFromDb);
+      routesFromDb.value.push(data as RouteDataFromDb);
+
+      router.addRoute({
+        path: data.path,
+        name: data.path,
+        component: canvases[data.component],
+        props: {
+          routeData: data
+        }
+      });
+
       notifications.add({ id: 'route-create', title: 'Страница создана!' });
       newRouteValues.route = '';
       newRouteValues.canvas = 'CanvasOne';

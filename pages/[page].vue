@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { canvases } from '~/utils/canvasesData';
+
 definePageMeta({
   middleware: async (to) => {
     //const nuxtApp = useNuxtApp();
@@ -19,12 +21,10 @@ definePageMeta({
           message: `Страница ${to.path} не найдена`
         });
       } else {
-        const CanvasComponent = () => import(`~/components/${isInDb.component}.vue`);
-
         router.addRoute({
           path: isInDb.path,
           name: isInDb.path,
-          component: CanvasComponent,
+          component: canvases[isInDb.component],
           props: {
             routeData: isInDb
           }

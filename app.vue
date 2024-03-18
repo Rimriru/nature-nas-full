@@ -1,21 +1,20 @@
 <script setup lang="ts">
+import { canvases } from './utils/canvasesData';
 const router = useRouter();
+const routes = await useAllRoutes();
+const links = await useLinks();
 
 const routesState = useRoutesState();
 const linksState = useLinksState();
-
-const routes = await useAllRoutes();
-const links = await useLinks();
 
 routesState.value = routes;
 linksState.value = links;
 
 routesState.value.forEach((route) => {
-  const CanvasComponent = () => import(`~/components/${route.component}.vue`);
   router.addRoute({
     path: route.path,
     name: route.path,
-    component: CanvasComponent,
+    component: canvases[route.component],
     props: {
       routeData: route
     }

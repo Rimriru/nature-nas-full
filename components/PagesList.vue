@@ -11,6 +11,7 @@ const removeRouteError = ref('');
 const links = useLinksState();
 const routesFromDb = useRoutesState();
 const notifications = useToast();
+const router = useRouter();
 
 const onRemoveBtnClick = (routeId: string, path: string) => {
   isConfirmPopupOpen.value = true;
@@ -33,6 +34,10 @@ const handleRouteRemove = async () => {
     routesFromDb.value = routesFromDb.value.filter(
       (route: RouteDataFromDb) => route._id !== routeDataForRemove.id
     );
+
+    router.removeRoute(routeDataForRemove.path);
+
+    console.log(router.getRoutes());
     onConfirmPopupClose();
     notifications.add({ id: 'route-remove', title: data.message });
   } catch (error: any) {

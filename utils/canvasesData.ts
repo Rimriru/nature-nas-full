@@ -5,7 +5,14 @@ import canvasFour from '~/assets/images/canvas-4.png';
 import canvasFive from '~/assets/images/canvas-5.png';
 import canvasSix from '~/assets/images/canvas-6.png';
 
-const CANVAS_OPTIONS = [
+import { CanvasOne, CanvasTwo } from '#components';
+import type { DefineComponent } from 'vue';
+
+interface Canvases {
+  [key: string]: DefineComponent;
+}
+
+export const CANVAS_OPTIONS = [
   {
     value: 'CanvasOne',
     img: canvasOne,
@@ -38,4 +45,7 @@ const CANVAS_OPTIONS = [
   }
 ];
 
-export default CANVAS_OPTIONS;
+export const canvases: Canvases = {
+  CanvasOne: CanvasOne as DefineComponent,
+  CanvasTwo: CanvasTwo as DefineComponent
+};
