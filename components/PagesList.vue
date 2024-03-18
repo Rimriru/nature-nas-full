@@ -12,13 +12,6 @@ const links = useLinksState();
 const routesFromDb = useRoutesState();
 const notifications = useToast();
 
-const routesArrayForAdmin = computed(() => {
-  return routesFromDb.value.map((route, index) => ({
-    order: index + 1,
-    path: route.path,
-    actions: 'remove' // Replace 'remove' with the desired action
-  }));
-});
 const onRemoveBtnClick = (routeId: string, path: string) => {
   isConfirmPopupOpen.value = true;
   routeDataForRemove.id = routeId;
@@ -32,18 +25,18 @@ const onConfirmPopupClose = () => {
 };
 
 const handleRouteRemove = async () => {
-  const { data, error } = await useFetch(`/api/routes/${routeDataForRemove.id}`, {
-    method: 'delete'
-  });
-  if (data.value) {
+  try {
+    const data = await $fetch(`/api/routes/${routeDataForRemove.id}`, {
+      method: 'delete'
+    });
     links.value = links.value.filter((link) => link.to !== routeDataForRemove.path);
     routesFromDb.value = routesFromDb.value.filter(
-      (route: RouteDataFromDb) => route.path !== routeDataForRemove.path
+      (route: RouteDataFromDb) => route._id !== routeDataForRemove.id
     );
     onConfirmPopupClose();
-    notifications.add({ id: 'route-remove', title: data.value.message });
-  } else {
-    removeRouteError.value = error.value?.data.message;
+    notifications.add({ id: 'route-remove', title: data.message });
+  } catch (error: any) {
+    removeRouteError.value = error.data.message;
   }
 };
 </script>

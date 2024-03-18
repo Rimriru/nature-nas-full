@@ -1,15 +1,14 @@
 <script setup lang="ts">
-const nuxtApp = useNuxtApp();
 const router = useRouter();
 
 const routesState = useRoutesState();
 const linksState = useLinksState();
 
-const routes = await nuxtApp.runWithContext(() => useAllRoutes());
-const links = await nuxtApp.runWithContext(() => useLinks());
+const routes = await useAllRoutes();
+const links = await useLinks();
 
-routesState.value = routes.value;
-linksState.value = links.value;
+routesState.value = routes;
+linksState.value = links;
 
 routesState.value.forEach((route) => {
   const CanvasComponent = () => import(`~/components/${route.component}.vue`);
@@ -26,7 +25,9 @@ routesState.value.forEach((route) => {
 
 <template>
   <NuxtLayout>
-    <HeadingImage v-if="$route.path !== '/admin'" />
-    <NuxtPage />
+    <div class="layout">
+      <HeadingImage v-if="router.currentRoute.value.path !== '/admin'" />
+      <NuxtPage />
+    </div>
   </NuxtLayout>
 </template>

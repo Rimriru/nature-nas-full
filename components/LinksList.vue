@@ -67,37 +67,38 @@ const onEditLinkFormSubmit = async () => {
   if (linkData.title === linkDataBeforeEdit.title && linkData.to === linkDataBeforeEdit.to) {
     onCloseLinkForm();
   } else {
-    const { data, error } = await useFetch(`/api/links/${linkId.value}`, {
-      method: 'patch',
-      body: {
-        title: linkData.title,
-        to: linkData.to
-      }
-    });
-    if (data.value) {
+    const newLinkBody = {
+      title: linkData.title,
+      to: linkData.to
+    };
+    try {
+      const data = await $fetch(`/api/links/${linkId.value}`, {
+        method: 'patch',
+        body: newLinkBody
+      });
+
       const editedLinkIndex = links.value.findIndex(
-        (link) => link._id === data.value?.editedLinkData?._id
+        (link) => link._id === data.editedLinkData?._id
       );
-      links.value[editedLinkIndex] = data.value.editedLinkData as Link;
+      links.value[editedLinkIndex] = data.editedLinkData as Link;
       onCloseLinkForm();
-      notifications.add({ id: 'link-edited', title: data.value.message });
-    } else {
-      editLinkError.value = error.value?.data.message;
+      notifications.add({ id: 'link-edited', title: data.message });
+    } catch (error: any) {
+      editLinkError.value = error?.data.message;
     }
   }
 };
 
 const onRemoveLinkPopupAgree = async () => {
-  const { data, error } = await useFetch(`/api/links/${linkId.value}`, {
-    method: 'delete'
-  });
-
-  if (data.value) {
+  try {
+    const data = await $fetch(`/api/links/${linkId.value}`, {
+      method: 'delete'
+    });
     links.value = links.value.filter((link) => link._id !== linkId.value);
     onCloseConfirmPopup();
-    notifications.add({ id: 'link-removed', title: data.value.message });
-  } else {
-    removeLinkError.value = error.value?.data.message;
+    notifications.add({ id: 'link-removed', title: data.message });
+  } catch (error: any) {
+    removeLinkError.value = error.data.message;
   }
 };
 </script>

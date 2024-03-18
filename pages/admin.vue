@@ -28,7 +28,6 @@ useServerSeoMeta({
     <PagesList v-if="whatPageIsShown === 'pages-list'" />
     <LinksList v-if="whatPageIsShown === 'links-list'" :is-in-admin-page="true" />
     <NewsCreation v-if="whatPageIsShown === 'add-news'" />
-    <UNotifications />
   </main>
 </template>
 

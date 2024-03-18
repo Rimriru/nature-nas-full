@@ -50,16 +50,16 @@ const onAddLinkFormSubmit = async () => {
     to: linkValue.to,
     group: groupingLink.group as Group
   };
-  const { data, error } = await useFetch('/api/links', {
-    method: 'post',
-    body: newLinkBody
-  });
-  if (data.value) {
-    linksState.value.push(data.value as unknown as Link);
-    notifications.add({ id: 'link-create', title: `Ссылка ${newLinkBody.title} создана!` });
+  try {
+    const data = await $fetch('/api/links', {
+      method: 'post',
+      body: newLinkBody
+    });
+    linksState.value.push(data as unknown as Link);
+    notifications.add({ id: 'link-create', title: `Ссылка "${newLinkBody.title}" создана!` });
     onCloseLinkForm();
-  } else {
-    addLinkError.value = error.value?.data.message;
+  } catch (err: any) {
+    addLinkError.value = err.data.message;
   }
 };
 </script>

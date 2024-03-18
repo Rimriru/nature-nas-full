@@ -34,18 +34,20 @@ const handleCreatePageFormSubmit = async () => {
       path: newRouteValues.route,
       component: newRouteValues.canvas
     };
-    const { data, error } = await useFetch('/api/routes', {
-      method: 'post',
-      body: newRouteBody
-    });
-    if (data.value) {
-      routesFromDb.value.push(data.value as unknown as RouteDataFromDb);
+
+    try {
+      const data = await $fetch('/api/routes', {
+        method: 'post',
+        body: newRouteBody
+      });
+
+      routesFromDb.value.push(data as unknown as RouteDataFromDb);
       notifications.add({ id: 'route-create', title: 'Страница создана!' });
       newRouteValues.route = '';
       newRouteValues.canvas = 'CanvasOne';
       (form.value as unknown as Form<string>).clear();
-    } else {
-      notifications.add({ id: 'route-create', title: error.value?.data.message });
+    } catch (error: any) {
+      notifications.add({ id: 'route-create', title: error.data.message });
     }
   }
 };
