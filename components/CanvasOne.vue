@@ -2,6 +2,15 @@
 import type { Content, OriginalContentValues } from '~/types/ContentDataFromDb';
 //import type RouteDataFromDb from '~/types/RouteDataFromDb';
 
+interface PersonaData {
+  name: string;
+  telNumber: string;
+  faxNumber: string;
+  email: string;
+  description: string;
+  photo: string;
+}
+
 const contentValues: Ref<Content> = ref({
   _id: '',
   title: '',
@@ -12,6 +21,19 @@ const contentValues: Ref<Content> = ref({
   sections: [],
   route: ''
 });
+
+const personasOptions: Ref<PersonaData[]> = ref([]);
+const chosenPersona = ref('');
+const personaData: PersonaData = reactive({
+  _id: '',
+  name: '',
+  telNumber: '',
+  faxNumber: '',
+  email: '',
+  description: '',
+  photo: ''
+});
+
 const isInEditMode = ref(false);
 let wasContentBefore = false;
 const pageTitle = usePageTitle();
@@ -25,19 +47,26 @@ watch(
 
 const props = defineProps(['routeData']);
 
-const { data } = await useFetch(`/api/content/${props.routeData._id}`, {
+const content = await useFetch(`/api/content/${props.routeData._id}`, {
   watch: false
 });
 
-if (data.value) {
+if (content.data.value) {
   wasContentBefore = true;
-  contentValues.value = data.value;
+  contentValues.value = content.data.value;
 
   useSeoMeta({
-    title: () => data.value.title,
-    description: () => data.value.description
+    title: () => content.data.value.title,
+    description: () => content.data.value.description
   });
 }
+
+await useFetch('/api/persona', {
+  watch: false,
+  onResponse({ response }) {
+    personasOptions.value = response._data;
+  }
+});
 
 const originalState: OriginalContentValues = {
   title: '',
@@ -90,7 +119,6 @@ const handleCanvasFormSubmit = async () => {
         method: 'post',
         body: newContentBody
       });
-      console.log('After:', data);
       disableEditMode();
     } catch (error) {
       console.error(error);
@@ -101,7 +129,6 @@ const handleCanvasFormSubmit = async () => {
         method: 'patch',
         body: contentBody
       });
-      console.log('After:', data);
       disableEditMode();
     } catch (error) {
       console.error(error);
@@ -121,7 +148,10 @@ const handleCanvasFormSubmit = async () => {
     <main class="page-content">
       <article v-if="!isInEditMode" class="page">
         <div class="page__container">
-          <PersonaCard></PersonaCard>
+          <div>
+            <p></p>
+            <PersonaCard></PersonaCard>
+          </div>
           <p class="page__description">
             {{ contentValues.description }}
           </p>
@@ -138,14 +168,23 @@ const handleCanvasFormSubmit = async () => {
         @on-cancel="handleCancelBtnClick"
         @on-submit="handleCanvasFormSubmit"
       >
-        <!-- <fieldset>
+        <fieldset>
           <legend>Контакт</legend>
-          Выбрать существующий: <UInputMenu></UInputMenu>
+          Выбрать существующий:
+          <UInputMenu
+            :options="personasOptions"
+            v-model="chosenPersona"
+            option-attribute="name"
+          ></UInputMenu>
           Создать новый:
-          <UFormGroup></UFormGroup>
-          <UFormGroup></UFormGroup>
-          <UInput />
-        </fieldset> -->
+          <PersonaForm
+            :persona-data="
+              chosenPersona
+                ? personasOptions.filter((persona) => persona.name === chosenPersona)
+                : personaData
+            "
+          ></PersonaForm>
+        </fieldset>
         <label for="carousel" v-if="isInEditMode">
           Загрузить фото для галереи:
           <input

@@ -22,7 +22,7 @@ const personaSchema = new mongoose.Schema(
       default: ''
     },
     photo: {
-      type: mongoose.Schema.Types.Mixed,
+      type: Buffer,
       default: {}
     }
   },
