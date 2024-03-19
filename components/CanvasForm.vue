@@ -2,19 +2,12 @@
 import type { Form, FormError } from '#ui/types';
 const canvasForm = ref(null);
 const props = defineProps(['contentValues']);
-const emit = defineEmits(['onCancel', 'submit']);
-
-const formValues = reactive({
-  heading: props.contentValues.heading,
-  description: props.contentValues.description,
-  plainText: props.contentValues.plainText,
-  photos: props.contentValues.photos
-});
+const emit = defineEmits(['onCancel', 'onSubmit']);
 
 const validate = (state: any): FormError[] => {
   const errors = [];
-  if (!state.heading)
-    errors.push({ path: 'heading', message: 'Поле "Заголовок" является обязательным' });
+  if (!state.title)
+    errors.push({ path: 'title', message: 'Поле "Заголовок" является обязательным' });
   return errors;
 };
 
@@ -22,26 +15,22 @@ const onCancel = () => {
   emit('onCancel');
   if (canvasForm.value) return (canvasForm.value as Form<string>).clear();
 };
-
-const onSubmit = () => {
-  emit('submit', formValues);
-};
 </script>
 
 <template>
   <UForm
     class="canvas-form"
-    :state="formValues"
+    :state="props.contentValues"
     ref="canvasForm"
     :validate="validate"
-    @submit="onSubmit"
+    @submit="emit('onSubmit')"
   >
-    <UFormGroup name="heading">
+    <UFormGroup name="title">
       Заголовок страницы
       <span class="required">*</span>
       <UInput
         color="sky"
-        v-model="formValues.heading"
+        v-model="props.contentValues.title"
         placeholder="Введите заголовок страницы..."
       />
     </UFormGroup>
@@ -51,7 +40,7 @@ const onSubmit = () => {
       <UTextarea
         color="sky"
         size="xl"
-        v-model="formValues.description"
+        v-model="props.contentValues.description"
         placeholder="Введите описание..."
       />
     </UFormGroup>
@@ -59,7 +48,7 @@ const onSubmit = () => {
     <UFormGroup name="plainText">
       Содержимое
       <ClientOnly>
-        <ContentEditor v-model="formValues.plainText" />
+        <ContentEditor v-model="props.contentValues.text" />
       </ClientOnly>
     </UFormGroup>
     <slot />

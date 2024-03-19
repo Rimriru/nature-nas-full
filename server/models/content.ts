@@ -21,7 +21,8 @@ const contentSchema = new mongoose.Schema(
     },
     route: {
       type: mongoose.Schema.Types.ObjectId,
-      required: [true, 'Необходимо передать роут']
+      required: [true, 'Необходимо передать роут'],
+      unique: true
     }
   },
   { versionKey: false }

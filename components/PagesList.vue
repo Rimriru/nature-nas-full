@@ -34,10 +34,7 @@ const handleRouteRemove = async () => {
     routesFromDb.value = routesFromDb.value.filter(
       (route: RouteDataFromDb) => route._id !== routeDataForRemove.id
     );
-
     router.removeRoute(routeDataForRemove.path);
-
-    console.log(router.getRoutes());
     onConfirmPopupClose();
     notifications.add({ id: 'route-remove', title: data.message });
   } catch (error: any) {

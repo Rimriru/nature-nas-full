@@ -1,45 +1,60 @@
 <script setup lang="ts">
-import type RouteDataFromDb from '~/types/RouteDataFromDb';
-const contentValues = ref({
-  heading: '',
+import type { Content, OriginalContentValues } from '~/types/ContentDataFromDb';
+//import type RouteDataFromDb from '~/types/RouteDataFromDb';
+
+const contentValues: Ref<Content> = ref({
+  _id: '',
+  title: '',
   description: '',
-  plainText: '', // type HTMLElement?
-  photos: []
+  text: '',
+  photos: [],
+  personas: [],
+  sections: [],
+  route: ''
 });
 const isInEditMode = ref(false);
+let wasContentBefore = false;
 const pageTitle = usePageTitle();
 
 watch(
-  () => contentValues.value.heading,
-  (newValue, oldValue) => {
+  () => contentValues.value.title,
+  (newValue) => {
     pageTitle.value = newValue;
   }
 );
 
 const props = defineProps(['routeData']);
 
-// const { data } = useLazyFetch(`/api/content/${props.routeData._id}`);
-// if (data.value) {
-//   console.log('Data fetched!');
-// }
+const { data } = await useFetch(`/api/content/${props.routeData._id}`, {
+  watch: false
+});
 
-const originalState = {
-  heading: '',
+if (data.value) {
+  wasContentBefore = true;
+  contentValues.value = data.value;
+
+  useSeoMeta({
+    title: () => data.value.title,
+    description: () => data.value.description
+  });
+}
+
+const originalState: OriginalContentValues = {
+  title: '',
   description: '',
-  plainText: '',
+  text: '',
   photos: []
 };
 
 const onPhotosSelected = (event: any) => {
-  console.log(event);
   contentValues.value.photos = event.target.files;
   console.log(contentValues.value.photos);
 };
 
 const enableEditMode = () => {
-  originalState.heading = contentValues.value.heading;
+  originalState.title = contentValues.value.title;
   originalState.description = contentValues.value.description;
-  originalState.plainText = contentValues.value.plainText;
+  originalState.text = contentValues.value.text;
   originalState.photos = contentValues.value.photos;
 
   isInEditMode.value = true;
@@ -48,18 +63,50 @@ const enableEditMode = () => {
 const disableEditMode = () => (isInEditMode.value = false);
 
 const handleCancelBtnClick = () => {
-  contentValues.value.heading = originalState.heading;
+  contentValues.value.title = originalState.title;
   contentValues.value.description = originalState.description;
-  contentValues.value.plainText = originalState.plainText;
+  contentValues.value.text = originalState.text;
   contentValues.value.photos = originalState.photos;
 
   disableEditMode();
 };
 
-const handleCanvasFormSubmit = (newVal: any) => {
-  contentValues.value = newVal;
-  console.log(contentValues.value);
-  disableEditMode();
+const handleCanvasFormSubmit = async () => {
+  const contentBody = {
+    title: contentValues.value.title,
+    description: contentValues.value.description,
+    text: contentValues.value.text,
+    photos: contentValues.value.photos,
+    personas: contentValues.value.personas,
+    sections: contentValues.value.sections
+  };
+  if (!wasContentBefore) {
+    const newContentBody = {
+      ...contentBody,
+      route: props.routeData._id
+    };
+    try {
+      const data = await $fetch('/api/content', {
+        method: 'post',
+        body: newContentBody
+      });
+      console.log('After:', data);
+      disableEditMode();
+    } catch (error) {
+      console.error(error);
+    }
+  } else {
+    try {
+      const data = await $fetch(`/api/content/${contentValues.value._id}`, {
+        method: 'patch',
+        body: contentBody
+      });
+      console.log('After:', data);
+      disableEditMode();
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   // add seo to server!!!!
   // useSeoMeta({
@@ -73,14 +120,13 @@ const handleCanvasFormSubmit = (newVal: any) => {
   <ClientOnly>
     <main class="page-content">
       <article v-if="!isInEditMode" class="page">
-        <h3>{{ props.routeData._id }}</h3>
         <div class="page__container">
           <PersonaCard></PersonaCard>
           <p class="page__description">
             {{ contentValues.description }}
           </p>
         </div>
-        <div v-html="contentValues.plainText" class="page__plain-text"></div>
+        <div v-html="contentValues.text" class="page__plain-text"></div>
         <!-- <UCarousel></UCarousel> -->
         <MenuButton class="page__edit-btn" :is-small="true" @click="enableEditMode">
           Редактировать
@@ -90,7 +136,7 @@ const handleCanvasFormSubmit = (newVal: any) => {
         v-else
         :content-values="contentValues"
         @on-cancel="handleCancelBtnClick"
-        @submit="handleCanvasFormSubmit"
+        @on-submit="handleCanvasFormSubmit"
       >
         <!-- <fieldset>
           <legend>Контакт</legend>

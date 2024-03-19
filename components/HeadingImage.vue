@@ -15,7 +15,6 @@ router.beforeEach(() => {
 
 <style lang="scss">
 .heading-image {
-  max-width: 1920px;
   width: 100%;
   height: 227px;
   position: relative;

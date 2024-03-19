@@ -9,6 +9,7 @@ export default defineEventHandler(async (evt) => {
   try {
     const linkToEdit = (await links.findById(id)) as Link;
     if (linkToEdit && to === linkToEdit.to) {
+      // Если роут не поменялся
       const editedLinkData: Link | null = await links.findByIdAndUpdate(
         id,
         { title },
@@ -16,6 +17,7 @@ export default defineEventHandler(async (evt) => {
       );
       return { editedLinkData, message: `Ссылка "${title}" была изменена` };
     } else {
+      // Если роут был изменён
       const route = await routes.findOne({ path: to });
       const editedLinkData: Link | null = await links.findByIdAndUpdate(
         id,

@@ -26,7 +26,7 @@ export default defineNuxtConfig({
       contentSecurityPolicy: {
         'script-src': ["'self'", "'unsafe-inline'", 'https:', '*.tinymce.com', '*.tiny.cloud'],
         'connect-src': ["'self'", '*.tinymce.com', '*.tiny.cloud', 'blob:'],
-        'img-src': ["'self'", '*.tinymce.com', '*.tiny.cloud', 'data:'],
+        'img-src': ["'self'", '*.tinymce.com', '*.tiny.cloud', 'data:', 'https:'],
         'style-src': ["'self'", "'unsafe-inline'", '*.tinymce.com', '*.tiny.cloud'],
         'font-src': ["'self'", '*.tinymce.com', '*.tiny.cloud']
       }
