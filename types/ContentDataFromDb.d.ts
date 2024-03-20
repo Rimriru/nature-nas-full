@@ -14,6 +14,14 @@ interface OriginalContentValues {
   description: string;
   text: string;
   photos: any[];
+  personaData: {
+    name: string;
+    telNumber: string;
+    faxNumber: string;
+    email: string;
+    description: string;
+    photo: any;
+  };
 }
 
 export { Content, OriginalContentValues };
