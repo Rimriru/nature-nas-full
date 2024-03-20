@@ -2,10 +2,17 @@ import { contents } from '../../models/index';
 
 export default defineEventHandler(async (evt) => {
   const id = getRouterParam(evt, 'id');
-  const contentBody = await readBody(evt);
-
+  const personaId = getRouterParam(evt, 'personaId');
   try {
-    const editedContent = await contents.findByIdAndUpdate(id, contentBody, { new: true });
+    const editedContent = await contents.findByIdAndUpdate(
+      id,
+      {
+        $addToSet: {
+          personas: personaId
+        }
+      },
+      { new: true }
+    );
     return editedContent;
   } catch (error: any) {
     throw createError({
