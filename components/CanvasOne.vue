@@ -1,38 +1,28 @@
 <script setup lang="ts">
-import type { Content, OriginalContentValues } from '~/types/ContentDataFromDb';
-import type { PersonaData, PersonaDataArray } from '~/types/PersonasDataFromDb';
+import type {
+  ContentFromDb,
+  CanvasOneContent,
+  OriginalContentValues
+} from '~/types/ContentDataFromDb';
 
-const contentValues: Ref<Content> = ref({
+const contentValues: Ref<CanvasOneContent> = ref({
   _id: '',
   title: '',
   description: '',
   text: '',
   photos: [],
-  personas: [],
-  sections: [],
-  route: ''
-});
-
-// persona's refs
-
-const personasOptions: Ref<PersonaDataArray> = ref([]);
-const chosenPersona: Ref<PersonaData> = ref({
-  _id: '',
-  name: '',
-  telNumber: '',
-  faxNumber: '',
-  email: '',
-  description: '',
-  photo: ''
-});
-const personaData: Ref<PersonaData> = ref({
-  _id: '',
-  name: '',
-  telNumber: '',
-  faxNumber: '',
-  email: '',
-  description: '',
-  photo: ''
+  personaOne: {
+    name: '',
+    telNumber: '',
+    faxNumber: '',
+    email: '',
+    description: '',
+    photo: {
+      path: '',
+      filename: ''
+    }
+  },
+  sections: []
 });
 
 const isInEditMode = ref(false);
@@ -47,17 +37,13 @@ watch(
   }
 );
 
-// выбираем персону - смена данных в рефе
-watch(chosenPersona, (newValue: PersonaData) => {
-  personaData.value = newValue;
-});
-
 // данные о странице от router
 const props = defineProps(['routeData']);
 
 // запрос на контент
 const content = await useFetch(`/api/content/${props.routeData._id}`, {
-  watch: false
+  watch: false,
+  pick: ['_id', 'title', 'description', 'text', 'sections', 'photos', 'personaOne']
 });
 
 // если запрос был ранее сохранён, то
@@ -66,26 +52,15 @@ const content = await useFetch(`/api/content/${props.routeData._id}`, {
 // добавляем мета теги в виде заголовка и описания страницы
 if (content.data.value) {
   wasContentBefore = true;
-  contentValues.value = content.data.value;
+  console.log(content.data.value);
+  contentValues.value = content.data.value as CanvasOneContent;
+  console.log(contentValues.value);
 
   useSeoMeta({
-    title: () => content.data.value.title,
-    description: () => content.data.value.description
+    title: () => content.data.value!.title,
+    description: () => content.data.value!.description
   });
 }
-
-// запрос на всех персон, что сохранены в db
-const personasFromDB = await useFetch('/api/persona', {
-  watch: false
-});
-
-// если персоны есть, то сохраняем
-if (personasFromDB.data.value) {
-  personasOptions.value = personasFromDB.data.value;
-}
-
-// пропс для PersonaInputFields, чтобы избежать props drilling
-provide('personaData', personaData);
 
 // переменная для сохранения промежуточные значений
 // на её основе мы сохраняем значения полей контента в случае нажатия кнопки Отмена
@@ -95,13 +70,16 @@ let originalState: OriginalContentValues = {
   description: '',
   text: '',
   photos: [],
-  personaData: {
+  personaOne: {
     name: '',
     telNumber: '',
     faxNumber: '',
     email: '',
     description: '',
-    photo: ''
+    photo: {
+      path: '',
+      filename: ''
+    }
   }
 };
 
@@ -118,13 +96,15 @@ const enableEditMode = () => {
   originalState.text = contentValues.value.text;
   originalState.photos = contentValues.value.photos;
 
-  originalState.personaData.name = personaData.value.name;
-  originalState.personaData.telNumber = personaData.value.telNumber;
-  originalState.personaData.faxNumber = personaData.value.faxNumber;
-  originalState.personaData.email = personaData.value.email;
-  originalState.personaData.description = personaData.value.description;
-  originalState.personaData.photo = personaData.value.photo;
+  console.log(contentValues.value.personaOne);
 
+  originalState.personaOne.name = contentValues.value.personaOne.name;
+  originalState.personaOne.telNumber = contentValues.value.personaOne.telNumber;
+  originalState.personaOne.faxNumber = contentValues.value.personaOne.faxNumber;
+  originalState.personaOne.email = contentValues.value.personaOne.email;
+  originalState.personaOne.description = contentValues.value.personaOne.description;
+  originalState.personaOne.photo.path = contentValues.value.personaOne.photo.path;
+  originalState.personaOne.photo.filename = contentValues.value.personaOne.photo.filename;
   isInEditMode.value = true;
 };
 
@@ -137,13 +117,16 @@ const disableEditMode = () => {
     description: '',
     text: '',
     photos: [],
-    personaData: {
+    personaOne: {
       name: '',
       telNumber: '',
       faxNumber: '',
       email: '',
       description: '',
-      photo: ''
+      photo: {
+        path: '',
+        filename: ''
+      }
     }
   };
 };
@@ -155,26 +138,22 @@ const handleCancelBtnClick = () => {
   contentValues.value.text = originalState.text;
   contentValues.value.photos = originalState.photos;
 
-  personaData.value.name = originalState.personaData.name;
-  personaData.value.telNumber = originalState.personaData.faxNumber;
-  personaData.value.faxNumber = originalState.personaData.faxNumber;
-  personaData.value.email = originalState.personaData.email;
-  personaData.value.description = originalState.personaData.description;
-  personaData.value.photo = originalState.personaData.photo;
+  contentValues.value.personaOne.name = originalState.personaOne.name;
+  contentValues.value.personaOne.telNumber = originalState.personaOne.faxNumber;
+  contentValues.value.personaOne.faxNumber = originalState.personaOne.faxNumber;
+  contentValues.value.personaOne.email = originalState.personaOne.email;
+  contentValues.value.personaOne.description = originalState.personaOne.description;
+  contentValues.value.personaOne.photo.path = originalState.personaOne.photo.path;
+  contentValues.value.personaOne.photo.filename = originalState.personaOne.photo.filename;
 
   disableEditMode();
 };
 
 // сабмит формы
 const handleCanvasFormSubmit = async () => {
-  const contentBody = {
-    title: contentValues.value.title,
-    description: contentValues.value.description,
-    text: contentValues.value.text,
-    photos: contentValues.value.photos,
-    personas: contentValues.value.personas,
-    sections: contentValues.value.sections
-  };
+  const { title, description, text, photos, personaOne } = contentValues.value;
+  const contentBody = { title, description, text, photos, personaOne };
+
   if (!wasContentBefore) {
     const newContentBody = {
       ...contentBody,
@@ -185,40 +164,28 @@ const handleCanvasFormSubmit = async () => {
         method: 'post',
         body: newContentBody
       });
-      disableEditMode();
+      // disableEditMode();
+      wasContentBefore = true;
     } catch (error) {
       console.error(error);
     }
   } else {
-    const contentBefore = {
-      title: contentValues.value.title,
-      description: contentValues.value.description,
-      text: contentValues.value.text,
-      photos: contentValues.value.photos,
-      personaData: {
-        name: personaData.value.name,
-        telNumber: personaData.value.telNumber,
-        faxNumber: personaData.value.faxNumber,
-        email: personaData.value.email,
-        description: personaData.value.description,
-        photo: personaData.value.photo
-      }
-    };
-
-    if (JSON.stringify(originalState) === JSON.stringify(contentBefore)) {
-      disableEditMode();
-    } else {
-      disableEditMode();
-      //   try {
-      //   const data = await $fetch(`/api/content/${contentValues.value._id}`, {
-      //     method: 'patch',
-      //     body: contentBody
-      //   });
-      //   disableEditMode();
-      // } catch (error) {
-      //   console.error(error);
-      // }
-    }
+    console.log(JSON.stringify(originalState) === JSON.stringify(contentBody));
+    console.log(originalState);
+    console.log(contentBody);
+    // if (JSON.stringify(originalState) === JSON.stringify(contentBody)) {
+    //   disableEditMode();
+    // } else {
+    //   try {
+    //     const data = await $fetch(`/api/content/${contentValues.value._id}`, {
+    //       method: 'patch',
+    //       body: contentBody
+    //     });
+    //     disableEditMode();
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // }
   }
 };
 </script>
@@ -229,7 +196,7 @@ const handleCanvasFormSubmit = async () => {
       <div class="page__container">
         <div>
           <p></p>
-          <PersonaCard :persona-data="personaData"></PersonaCard>
+          <PersonaCard :persona-data="contentValues.personaOne"></PersonaCard>
         </div>
         <p class="page__description">
           {{ contentValues.description }}
@@ -247,7 +214,7 @@ const handleCanvasFormSubmit = async () => {
       @on-cancel="handleCancelBtnClick"
       @on-submit="handleCanvasFormSubmit"
     >
-      <PersonaFieldset :personas-options="personasOptions" v-model:chosen-persona="chosenPersona" />
+      <PersonaInputFields v-model:persona-data="contentValues.personaOne" />
       <label for="carousel" v-if="isInEditMode">
         Загрузить фото для галереи:
         <input

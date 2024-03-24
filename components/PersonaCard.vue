@@ -1,18 +1,6 @@
 <script setup lang="ts">
 const props = defineProps(['personaData']);
-// const personaName = ref('Виталий Владимирович Жоб');
-// const personaPhoneNumber = ref('+7534534543');
-// const personaFaxNumber = ref('+04543545');
-// const personaEmail = ref('щкщкщ');
-// const personaDescription = ref('Я полон сил и энергичен');
 const personaPhoto = ref('/add-photo.png');
-
-watch(
-  () => props.personaData,
-  (newValue) => {
-    console.log(newValue);
-  }
-);
 </script>
 
 <template>

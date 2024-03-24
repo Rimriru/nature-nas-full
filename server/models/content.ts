@@ -12,9 +12,65 @@ const contentSchema = new mongoose.Schema(
       type: [mongoose.Schema.Types.ObjectId],
       ref: 'section'
     },
-    personas: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: 'persona'
+    personaOne: {
+      name: {
+        type: String,
+        default: ''
+      },
+      telNumber: {
+        type: String,
+        default: ''
+      },
+      faxNumber: {
+        type: String,
+        default: ''
+      },
+      email: {
+        type: String,
+        default: ''
+      },
+      description: {
+        type: String,
+        default: ''
+      },
+      photo: {
+        path: {
+          type: String
+        },
+        filename: {
+          type: String
+        }
+      }
+    },
+    personaTwo: {
+      name: {
+        type: String,
+        default: ''
+      },
+      telNumber: {
+        type: String,
+        default: ''
+      },
+      faxNumber: {
+        type: String,
+        default: ''
+      },
+      email: {
+        type: String,
+        default: ''
+      },
+      description: {
+        type: String,
+        default: ''
+      },
+      photo: {
+        path: {
+          type: String
+        },
+        filename: {
+          type: String
+        }
+      }
     },
     photos: {
       type: [mongoose.Schema.Types.Mixed]

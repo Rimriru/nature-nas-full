@@ -11,7 +11,28 @@ interface newRouteContentRequestBody {
     required: true;
   };
   sections: string[];
-  personas: string[];
+  personaOne: {
+    name: string;
+    telNumber: string;
+    faxNumber: string;
+    email: string;
+    description: string;
+    photo: {
+      path: string;
+      filename: string;
+    };
+  };
+  personaTwo: {
+    name: string;
+    telNumber: string;
+    faxNumber: string;
+    email: string;
+    description: string;
+    photo: {
+      path: string;
+      filename: string;
+    };
+  };
 }
 
 export { newRouteContentRequestBody };

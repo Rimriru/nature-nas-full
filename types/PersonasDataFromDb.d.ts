@@ -7,6 +7,4 @@ interface PersonaData {
   photo: string;
 }
 
-type PersonaDataArray = PersonaData[];
-
-export { PersonaData, PersonaDataArray };
+export default PersonaData;
