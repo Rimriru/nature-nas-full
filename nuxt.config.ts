@@ -14,10 +14,19 @@ export default defineNuxtConfig({
   },
   components: [{ path: '~/components/ui', pathPrefix: false }, '~/components'],
   runtimeConfig: {
-    mongoDbUrl: process.env.MONGODB_URL
+    mongoDbUrl: process.env.MONGODB_URL,
+    public: {
+      domen: process.env.DOMEN,
+      process: 'development'
+    }
   },
   routeRules: {
-    '/api/**': { cors: true }
+    '/api/**': {
+      cors: true,
+      security: {
+        xssValidator: false
+      }
+    }
   },
   security: {
     headers: {
@@ -26,7 +35,15 @@ export default defineNuxtConfig({
       contentSecurityPolicy: {
         'script-src': ["'self'", "'unsafe-inline'", 'https:', '*.tinymce.com', '*.tiny.cloud'],
         'connect-src': ["'self'", '*.tinymce.com', '*.tiny.cloud', 'blob:'],
-        'img-src': ["'self'", '*.tinymce.com', '*.tiny.cloud', 'data:', 'https:'],
+        'img-src': [
+          "'self'",
+          '*.tinymce.com',
+          '*.tiny.cloud',
+          'data:',
+          'https:',
+          'blob:',
+          'http://www.localhost:4000'
+        ],
         'style-src': ["'self'", "'unsafe-inline'", '*.tinymce.com', '*.tiny.cloud'],
         'font-src': ["'self'", '*.tinymce.com', '*.tiny.cloud']
       }

@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import type {
-  ContentFromDb,
-  CanvasOneContent,
-  OriginalContentValues
-} from '~/types/ContentDataFromDb';
+import type { CanvasOneContent, OriginalContentValues } from '~/types/ContentDataFromDb';
 
 const contentValues: Ref<CanvasOneContent> = ref({
   _id: '',
@@ -17,17 +13,17 @@ const contentValues: Ref<CanvasOneContent> = ref({
     faxNumber: '',
     email: '',
     description: '',
-    photo: {
-      path: '',
-      filename: ''
-    }
+    photo: ''
   },
   sections: []
 });
+const personaPhotoForUploading = ref<File | string>('');
 
 const isInEditMode = ref(false);
 let wasContentBefore = false;
 const pageTitle = usePageTitle();
+const notifications = useToast();
+const config = useRuntimeConfig();
 
 // динамичная смена заголовка в HeadingImage
 watch(
@@ -52,9 +48,7 @@ const content = await useFetch(`/api/content/${props.routeData._id}`, {
 // добавляем мета теги в виде заголовка и описания страницы
 if (content.data.value) {
   wasContentBefore = true;
-  console.log(content.data.value);
   contentValues.value = content.data.value as CanvasOneContent;
-  console.log(contentValues.value);
 
   useSeoMeta({
     title: () => content.data.value!.title,
@@ -76,10 +70,7 @@ let originalState: OriginalContentValues = {
     faxNumber: '',
     email: '',
     description: '',
-    photo: {
-      path: '',
-      filename: ''
-    }
+    photo: ''
   }
 };
 
@@ -89,6 +80,10 @@ const onPhotosSelected = (event: any) => {
   console.log(contentValues.value.photos);
 };
 
+const onPersonaPhotoSelected = (newPhoto: File | string) => {
+  personaPhotoForUploading.value = newPhoto;
+};
+
 // сохранение промежуточных значений контента и персоны
 const enableEditMode = () => {
   originalState.title = contentValues.value.title;
@@ -96,15 +91,12 @@ const enableEditMode = () => {
   originalState.text = contentValues.value.text;
   originalState.photos = contentValues.value.photos;
 
-  console.log(contentValues.value.personaOne);
-
   originalState.personaOne.name = contentValues.value.personaOne.name;
   originalState.personaOne.telNumber = contentValues.value.personaOne.telNumber;
   originalState.personaOne.faxNumber = contentValues.value.personaOne.faxNumber;
   originalState.personaOne.email = contentValues.value.personaOne.email;
   originalState.personaOne.description = contentValues.value.personaOne.description;
-  originalState.personaOne.photo.path = contentValues.value.personaOne.photo.path;
-  originalState.personaOne.photo.filename = contentValues.value.personaOne.photo.filename;
+  originalState.personaOne.photo = contentValues.value.personaOne.photo;
   isInEditMode.value = true;
 };
 
@@ -123,10 +115,7 @@ const disableEditMode = () => {
       faxNumber: '',
       email: '',
       description: '',
-      photo: {
-        path: '',
-        filename: ''
-      }
+      photo: ''
     }
   };
 };
@@ -143,8 +132,7 @@ const handleCancelBtnClick = () => {
   contentValues.value.personaOne.faxNumber = originalState.personaOne.faxNumber;
   contentValues.value.personaOne.email = originalState.personaOne.email;
   contentValues.value.personaOne.description = originalState.personaOne.description;
-  contentValues.value.personaOne.photo.path = originalState.personaOne.photo.path;
-  contentValues.value.personaOne.photo.filename = originalState.personaOne.photo.filename;
+  contentValues.value.personaOne.photo = originalState.personaOne.photo;
 
   disableEditMode();
 };
@@ -153,6 +141,32 @@ const handleCancelBtnClick = () => {
 const handleCanvasFormSubmit = async () => {
   const { title, description, text, photos, personaOne } = contentValues.value;
   const contentBody = { title, description, text, photos, personaOne };
+
+  console.log(contentValues.value);
+
+  if (personaPhotoForUploading.value) {
+    const body = new FormData();
+    body.append('file', personaPhotoForUploading.value);
+
+    await $fetch('/api/images', {
+      method: 'post',
+      body,
+      onResponse({ response }) {
+        if (!response.ok) {
+          notifications.add({
+            id: 'file-upload',
+            title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
+          });
+        } else {
+          contentValues.value.personaOne.photo = `${
+            config.public.process === 'development'
+              ? 'http://www.localhost:4000'
+              : config.public.domen
+          }/image/${response._data}`;
+        }
+      }
+    });
+  }
 
   if (!wasContentBefore) {
     const newContentBody = {
@@ -164,28 +178,25 @@ const handleCanvasFormSubmit = async () => {
         method: 'post',
         body: newContentBody
       });
-      // disableEditMode();
+      disableEditMode();
       wasContentBefore = true;
     } catch (error) {
       console.error(error);
     }
   } else {
-    console.log(JSON.stringify(originalState) === JSON.stringify(contentBody));
-    console.log(originalState);
-    console.log(contentBody);
-    // if (JSON.stringify(originalState) === JSON.stringify(contentBody)) {
-    //   disableEditMode();
-    // } else {
-    //   try {
-    //     const data = await $fetch(`/api/content/${contentValues.value._id}`, {
-    //       method: 'patch',
-    //       body: contentBody
-    //     });
-    //     disableEditMode();
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // }
+    if (JSON.stringify(originalState) === JSON.stringify(contentBody)) {
+      disableEditMode();
+    } else {
+      try {
+        const data = await $fetch(`/api/content/${contentValues.value._id}`, {
+          method: 'patch',
+          body: contentBody
+        });
+        disableEditMode();
+      } catch (error) {
+        console.error(error);
+      }
+    }
   }
 };
 </script>
@@ -214,7 +225,11 @@ const handleCanvasFormSubmit = async () => {
       @on-cancel="handleCancelBtnClick"
       @on-submit="handleCanvasFormSubmit"
     >
-      <PersonaInputFields v-model:persona-data="contentValues.personaOne" />
+      <PersonaInputFields
+        v-model:persona-data="contentValues.personaOne"
+        :photo="contentValues.personaOne.photo"
+        @on-photo-change="onPersonaPhotoSelected"
+      />
       <label for="carousel" v-if="isInEditMode">
         Загрузить фото для галереи:
         <input

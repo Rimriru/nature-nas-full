@@ -12,10 +12,7 @@ interface ContentFromDb {
     faxNumber: string;
     email: string;
     description: string;
-    photo: {
-      path: string;
-      filename: string;
-    };
+    photo: string;
   };
   personaTwo: {
     name: string;
@@ -23,10 +20,7 @@ interface ContentFromDb {
     faxNumber: string;
     email: string;
     description: string;
-    photo: {
-      path: string;
-      filename: string;
-    };
+    photo: string;
   };
 }
 
@@ -43,10 +37,7 @@ interface CanvasOneContent {
     faxNumber: string;
     email: string;
     description: string;
-    photo: {
-      path: string;
-      filename: string;
-    };
+    photo: string;
   };
 }
 
@@ -61,10 +52,7 @@ interface OriginalContentValues {
     faxNumber: string;
     email: string;
     description: string;
-    photo: {
-      path: string;
-      filename: string;
-    };
+    photo: string;
   };
 }
 

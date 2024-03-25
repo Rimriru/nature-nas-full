@@ -34,12 +34,7 @@ const contentSchema = new mongoose.Schema(
         default: ''
       },
       photo: {
-        path: {
-          type: String
-        },
-        filename: {
-          type: String
-        }
+        type: String
       }
     },
     personaTwo: {

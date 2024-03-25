@@ -2,6 +2,24 @@
 import type { ModelRef } from 'vue';
 import type PersonaData from '~/types/PersonasDataFromDb';
 const model: ModelRef<PersonaData | undefined, string> = defineModel('personaData');
+const emit = defineEmits(['onPhotoChange']);
+const props = defineProps(['photo']);
+const photoForPreview = ref<string>('');
+
+const onPhotoChange = (event: Event) => {
+  const fileInputData = event.target as HTMLInputElement;
+  if (fileInputData.files && fileInputData.files.length > 0) {
+    const file = fileInputData.files[0];
+    emit('onPhotoChange', file);
+    photoForPreview.value = URL.createObjectURL(file);
+  }
+};
+
+onMounted(() => {
+  if (props.photo) {
+    photoForPreview.value = props.photo;
+  }
+});
 </script>
 
 <template>
@@ -34,7 +52,8 @@ const model: ModelRef<PersonaData | undefined, string> = defineModel('personaDat
         id="personaPhoto"
         type="file"
         ref="personaPhotoInput"
-        accept="image/gif, image/jpeg, image/png"
+        accept="image/jpeg, image/png"
+        @change="onPhotoChange"
       />
       <UButton
         color="blue"
@@ -45,7 +64,7 @@ const model: ModelRef<PersonaData | undefined, string> = defineModel('personaDat
       </UButton>
       <p>
         Загруженный файл:
-        <!-- {{ props.personaData.photo ? (props.personaData.photo as unknown as File).name : '' }} -->
+        <img v-if="photoForPreview" :src="photoForPreview" />
       </p>
     </label>
   </fieldset>

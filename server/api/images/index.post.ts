@@ -1,11 +1,48 @@
-import path from 'path';
-import fs from 'fs';
+import multer from 'multer';
+import { callNodeListener } from 'h3';
+import * as crypto from 'crypto';
+
+let fileName = '';
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/assets/images');
+  },
+  filename: (req, file, cbd) => {
+    const rand = crypto.randomUUID();
+    const ext = file.originalname.split('.').pop();
+    fileName = rand + '.' + ext;
+    cbd(null, fileName);
+  }
+});
+
+// только jpeg & png
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1048576
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype == 'image/png' || file.mimetype == 'image/jpeg') {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid file type'));
+    }
+  }
+});
 
 export default defineEventHandler(async (event) => {
-  const images = await readMultipartFormData(event);
-  images?.forEach((file) => {
-    const filePath = path.join('public', file.filename as string);
-    fs.writeFileSync(filePath, file.data);
-  });
-  return 201;
+  try {
+    await callNodeListener(
+      // @ts-expect-error: Nuxt 3
+      upload.single('file'),
+      event.node.req,
+      event.node.res
+    );
+    return fileName;
+  } catch (error: any) {
+    return createError({
+      status: error.statusCode,
+      message: error.message
+    });
+  }
 });

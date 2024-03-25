@@ -6,7 +6,7 @@ const personaPhoto = ref('/add-photo.png');
 <template>
   <div class="persona-card">
     <div class="persona-card__main-block">
-      <NuxtImg :src="personaPhoto" />
+      <NuxtImg :src="props.personaData.photo ? props.personaData.photo : personaPhoto" />
       <div class="persona-card__info">
         <h2>{{ props.personaData.name }}</h2>
         <p v-if="props.personaData.telNumber">
