@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import type { CanvasOneContent, OriginalContentValues } from '~/types/ContentDataFromDb';
 
-const contentValues: Ref<CanvasOneContent> = ref({
+const contentValues = ref<CanvasOneContent>({
   _id: '',
   title: '',
   description: '',
   text: '',
   photos: [],
   personaOne: {
+    position: '',
     name: '',
     telNumber: '',
     faxNumber: '',
@@ -65,6 +66,7 @@ let originalState: OriginalContentValues = {
   text: '',
   photos: [],
   personaOne: {
+    position: '',
     name: '',
     telNumber: '',
     faxNumber: '',
@@ -91,6 +93,7 @@ const enableEditMode = () => {
   originalState.text = contentValues.value.text;
   originalState.photos = contentValues.value.photos;
 
+  originalState.personaOne.position = contentValues.value.personaOne.position;
   originalState.personaOne.name = contentValues.value.personaOne.name;
   originalState.personaOne.telNumber = contentValues.value.personaOne.telNumber;
   originalState.personaOne.faxNumber = contentValues.value.personaOne.faxNumber;
@@ -110,6 +113,7 @@ const disableEditMode = () => {
     text: '',
     photos: [],
     personaOne: {
+      position: '',
       name: '',
       telNumber: '',
       faxNumber: '',
@@ -127,8 +131,9 @@ const handleCancelBtnClick = () => {
   contentValues.value.text = originalState.text;
   contentValues.value.photos = originalState.photos;
 
+  contentValues.value.personaOne.position = originalState.personaOne.position;
   contentValues.value.personaOne.name = originalState.personaOne.name;
-  contentValues.value.personaOne.telNumber = originalState.personaOne.faxNumber;
+  contentValues.value.personaOne.telNumber = originalState.personaOne.telNumber;
   contentValues.value.personaOne.faxNumber = originalState.personaOne.faxNumber;
   contentValues.value.personaOne.email = originalState.personaOne.email;
   contentValues.value.personaOne.description = originalState.personaOne.description;
@@ -142,8 +147,6 @@ const handleCanvasFormSubmit = async () => {
   const { title, description, text, photos, personaOne } = contentValues.value;
   const contentBody = { title, description, text, photos, personaOne };
 
-  console.log(contentValues.value);
-
   if (personaPhotoForUploading.value) {
     const body = new FormData();
     body.append('file', personaPhotoForUploading.value);
@@ -151,21 +154,33 @@ const handleCanvasFormSubmit = async () => {
     await $fetch('/api/images', {
       method: 'post',
       body,
-      onResponse({ response }) {
+      async onResponse({ response }) {
         if (!response.ok) {
           notifications.add({
             id: 'file-upload',
             title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
           });
         } else {
-          contentValues.value.personaOne.photo = `${
-            config.public.process === 'development'
-              ? 'http://www.localhost:4000'
-              : config.public.domen
-          }/image/${response._data}`;
+          const previousPhoto = contentValues.value.personaOne.photo;
+          contentValues.value.personaOne.photo = response._data;
+
+          if (previousPhoto) {
+            await $fetch(`/api/images/${previousPhoto}`, {
+              method: 'delete'
+            });
+          }
         }
       }
     });
+  } else {
+    const previousPhoto = contentValues.value.personaOne.photo;
+    contentValues.value.personaOne.photo = '';
+
+    if (previousPhoto) {
+      await $fetch(`/api/images/${previousPhoto}`, {
+        method: 'delete'
+      });
+    }
   }
 
   if (!wasContentBefore) {
@@ -209,7 +224,7 @@ const handleCanvasFormSubmit = async () => {
           <p></p>
           <PersonaCard :persona-data="contentValues.personaOne"></PersonaCard>
         </div>
-        <p class="page__description">
+        <p v-if="contentValues.description" class="page__description">
           {{ contentValues.description }}
         </p>
       </div>
@@ -264,7 +279,7 @@ const handleCanvasFormSubmit = async () => {
 
   .page__container {
     display: flex;
-    gap: 20px;
+    justify-content: space-around;
   }
 
   .page__plain-text {

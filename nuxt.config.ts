@@ -17,23 +17,38 @@ export default defineNuxtConfig({
     mongoDbUrl: process.env.MONGODB_URL,
     public: {
       domen: process.env.DOMEN,
-      process: 'development'
+      process: process.env.NODE_ENV
     }
   },
   routeRules: {
     '/api/**': {
       cors: true,
       security: {
-        xssValidator: false
+        xssValidator: false,
+        headers: {
+          crossOriginEmbedderPolicy: 'unsafe-none',
+          crossOriginResourcePolicy: 'cross-origin'
+        }
       }
     }
   },
   security: {
+    nonce: true,
     headers: {
+      crossOriginResourcePolicy: 'cross-origin',
       crossOriginEmbedderPolicy:
         process.env.NODE_ENV === 'development' ? 'unsafe-none' : 'require-corp',
       contentSecurityPolicy: {
-        'script-src': ["'self'", "'unsafe-inline'", 'https:', '*.tinymce.com', '*.tiny.cloud'],
+        'script-src': [
+          "'self'",
+          "'unsafe-inline'",
+          'https:',
+          '*.tinymce.com',
+          '*.tiny.cloud',
+          'http://www.localhost:3000',
+          'http://www.localhost:4000'
+        ],
+        'script-src-attr': ["'self'"],
         'connect-src': ["'self'", '*.tinymce.com', '*.tiny.cloud', 'blob:'],
         'img-src': [
           "'self'",
@@ -42,6 +57,7 @@ export default defineNuxtConfig({
           'data:',
           'https:',
           'blob:',
+          'http://www.localhost:3000',
           'http://www.localhost:4000'
         ],
         'style-src': ["'self'", "'unsafe-inline'", '*.tinymce.com', '*.tiny.cloud'],

@@ -1,14 +1,19 @@
 <script setup lang="ts">
 const props = defineProps(['personaData']);
-const personaPhoto = ref('/add-photo.png');
+
+const config = useRuntimeConfig();
 </script>
 
 <template>
   <div class="persona-card">
     <div class="persona-card__main-block">
-      <NuxtImg :src="props.personaData.photo ? props.personaData.photo : personaPhoto" />
+      <NuxtImg
+        v-if="props.personaData.photo"
+        :src="`${config.public.domen}/image/${props.personaData.photo}`"
+      />
       <div class="persona-card__info">
-        <h2>{{ props.personaData.name }}</h2>
+        <h2>{{ props.personaData.position }}</h2>
+        <h3>{{ props.personaData.name }}</h3>
         <p v-if="props.personaData.telNumber">
           <UIcon name="i-material-symbols-phone-enabled-outline" />
           Тел.: {{ props.personaData.telNumber }}
@@ -19,7 +24,8 @@ const personaPhoto = ref('/add-photo.png');
         </p>
         <p v-if="props.personaData.email">
           <UIcon name="i-material-symbols-mail-outline" />
-          Email: {{ props.personaData.email }}
+          Email:
+          <a :href="`mailto:${props.personaData.email}`">{{ props.personaData.email }}</a>
         </p>
       </div>
     </div>

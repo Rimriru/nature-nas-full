@@ -1,3 +1,5 @@
+import type PersonaData from './PersonasDataFromDb';
+
 interface ContentFromDb {
   _id: string;
   title: string;
@@ -6,22 +8,8 @@ interface ContentFromDb {
   photos: any[];
   route: string;
   sections: string[];
-  personaOne: {
-    name: string;
-    telNumber: string;
-    faxNumber: string;
-    email: string;
-    description: string;
-    photo: string;
-  };
-  personaTwo: {
-    name: string;
-    telNumber: string;
-    faxNumber: string;
-    email: string;
-    description: string;
-    photo: string;
-  };
+  personaOne: PersonaData;
+  personaTwo: PersonaData;
 }
 
 interface CanvasOneContent {
@@ -31,14 +19,7 @@ interface CanvasOneContent {
   description: string;
   photos: any[];
   sections: string[];
-  personaOne: {
-    name: string;
-    telNumber: string;
-    faxNumber: string;
-    email: string;
-    description: string;
-    photo: string;
-  };
+  personaOne: PersonaData;
 }
 
 interface OriginalContentValues {
@@ -46,14 +27,7 @@ interface OriginalContentValues {
   description: string;
   text: string;
   photos: any[];
-  personaOne: {
-    name: string;
-    telNumber: string;
-    faxNumber: string;
-    email: string;
-    description: string;
-    photo: string;
-  };
+  personaOne: PersonaData;
 }
 
 export { ContentFromDb, CanvasOneContent, OriginalContentValues };

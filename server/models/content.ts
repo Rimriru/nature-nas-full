@@ -13,6 +13,10 @@ const contentSchema = new mongoose.Schema(
       ref: 'section'
     },
     personaOne: {
+      position: {
+        type: String,
+        default: ''
+      },
       name: {
         type: String,
         default: ''
@@ -39,32 +43,22 @@ const contentSchema = new mongoose.Schema(
     },
     personaTwo: {
       name: {
-        type: String,
-        default: ''
+        type: String
       },
       telNumber: {
-        type: String,
-        default: ''
+        type: String
       },
       faxNumber: {
-        type: String,
-        default: ''
+        type: String
       },
       email: {
-        type: String,
-        default: ''
+        type: String
       },
       description: {
-        type: String,
-        default: ''
+        type: String
       },
       photo: {
-        path: {
-          type: String
-        },
-        filename: {
-          type: String
-        }
+        type: String
       }
     },
     photos: {

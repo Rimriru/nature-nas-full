@@ -1,5 +1,5 @@
 .persona-card {
-  width: clamp(250px, 50vw, 500px);
+  width: clamp(250px, 50vw, 550px);
   display: flex;
   flex-direction: column;
   gap: 25px;
@@ -10,7 +10,8 @@
     justify-content: space-between;
 
     img {
-      flex-basis: 200px;
+      width: 200px;
+      height: 250px;
       border-radius: 10px;
     }
 
