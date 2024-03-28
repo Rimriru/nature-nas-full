@@ -84,46 +84,5 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
-.persona-fieldset {
-  .persona-fieldset__title {
-    font-size: 1.3rem;
-    margin-bottom: 5px;
-  }
-
-  .persona-fieldset__main-block {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    margin-bottom: 15px;
-
-    .persona-fieldset__photo {
-      display: inline;
-
-      .persona-fieldset__perview {
-        margin-top: 10px;
-        img {
-          width: 200px;
-          height: 250px;
-          border-radius: 10px;
-        }
-      }
-    }
-
-    .persona-fieldset__main-info {
-      flex-basis: 300px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-  }
-
-  .persona-fieldset__description {
-    max-width: 800px;
-    margin: 0 auto;
-
-    input {
-      height: 50px;
-    }
-  }
-}
+@import url('~/assets/styles/components/personaInputFields.scss');
 </style>
