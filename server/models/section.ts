@@ -2,11 +2,11 @@ import mongoose from 'mongoose';
 
 const sectionSchema = new mongoose.Schema(
   {
-    name: {
+    title: {
       type: String,
       required: [true, 'Требуется название секции']
     },
-    text: {
+    content: {
       type: String,
       required: [true, 'Требуется содержимое секции']
     }

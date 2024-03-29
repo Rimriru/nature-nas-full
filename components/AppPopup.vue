@@ -4,7 +4,7 @@ const emit = defineEmits(['onClose']);
 </script>
 
 <template>
-  <div class="popup" :class="{ popup__opened: props.isOpened }" @click.self="emit('onClose')">
+  <div class="popup" :class="{ popup__opened: props.isOpened }" @mousedown.self="emit('onClose')">
     <div class="popup__container">
       <slot />
     </div>

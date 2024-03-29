@@ -4,7 +4,7 @@ import type { ContentFromDb } from '~/types/ContentDataFromDb';
 export default defineEventHandler(async (evt) => {
   const id = getRouterParam(evt, 'id');
   try {
-    const content = await contents.findOne({ route: id });
+    const content = await contents.findOne({ route: id }).populate('sections');
     return content as unknown as ContentFromDb;
   } catch (error: any) {
     throw createError({

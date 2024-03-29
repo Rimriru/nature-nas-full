@@ -3,16 +3,28 @@ const props = defineProps(['photosFromDb']);
 const emit = defineEmits(['onPhotosSelected']);
 
 const photosForDemonstration = ref<string[]>([]);
+const photosError = ref('');
 const config = useRuntimeConfig();
 
 const onPhotosChange = (event: Event) => {
+  photosError.value = '';
   photosForDemonstration.value = [];
   const filesInputData = event.target as HTMLInputElement;
   if (filesInputData.files && filesInputData.files.length > 0) {
     const files = filesInputData.files;
+    const filesArray = Array.from(files);
+    let errorPresent = false;
+    filesArray.forEach((file) => {
+      if (file.size > 5242880) {
+        photosError.value = 'Размер одного из загружаемых файлов превышает 5 мб!';
+        errorPresent = true;
+      }
+    });
+
+    if (errorPresent) return;
+
     emit('onPhotosSelected', files);
 
-    const filesArray = Array.from(files);
     filesArray.forEach((file) => {
       photosForDemonstration.value.push(URL.createObjectURL(file));
     });
@@ -33,6 +45,7 @@ onMounted(() => {
 <template>
   <div class="photos-input">
     <p class="photos-input__title">Фото</p>
+    <span class="required photos-input__error">{{ photosError }}</span>
     <label class="photos-input__label" for="carousel">
       Загрузить фото для галереи:
       <input
@@ -41,7 +54,7 @@ onMounted(() => {
         type="file"
         multiple
         ref="fileInput"
-        accept="image/gif, image/jpeg, image/png"
+        accept="image/jpeg, image/png"
         @change="onPhotosChange"
       />
       <UButton color="blue" variant="soft" @click="($refs.fileInput as HTMLInputElement).click()">
@@ -71,6 +84,11 @@ onMounted(() => {
   .photos-input__title {
     font-size: 1.3rem;
     margin-bottom: 5px;
+  }
+
+  .photos-input__error {
+    font-weight: 500;
+    display: block;
   }
 
   .photos-input__preview {

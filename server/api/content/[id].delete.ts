@@ -10,12 +10,31 @@ export default defineEventHandler(async (evt) => {
       // если было фото у контакта
       if (deletedContentInsides.personaOne.photo) {
         await $fetch(`/api/images/${deletedContentInsides.personaOne.photo}`, {
-          method: 'delete'
+          method: 'delete',
+          onResponse({ response }) {
+            if (!response.ok) {
+              throw createError({
+                status: response.status,
+                message: response.statusText
+              });
+            }
+          }
         });
-        console.log('Фото удалено');
       }
 
       if (deletedContentInsides.photos && deletedContentInsides.photos.length > 0) {
+        await $fetch('/api/images', {
+          method: 'delete',
+          body: deletedContentInsides.photos,
+          onResponse({ response }) {
+            if (!response.ok) {
+              throw createError({
+                status: response.status,
+                message: response.statusText
+              });
+            }
+          }
+        });
       }
 
       return { message: 'Контент удалён' };

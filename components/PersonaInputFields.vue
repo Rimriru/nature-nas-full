@@ -6,12 +6,16 @@ const emit = defineEmits(['onPhotoChange']);
 const props = defineProps(['photo']);
 const photoForPreview = ref<string>('');
 const config = useRuntimeConfig();
+const photoError = ref('');
 
 const onPhotoChange = (event: Event) => {
+  photoError.value = '';
   photoForPreview.value = '';
   const fileInputData = event.target as HTMLInputElement;
   if (fileInputData.files && fileInputData.files.length > 0) {
     const file = fileInputData.files[0];
+    if (file.size > 5242880)
+      return (photoError.value = 'Размер загружаемого файла превышает 5 мб!');
     emit('onPhotoChange', file);
     photoForPreview.value = URL.createObjectURL(file);
   } else {
@@ -30,29 +34,32 @@ onMounted(() => {
   <fieldset class="persona-fieldset">
     <legend class="persona-fieldset__title">Контакт</legend>
     <div class="persona-fieldset__main-block">
-      <label for="personaPhoto" class="persona-fieldset__photo">
-        Загрузить фото контакта:
-        <input
-          style="display: none"
-          id="personaPhoto"
-          type="file"
-          ref="personaPhotoInput"
-          accept="image/jpeg, image/png"
-          @change="onPhotoChange"
-        />
-        <UButton
-          color="blue"
-          variant="soft"
-          @click="($refs.personaPhotoInput as HTMLInputElement).click()"
-        >
-          Выбрать файл
-        </UButton>
-        <p class="persona-fieldset__perview">
-          Загруженный файл:
-          <img v-if="photoForPreview" :src="photoForPreview" />
-          <span v-else>отсутствует</span>
-        </p>
-      </label>
+      <div>
+        <span class="required persona-fieldset__photo-err">{{ photoError }}</span>
+        <label for="personaPhoto" class="persona-fieldset__photo">
+          Загрузить фото контакта:
+          <input
+            style="display: none"
+            id="personaPhoto"
+            type="file"
+            ref="personaPhotoInput"
+            accept="image/jpeg, image/png"
+            @change="onPhotoChange"
+          />
+          <UButton
+            color="blue"
+            variant="soft"
+            @click="($refs.personaPhotoInput as HTMLInputElement).click()"
+          >
+            Выбрать файл
+          </UButton>
+          <p class="persona-fieldset__perview">
+            Загруженный файл:
+            <img v-if="photoForPreview" :src="photoForPreview" />
+            <span v-else>отсутствует</span>
+          </p>
+        </label>
+      </div>
       <div class="persona-fieldset__main-info">
         <UFormGroup name="position">
           Должность

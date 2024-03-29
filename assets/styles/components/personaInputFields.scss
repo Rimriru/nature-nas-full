@@ -10,6 +10,11 @@
     justify-content: space-around;
     margin-bottom: 15px;
 
+    .persona-fieldset__photo-err {
+      display: block;
+      font-weight: 500;
+    }
+
     .persona-fieldset__photo {
       display: inline;
 

@@ -67,14 +67,10 @@ const onEditLinkFormSubmit = async () => {
   if (linkData.title === linkDataBeforeEdit.title && linkData.to === linkDataBeforeEdit.to) {
     onCloseLinkForm();
   } else {
-    const newLinkBody = {
-      title: linkData.title,
-      to: linkData.to
-    };
     try {
       const data = await $fetch(`/api/links/${linkId.value}`, {
         method: 'patch',
-        body: newLinkBody
+        body: linkData
       });
 
       const editedLinkIndex = links.value.findIndex(

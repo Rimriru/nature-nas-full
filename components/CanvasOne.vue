@@ -22,7 +22,6 @@ const personaPhotoForUploading = ref<File | string>('');
 const personaPhotoInputChanged = ref(false);
 const carouselPhotosForLoading = ref<FileList | []>([]);
 
-const pageRef = ref<HTMLElement | null>(null);
 const isInEditMode = ref(false);
 let wasContentBefore = false;
 const pageTitle = usePageTitle();
@@ -41,7 +40,7 @@ watch(
 );
 
 watch(isInEditMode, (newValue) => {
-  if (newValue === true) {
+  if (newValue) {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   }
 });
@@ -228,19 +227,18 @@ const handleCanvasFormSubmit = async () => {
           const previousPhotos = contentValues.value.photos;
           contentValues.value.photos = response._data;
           if (previousPhotos) {
-            previousPhotos.forEach(async (photo) => {
-              await $fetch(`/api/images/${photo}`, {
-                method: 'delete',
-                onResponse({ response }) {
-                  if (!response.ok) {
-                    notifications.add({
-                      id: 'file-delete',
-                      title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
-                    });
-                    return;
-                  }
+            await $fetch('/api/images', {
+              method: 'delete',
+              body: previousPhotos,
+              onResponse({ response }) {
+                if (!response.ok) {
+                  notifications.add({
+                    id: 'file-delete',
+                    title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
+                  });
+                  return;
                 }
-              });
+              }
             });
           }
         }
@@ -326,7 +324,7 @@ const handleCanvasFormSubmit = async () => {
       />
     </CanvasForm>
     <!-- Секции -->
-    <PageSections />
+    <PageSections :sections="contentValues.sections" :content-id="contentValues._id" />
   </main>
 </template>
 

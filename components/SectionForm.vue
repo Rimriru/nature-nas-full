@@ -1,36 +1,25 @@
 <script setup lang="ts">
+import type { Section } from '~/types/SectionDataFromDb';
 import type { FormError, FormSubmitEvent, Form } from '#ui/types';
 
-const sectionValue = reactive({
-  title: '',
-  text: ''
-});
-const form = ref(null);
+const sectionValues = defineModel<Section>('sectionValues');
+const emit = defineEmits(['close', 'submit']);
+const form = ref<Form<string> | null>(null);
 const isAddSectionPopupOpened = useSectionPopupOpeningState();
 
-const resetFormFields = () => {
-  sectionValue.title = '';
-  sectionValue.text = '';
-
-  if (form.value) return (form.value as Form<string>).clear();
-};
-
 const onClose = () => {
-  isAddSectionPopupOpened.value = false;
-  resetFormFields();
+  emit('close');
+
+  form.value?.clear();
 };
 
 const validate = (state: any): FormError[] => {
   const errors = [];
   if (!state.title)
     errors.push({ path: 'title', message: 'Поле "Заголовок" является обязательным' });
-  if (!state.text)
-    errors.push({ path: 'text', message: 'Поле "Содержимое" является обязательным' });
+  if (!state.content)
+    errors.push({ path: 'content', message: 'Поле "Содержимое" является обязательным' });
   return errors;
-};
-
-const handleSubmit = async (evt: FormSubmitEvent<any>) => {
-  console.log(evt.data);
 };
 </script>
 
@@ -38,28 +27,25 @@ const handleSubmit = async (evt: FormSubmitEvent<any>) => {
   <ClientOnly>
     <AppPopup @on-close="onClose" :is-opened="isAddSectionPopupOpened">
       <UForm
-        :state="sectionValue"
+        :state="sectionValues"
         :validate="validate"
         class="section-form"
         ref="form"
-        @submit="handleSubmit"
+        @submit="emit('submit')"
       >
-        <h3 class="section-form__heading">Добавить новую секцию</h3>
-
+        <h4 class="section-form__heading">Добавить новую секцию</h4>
         <UFormGroup name="title" class="section-form__label">
           Заголовок секции
           <span class="required">*</span>
-          <UInput color="blue" v-model="sectionValue.title" placeholder="Введите заголовок" />
+          <UInput color="blue" v-model="sectionValues!.title" placeholder="Введите заголовок" />
         </UFormGroup>
-
-        <UFormGroup name="text" class="section-form__label">
+        <UFormGroup name="content" class="section-form__label">
           Содержимое
           <span class="required">*</span>
           <ClientOnly>
-            <ContentEditor v-model="sectionValue.text" />
+            <ContentEditor v-model="sectionValues!.content" />
           </ClientOnly>
         </UFormGroup>
-
         <div class="section-form__btns">
           <MenuButton @click="onClose" :is-small="true">Отмена</MenuButton>
           <MenuButton :is-active="true" :button-type="'submit'" :is-small="true"
@@ -79,6 +65,7 @@ const handleSubmit = async (evt: FormSubmitEvent<any>) => {
 
   .section-form__heading {
     text-align: center;
+    font-size: 1.2rem;
   }
 
   .section-form__label {
