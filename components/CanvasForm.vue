@@ -66,7 +66,6 @@ const onCancel = () => {
 .canvas-form {
   margin: 0 auto;
   display: grid;
-  grid-column: 1fr;
   gap: 30px;
 
   .canvas-form__btns-container {

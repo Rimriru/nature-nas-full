@@ -30,57 +30,87 @@ watch([mouseX, mouseY, width, height], () => {
     eyeLocation.y = 19;
   }
 });
+
+// :style="`transform: translateX(${eyeLocation.x}px) translateY(${eyeLocation.y}px)`"
 </script>
 
 <template>
-  <svg width="76" height="134" viewBox="0 0 76 134" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      ref="eye"
-      class="eye"
-      d="M44.3643 85.9793C43.191 89.4434 39.3464 91.3531 35.7508 90.1933C32.1553 89.0334 30.2344 85.2637 31.4077 81.7997C32.581 78.3356 36.4257 76.4258 40.0212 77.5857C43.6168 78.7455 45.5377 82.5152 44.3643 85.9793Z"
-      fill="black"
-      stroke="black"
-      stroke-width="2"
-      :style="`transform: translateX(${eyeLocation.x}px) translateY(${eyeLocation.y}px)`"
-    />
-    <rect
-      x="1.21355"
-      y="0.741323"
-      width="4.35634"
-      height="18.1129"
-      rx="2.17817"
-      transform="matrix(0.973333 -0.229396 0.24022 0.970719 18.8543 12.5667)"
-      fill="black"
-      stroke="black"
-      stroke-width="2"
-    />
-    <rect
-      x="1.05537"
-      y="0.94425"
-      width="3.9796"
-      height="22.3993"
-      rx="1.9898"
-      transform="matrix(0.998534 -0.0541337 0.0568321 0.998384 33.0085 0.382387)"
-      fill="black"
-      stroke="black"
-      stroke-width="2"
-    />
-    <rect
-      x="0.630179"
-      y="1.25449"
-      width="4.05497"
-      height="16.2666"
-      rx="2.02748"
-      transform="matrix(0.951537 0.307534 -0.321358 0.946958 54.1151 11.2756)"
-      fill="black"
-      stroke="black"
-      stroke-width="2"
-    />
-    <path
-      d="M71 84C71 96.8143 67.0467 108.228 60.8892 116.33C54.7346 124.428 46.5952 129 38 129C29.4048 129 21.2654 124.428 15.1108 116.33C8.95332 108.228 5 96.8143 5 84C5 71.1857 8.95332 59.772 15.1108 51.6701C21.2654 43.5719 29.4048 39 38 39C46.5952 39 54.7346 43.5719 60.8892 51.6701C67.0467 59.772 71 71.1857 71 84Z"
-      stroke="#3C52B4"
-      stroke-width="10"
-    />
+  <svg
+    height="134px"
+    stroke-miterlimit="10"
+    style="fill-rule: nonzero; clip-rule: evenodd; stroke-linecap: round; stroke-linejoin: round"
+    version="1.1"
+    viewBox="0 0.155943 76 133.844"
+    width="76px"
+    xml:space="preserve"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:vectornator="http://vectornator.io"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+  >
+    <defs />
+    <clipPath id="ArtboardFrame">
+      <rect height="133.844" width="76" x="0" y="0.155943" />
+    </clipPath>
+    <g clip-path="url(#ArtboardFrame)" id="Layer" vectornator:layerName="Layer">
+      <g opacity="1" vectornator:layerName="Group 1">
+        <path
+          d="M44.3643 85.9793C43.191 89.4434 39.3464 91.3531 35.7508 90.1933C32.1553 89.0334 30.2344 85.2637 31.4077 81.7997C32.581 78.3356 36.4257 76.4258 40.0212 77.5857C43.6168 78.7455 45.5377 82.5152 44.3643 85.9793Z"
+          fill="#000000"
+          fill-rule="nonzero"
+          opacity="1"
+          stroke="#000000"
+          stroke-linecap="butt"
+          stroke-linejoin="miter"
+          stroke-width="2"
+          vectornator:layerName="path"
+          class="eye"
+          :style="`transform: translateX(${eyeLocation.x}px) translateY(${eyeLocation.y}px)`"
+        />
+        <path
+          d="M22.3337 12.5083L22.3337 12.5083C23.5045 12.2323 24.688 12.9553 24.977 14.123L28.2816 27.4768C28.5706 28.6445 27.8556 29.8148 26.6847 30.0908L26.6847 30.0908C25.5138 30.3668 24.3304 29.6438 24.0414 28.4761L20.7368 15.1223C20.4478 13.9546 21.1628 12.7842 22.3337 12.5083Z"
+          fill="#000000"
+          fill-rule="nonzero"
+          opacity="1"
+          stroke="#000000"
+          stroke-linecap="butt"
+          stroke-linejoin="miter"
+          stroke-width="2.0111"
+          vectornator:layerName="rect"
+        />
+        <path
+          d="M36.1029 1.16026L36.1029 1.16026C37.2002 1.10078 38.1404 1.94197 38.2028 3.03913L39.2497 21.4291C39.3121 22.5262 38.4732 23.4639 37.3759 23.5234L37.3759 23.5234C36.2785 23.5829 35.3384 22.7417 35.2759 21.6445L34.2291 3.25456C34.1666 2.1574 35.0055 1.21975 36.1029 1.16026Z"
+          fill="#000000"
+          fill-rule="nonzero"
+          opacity="1"
+          stroke="#000000"
+          stroke-linecap="butt"
+          stroke-linejoin="miter"
+          stroke-width="2.0027"
+          vectornator:layerName="rect"
+        />
+        <path
+          d="M56.2408 13.2809L56.2408 13.2809C57.3063 13.6252 57.8783 14.764 57.5185 15.8243L53.5942 27.3882C53.2344 28.4486 52.0789 29.029 51.0134 28.6847L51.0134 28.6847C49.9479 28.3403 49.3759 27.2016 49.7357 26.1412L53.6601 14.5773C54.0199 13.5169 55.1753 12.9365 56.2408 13.2809Z"
+          fill="#000000"
+          fill-rule="nonzero"
+          opacity="1"
+          stroke="#000000"
+          stroke-linecap="butt"
+          stroke-linejoin="miter"
+          stroke-width="1.98538"
+          vectornator:layerName="rect"
+        />
+        <path
+          d="M71 84C71 96.8143 67.0467 108.228 60.8892 116.33C54.7346 124.428 46.5952 129 38 129C29.4048 129 21.2654 124.428 15.1108 116.33C8.95332 108.228 5 96.8143 5 84C5 71.1857 8.95332 59.772 15.1108 51.6701C21.2654 43.5719 29.4048 39 38 39C46.5952 39 54.7346 43.5719 60.8892 51.6701C67.0467 59.772 71 71.1857 71 84Z"
+          fill="none"
+          opacity="1"
+          stroke="#3c52b4"
+          stroke-linecap="butt"
+          stroke-linejoin="miter"
+          stroke-width="10"
+          vectornator:layerName="path"
+        />
+      </g>
+    </g>
   </svg>
 </template>
 

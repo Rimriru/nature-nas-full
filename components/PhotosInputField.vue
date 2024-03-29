@@ -1,0 +1,88 @@
+<script setup lang="ts">
+const props = defineProps(['photosFromDb']);
+const emit = defineEmits(['onPhotosSelected']);
+
+const photosForDemonstration = ref<string[]>([]);
+const config = useRuntimeConfig();
+
+const onPhotosChange = (event: Event) => {
+  photosForDemonstration.value = [];
+  const filesInputData = event.target as HTMLInputElement;
+  if (filesInputData.files && filesInputData.files.length > 0) {
+    const files = filesInputData.files;
+    emit('onPhotosSelected', files);
+
+    const filesArray = Array.from(files);
+    filesArray.forEach((file) => {
+      photosForDemonstration.value.push(URL.createObjectURL(file));
+    });
+  } else {
+    emit('onPhotosSelected', []);
+  }
+};
+
+onMounted(() => {
+  if (props.photosFromDb.length > 0) {
+    props.photosFromDb.forEach((photo: string) => {
+      photosForDemonstration.value.push(`${config.public.domen}/image/${photo}`);
+    });
+  }
+});
+</script>
+
+<template>
+  <div class="photos-input">
+    <p class="photos-input__title">Фото</p>
+    <label class="photos-input__label" for="carousel">
+      Загрузить фото для галереи:
+      <input
+        style="display: none"
+        id="carousel"
+        type="file"
+        multiple
+        ref="fileInput"
+        accept="image/gif, image/jpeg, image/png"
+        @change="onPhotosChange"
+      />
+      <UButton color="blue" variant="soft" @click="($refs.fileInput as HTMLInputElement).click()">
+        Выбрать файл
+      </UButton>
+    </label>
+    <div class="photos-input__preview">
+      <span class="photos-input__preview-text">Предпросмотр:</span>
+      <UCarousel
+        v-if="photosForDemonstration.length > 0"
+        v-slot="{ item }"
+        :items="photosForDemonstration"
+        :ui="{ item: 'basis-full snap-center justify-center' }"
+        class="carousel"
+        arrows
+        indicators
+      >
+        <img :src="item" class="carousel__img" draggable="false" />
+      </UCarousel>
+      <span class="photos-input__preview-no-img" v-else>изображения отсутствуют</span>
+    </div>
+  </div>
+</template>
+
+<style lang="scss">
+.photos-input {
+  .photos-input__title {
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+  }
+
+  .photos-input__preview {
+    margin-top: 10px;
+
+    .photos-input__preview-text {
+      margin-right: 5px;
+    }
+
+    .photos-input__preview-no-img {
+      font-weight: 600;
+    }
+  }
+}
+</style>

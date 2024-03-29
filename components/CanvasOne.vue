@@ -22,6 +22,7 @@ const personaPhotoForUploading = ref<File | string>('');
 const personaPhotoInputChanged = ref(false);
 const carouselPhotosForLoading = ref<FileList | []>([]);
 
+const pageRef = ref<HTMLElement | null>(null);
 const isInEditMode = ref(false);
 let wasContentBefore = false;
 const pageTitle = usePageTitle();
@@ -38,6 +39,12 @@ watch(
     pageTitle.value = newValue;
   }
 );
+
+watch(isInEditMode, (newValue) => {
+  if (newValue === true) {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+  }
+});
 
 // запрос на контент
 const content = await useFetch(`/api/content/${props.routeData._id}`, {
@@ -78,12 +85,8 @@ let originalState: OriginalContentValues = {
   }
 };
 
-const onPhotosSelected = (event: any) => {
-  const fileInputData = event.target as HTMLInputElement;
-  if (fileInputData.files && fileInputData.files.length > 0) {
-    const files = fileInputData.files;
-    carouselPhotosForLoading.value = files;
-  }
+const onPhotosSelected = (files: FileList) => {
+  carouselPhotosForLoading.value = files;
 };
 
 const onPersonaPhotoSelected = (newPhoto: File | string) => {
@@ -162,13 +165,23 @@ const handleCanvasFormSubmit = async () => {
             id: 'file-upload',
             title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
           });
+          return;
         } else {
           const previousPhoto = contentValues.value.personaOne.photo;
           contentValues.value.personaOne.photo = response._data[0];
 
           if (previousPhoto) {
             await $fetch(`/api/images/${previousPhoto}`, {
-              method: 'delete'
+              method: 'delete',
+              onResponse({ response }) {
+                if (!response.ok) {
+                  notifications.add({
+                    id: 'file-delete',
+                    title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
+                  });
+                  return;
+                }
+              }
             });
           }
         }
@@ -180,7 +193,16 @@ const handleCanvasFormSubmit = async () => {
 
     if (previousPhoto) {
       await $fetch(`/api/images/${previousPhoto}`, {
-        method: 'delete'
+        method: 'delete',
+        onResponse({ response }) {
+          if (!response.ok) {
+            notifications.add({
+              id: 'file-delete',
+              title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
+            });
+            return;
+          }
+        }
       });
     }
   }
@@ -201,13 +223,23 @@ const handleCanvasFormSubmit = async () => {
             id: 'file-upload',
             title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
           });
+          return;
         } else {
           const previousPhotos = contentValues.value.photos;
           contentValues.value.photos = response._data;
           if (previousPhotos) {
             previousPhotos.forEach(async (photo) => {
               await $fetch(`/api/images/${photo}`, {
-                method: 'delete'
+                method: 'delete',
+                onResponse({ response }) {
+                  if (!response.ok) {
+                    notifications.add({
+                      id: 'file-delete',
+                      title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
+                    });
+                    return;
+                  }
+                }
               });
             });
           }
@@ -225,7 +257,7 @@ const handleCanvasFormSubmit = async () => {
       route: props.routeData._id
     };
     try {
-      const data = await $fetch('/api/content', {
+      await $fetch('/api/content', {
         method: 'post',
         body: newContentBody
       });
@@ -239,7 +271,7 @@ const handleCanvasFormSubmit = async () => {
       disableEditMode();
     } else {
       try {
-        const data = await $fetch(`/api/content/${contentValues.value._id}`, {
+        await $fetch(`/api/content/${contentValues.value._id}`, {
           method: 'patch',
           body: contentBody
         });
@@ -267,15 +299,11 @@ const handleCanvasFormSubmit = async () => {
         v-slot="{ item }"
         :items="contentValues.photos"
         :ui="{ item: 'basis-full snap-center justify-center' }"
-        class="page__carousel"
+        class="carousel"
         arrows
-        indicator
+        indicators
       >
-        <img
-          :src="`${config.public.domen}/image/${item}`"
-          class="page__carousel-img"
-          draggable="false"
-        />
+        <img :src="`${config.public.domen}/image/${item}`" class="carousel__img" />
       </UCarousel>
       <MenuButton class="page__edit-btn" :is-small="true" @click="enableEditMode">
         Редактировать
@@ -292,25 +320,10 @@ const handleCanvasFormSubmit = async () => {
         :photo="contentValues.personaOne.photo"
         @on-photo-change="onPersonaPhotoSelected"
       />
-      <label for="carousel">
-        Загрузить фото для галереи:
-        <input
-          style="display: none"
-          id="carousel"
-          type="file"
-          multiple
-          ref="fileInput"
-          accept="image/gif, image/jpeg, image/png"
-          @change="onPhotosSelected"
-        />
-        <UButton color="blue" variant="soft" @click="($refs.fileInput as HTMLInputElement).click()">
-          Выбрать файл
-        </UButton>
-        <p v-if="carouselPhotosForLoading.length > 0">
-          Последний загруженный файл:
-          {{ (carouselPhotosForLoading[0] as File).name }}
-        </p>
-      </label>
+      <PhotosInputField
+        :photos-from-db="contentValues.photos"
+        @on-photos-selected="onPhotosSelected"
+      />
     </CanvasForm>
     <!-- Секции -->
     <PageSections />
@@ -323,25 +336,15 @@ const handleCanvasFormSubmit = async () => {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
+  gap: 20px;
 
   .page__container {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
   }
 
   .page__plain-text {
     margin-bottom: 50px;
-  }
-
-  .page__carousel {
-    max-width: 1000px;
-    margin: 0 auto 30px;
-
-    .page__carousel-img {
-      max-width: 1000px;
-      max-height: 564px;
-      object-fit: contain;
-    }
   }
 
   .page__edit-btn {
