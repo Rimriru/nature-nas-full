@@ -20,10 +20,19 @@ const removalError = '';
 
 const props = defineProps(['sections', 'contentId']);
 
+let sectionDataBeforeEdit = {
+  title: '',
+  content: ''
+};
+
 const onClose = () => {
   sectionIdOfInterest.value = '';
   sectionValues.title = '';
   sectionValues.content = '';
+  sectionDataBeforeEdit = {
+    title: '',
+    content: ''
+  };
   isSectionPopupOpened.value = false;
   isEditing.value = false;
 };
@@ -32,6 +41,9 @@ const onEditBtnClick = () => {
   sectionValues.title = whatSectionShown.value.title;
   sectionValues.content = whatSectionShown.value.content;
   sectionIdOfInterest.value = whatSectionShown.value._id;
+
+  sectionDataBeforeEdit.title = sectionValues.title;
+  sectionDataBeforeEdit.content = sectionValues.content;
 
   isEditing.value = true;
   isSectionPopupOpened.value = true;
@@ -87,28 +99,32 @@ const handleSectionsSubmit = async () => {
       console.error(error);
     }
   } else {
-    try {
-      const { message, updatedSection } = await $fetch(
-        `/api/section/${sectionIdOfInterest.value}`,
-        {
-          method: 'patch',
-          body: editedSectionData
-        }
-      );
-
-      notifications.add({ id: 'edit-sections', title: message });
-      const updatedSectionFromDb = updatedSection as unknown as SectionFromDb;
-
-      const theOldSectionIndex = sections.value.findIndex(
-        (section: SectionFromDb) => section._id === sectionIdOfInterest.value
-      );
-      if (theOldSectionIndex !== -1) {
-        sections.value[theOldSectionIndex] = updatedSectionFromDb;
-        whatSectionShown.value = updatedSectionFromDb;
-      }
+    if (JSON.stringify(sectionDataBeforeEdit) === JSON.stringify(editedSectionData)) {
       onClose();
-    } catch (error) {
-      console.error(error);
+    } else {
+      try {
+        const { message, updatedSection } = await $fetch(
+          `/api/section/${sectionIdOfInterest.value}`,
+          {
+            method: 'patch',
+            body: editedSectionData
+          }
+        );
+
+        notifications.add({ id: 'edit-sections', title: message });
+        const updatedSectionFromDb = updatedSection as unknown as SectionFromDb;
+
+        const theOldSectionIndex = sections.value.findIndex(
+          (section: SectionFromDb) => section._id === sectionIdOfInterest.value
+        );
+        if (theOldSectionIndex !== -1) {
+          sections.value[theOldSectionIndex] = updatedSectionFromDb;
+          whatSectionShown.value = updatedSectionFromDb;
+        }
+        onClose();
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 };
@@ -124,7 +140,7 @@ onMounted(() => {
 <template>
   <div class="sections">
     <div class="sections__container">
-      <ul class="sections__titles" v-if="sections.length">
+      <ul class="sections__titles">
         <li v-for="section in sections" :key="section._id">
           <MenuButton
             :is-active="section._id === whatSectionShown._id"
@@ -179,9 +195,13 @@ onMounted(() => {
       align-items: center;
       justify-content: center;
       gap: 20px;
+      flex-wrap: wrap;
 
       button {
-        padding-inline: 10px;
+        &.menu-button {
+          padding-inline: 10px;
+          box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
       }
     }
   }
@@ -189,12 +209,12 @@ onMounted(() => {
   .sections__content {
     border: 1px solid $mid-blue;
     border-radius: 40px;
-    padding: 20px;
+    padding: 40px 20px;
     position: relative;
 
     .sections__content-management {
       position: absolute;
-      top: 20px;
+      top: 15px;
       right: 25px;
       display: flex;
       gap: 10px;

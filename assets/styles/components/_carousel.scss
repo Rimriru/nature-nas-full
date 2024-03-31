@@ -2,10 +2,23 @@
   max-width: 1000px;
   margin: 0 auto 30px;
 
+  .carousel__container {
+    position: relative;
+  }
+
   .carousel__img {
     max-width: 1000px;
     max-height: 564px;
     object-fit: contain;
     border-radius: 10px;
+  }
+
+  .carousel__remove-btn {
+    position: absolute;
+    top: 0;
+    right: -35px;
+    background-image: url('~/assets/images/remove-cross-btn.svg');
+    width: 24px;
+    height: 24px;
   }
 }

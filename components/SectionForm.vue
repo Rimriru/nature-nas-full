@@ -8,9 +8,8 @@ const form = ref<Form<string> | null>(null);
 const isSectionPopupOpened = useSectionPopupOpeningState();
 
 const onClose = () => {
-  emit('close');
-
   form.value?.clear();
+  emit('close');
 };
 
 const validate = (state: any): FormError[] => {

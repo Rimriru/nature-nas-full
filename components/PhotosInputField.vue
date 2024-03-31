@@ -33,6 +33,10 @@ const onPhotosChange = (event: Event) => {
   }
 };
 
+const onRemovePhotoBtnClick = () => {
+  //console.log(photosForDemonstration.value);
+};
+
 onMounted(() => {
   if (props.photosFromDb.length > 0) {
     props.photosFromDb.forEach((photo: string) => {
@@ -72,7 +76,10 @@ onMounted(() => {
         arrows
         indicators
       >
-        <img :src="item" class="carousel__img" draggable="false" />
+        <div class="carousel__container">
+          <img :src="item" class="carousel__img" draggable="false" />
+          <button class="carousel__remove-btn" @click="onRemovePhotoBtnClick" />
+        </div>
       </UCarousel>
       <span class="photos-input__preview-no-img" v-else>изображения отсутствуют</span>
     </div>
