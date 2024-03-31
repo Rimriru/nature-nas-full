@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
 
   try {
     const updatedSection = await sections.findByIdAndUpdate(id, sectionBody, { new: true });
-    const message = `Раздел ${sectionBody.title} был изменён`;
+    const message = `Раздел "${sectionBody.title}" был изменён`;
     return { message, updatedSection };
   } catch (error: any) {
     throw createError({

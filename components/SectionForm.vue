@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { Section } from '~/types/SectionDataFromDb';
-import type { FormError, FormSubmitEvent, Form } from '#ui/types';
+import type { FormError, Form } from '#ui/types';
 
 const sectionValues = defineModel<Section>('sectionValues');
 const emit = defineEmits(['close', 'submit']);
 const form = ref<Form<string> | null>(null);
-const isAddSectionPopupOpened = useSectionPopupOpeningState();
+const isSectionPopupOpened = useSectionPopupOpeningState();
 
 const onClose = () => {
   emit('close');
@@ -25,7 +25,7 @@ const validate = (state: any): FormError[] => {
 
 <template>
   <ClientOnly>
-    <AppPopup @on-close="onClose" :is-opened="isAddSectionPopupOpened">
+    <AppPopup @on-close="onClose" :is-opened="isSectionPopupOpened">
       <UForm
         :state="sectionValues"
         :validate="validate"
@@ -47,8 +47,8 @@ const validate = (state: any): FormError[] => {
           </ClientOnly>
         </UFormGroup>
         <div class="section-form__btns">
-          <MenuButton @click="onClose" :is-small="true">Отмена</MenuButton>
-          <MenuButton :is-active="true" :button-type="'submit'" :is-small="true"
+          <MenuButton @click="onClose" :size="'middle'">Отмена</MenuButton>
+          <MenuButton :is-active="true" :button-type="'submit'" :size="'middle'"
             >Добавить</MenuButton
           >
         </div>

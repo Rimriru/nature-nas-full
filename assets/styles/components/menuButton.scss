@@ -6,10 +6,15 @@
   width: clamp(200px, 18vw, 320px);
   border-radius: 15px;
   padding-block: 12px;
-  font-size: 16px;
+  font-size: clamp(14px, 1.6vw, 16px);
 
   &_active {
     background-color: $light-blue;
+  }
+
+  &_size_middle {
+    width: clamp(200px, 15vw, 300px);
+    padding: 9px 10px;
   }
 
   &_size_small {

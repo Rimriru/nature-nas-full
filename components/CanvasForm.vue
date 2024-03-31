@@ -54,8 +54,8 @@ const onCancel = () => {
     <slot />
 
     <div class="canvas-form__btns-container">
-      <MenuButton @click="onCancel" :is-small="true"> Отменить </MenuButton>
-      <MenuButton :is-small="true" :is-active="true" :button-type="'submit'">
+      <MenuButton @click="onCancel" :size="'middle'"> Отменить </MenuButton>
+      <MenuButton :size="'middle'" :is-active="true" :button-type="'submit'">
         Сохранить
       </MenuButton>
     </div>

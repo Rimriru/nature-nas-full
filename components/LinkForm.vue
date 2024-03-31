@@ -57,8 +57,8 @@ onMounted(() => {
       </UFormGroup>
       <span class="error" v-if="props.error">{{ props.error }}</span>
       <div class="link-form__btns">
-        <MenuButton @click="emit('onClose')" :is-small="true">Отмена</MenuButton>
-        <MenuButton :is-active="true" :button-type="'submit'" :is-small="true">Добавить</MenuButton>
+        <MenuButton @click="emit('onClose')" :size="'small'">Отмена</MenuButton>
+        <MenuButton :is-active="true" :button-type="'submit'" :size="'small'">Добавить</MenuButton>
       </div>
     </UForm>
   </AppPopup>

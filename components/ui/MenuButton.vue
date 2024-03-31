@@ -1,13 +1,13 @@
 <script setup lang="ts">
 type ButtonType = 'button' | 'submit' | 'reset';
+type Size = 'small' | 'middle';
 defineProps({
   isActive: {
     type: Boolean,
     default: false
   },
-  isSmall: {
-    type: Boolean,
-    default: false
+  size: {
+    type: String as () => Size
   },
   buttonType: {
     type: String as () => ButtonType,
@@ -18,7 +18,11 @@ defineProps({
 
 <template>
   <button
-    :class="{ 'menu-button_active': isActive, 'menu-button_size_small': isSmall }"
+    :class="{
+      'menu-button_active': isActive,
+      'menu-button_size_small': size === 'small',
+      'menu-button_size_middle': size === 'middle'
+    }"
     class="menu-button"
     :type="buttonType"
   >

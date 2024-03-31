@@ -283,7 +283,7 @@ const handleCanvasFormSubmit = async () => {
 </script>
 
 <template>
-  <main class="page-content">
+  <main class="main">
     <article v-if="!isInEditMode" class="page">
       <div class="page__container">
         <PersonaCard :persona-data="contentValues.personaOne"></PersonaCard>
@@ -303,7 +303,7 @@ const handleCanvasFormSubmit = async () => {
       >
         <img :src="`${config.public.domen}/image/${item}`" class="carousel__img" />
       </UCarousel>
-      <MenuButton class="page__edit-btn" :is-small="true" @click="enableEditMode">
+      <MenuButton class="page__edit-btn" :size="'middle'" @click="enableEditMode">
         Редактировать
       </MenuButton>
     </article>
@@ -335,6 +335,8 @@ const handleCanvasFormSubmit = async () => {
   flex-direction: column;
   margin: 0 auto;
   gap: 20px;
+  border-bottom: 1px solid rgb(191, 189, 189);
+  padding-bottom: 20px;
 
   .page__container {
     display: flex;

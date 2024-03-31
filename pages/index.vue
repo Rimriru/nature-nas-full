@@ -31,7 +31,7 @@ const handleFileUpload = async () => {
 </script>
 
 <template>
-  <main class="page-content">
+  <main class="main">
     <p class="title">Ты на главной!</p>
     <div class="links">
       <NuxtLink to="/admin">To admin</NuxtLink>

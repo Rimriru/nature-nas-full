@@ -1,25 +1,42 @@
 <script setup lang="ts">
-const props = defineProps(['isOpen', 'whatIsRemoved', 'removedItemTitle', 'error']);
+type RemovedItem = 'link' | 'route' | 'section';
+const props = defineProps({
+  isOpen: {
+    type: Boolean,
+    required: true
+  },
+  whatIsRemoved: {
+    type: String as () => RemovedItem,
+    required: true
+  },
+  removedItemTitle: {
+    type: String,
+    required: true
+  },
+  error: String
+});
 const emit = defineEmits(['onClose', 'onAgree']);
+
+const message = {
+  link: () => `Вы уверены, что хотите удалить ссылку "${props.removedItemTitle}"?`,
+  route: () => `Вы уверены, что хотите удалить страницу "${props.removedItemTitle}"?`,
+  section: () => `Вы уверены, что хотите удалить раздел "${props.removedItemTitle}"?`
+};
 </script>
 
 <template>
   <AppPopup :is-opened="isOpen" @on-close="emit('onClose')">
     <div class="confirm-popup">
       <h3>
-        {{
-          props.whatIsRemoved === 'link'
-            ? `Вы уверены, что хотите удалить ссылку "${removedItemTitle}"?`
-            : `Вы уверены, что хотите удалить страницу "${removedItemTitle}"?`
-        }}
+        {{ message[whatIsRemoved]() }}
       </h3>
       <p v-if="props.whatIsRemoved === 'route'">
         Обратите внимание: будут удалены все ссылки, ведущие на эту страницу
       </p>
       <span v-if="props.error" class="error">{{ props.error }}</span>
       <div class="confirm-popup__btns">
-        <MenuButton :is-small="true" @click="emit('onClose')">Нет</MenuButton>
-        <MenuButton :is-active="true" :is-small="true" @click="emit('onAgree')">Да</MenuButton>
+        <MenuButton :size="'small'" @click="emit('onClose')">Нет</MenuButton>
+        <MenuButton :is-active="true" :size="'small'" @click="emit('onAgree')">Да</MenuButton>
       </div>
     </div>
   </AppPopup>
