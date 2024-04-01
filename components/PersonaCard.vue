@@ -25,7 +25,9 @@ const config = useRuntimeConfig();
         <p v-if="props.personaData.email">
           <UIcon name="i-material-symbols-mail-outline" />
           Email:
-          <a :href="`mailto:${props.personaData.email}`">{{ props.personaData.email }}</a>
+          <a class="persona-card__email-link" :href="`mailto:${props.personaData.email}`">{{
+            props.personaData.email
+          }}</a>
         </p>
       </div>
     </div>

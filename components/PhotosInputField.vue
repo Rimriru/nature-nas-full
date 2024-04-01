@@ -1,14 +1,14 @@
 <script setup lang="ts">
 const props = defineProps(['photosFromDb']);
-const emit = defineEmits(['onPhotosSelected']);
+const emit = defineEmits(['onPhotosSelected', 'update:photosFromDb']);
 
+const photosForUpload = ref<FileList | []>([]);
 const photosForDemonstration = ref<string[]>([]);
 const photosError = ref('');
 const config = useRuntimeConfig();
 
 const onPhotosChange = (event: Event) => {
   photosError.value = '';
-  photosForDemonstration.value = [];
   const filesInputData = event.target as HTMLInputElement;
   if (filesInputData.files && filesInputData.files.length > 0) {
     const files = filesInputData.files;
@@ -23,7 +23,7 @@ const onPhotosChange = (event: Event) => {
 
     if (errorPresent) return;
 
-    emit('onPhotosSelected', files);
+    photosForUpload.value = files;
 
     filesArray.forEach((file) => {
       photosForDemonstration.value.push(URL.createObjectURL(file));
@@ -33,9 +33,43 @@ const onPhotosChange = (event: Event) => {
   }
 };
 
-const onRemovePhotoBtnClick = () => {
-  //console.log(photosForDemonstration.value);
+const onRemovePhotoBtnClick = (src: string) => {
+  if (src.startsWith('blob:')) {
+    // находим индекс удаляемого фото
+    const indexPhotoOfInterest = photosForDemonstration.value.findIndex((photo) => photo === src);
+
+    // находим сам файл в массиве загруженных файлов, а заемт оставшиеся файлы загружаем в новый filelist, даём измененный список файлов в массив для загрузки -> emit from watch
+    if (photosForUpload.value.length > 1) {
+      const photosForUploadArray = Array.from(photosForUpload.value);
+      photosForUploadArray.splice(indexPhotoOfInterest, 1);
+      const newFileList = new DataTransfer();
+      photosForUploadArray.forEach((photo) => newFileList.items.add(photo));
+      photosForUpload.value = newFileList.files;
+
+      // убираем из фото для демонстрации
+      photosForDemonstration.value.splice(indexPhotoOfInterest, 1);
+    } else {
+      photosForUpload.value = [];
+
+      // убираем из фото для демонстрации
+      photosForDemonstration.value.splice(indexPhotoOfInterest, 1);
+    }
+  } else {
+    const splitedSrc = src.split('/');
+    const fileName = splitedSrc[splitedSrc.length - 1];
+    emit('update:photosFromDb', fileName);
+    photosForDemonstration.value = photosForDemonstration.value.filter((photo) => photo !== src);
+  }
 };
+
+watch(
+  photosForUpload,
+  () => {
+    console.log(photosForUpload.value);
+    emit('onPhotosSelected', photosForUpload.value);
+  },
+  { deep: true }
+);
 
 onMounted(() => {
   if (props.photosFromDb.length > 0) {
@@ -78,7 +112,7 @@ onMounted(() => {
       >
         <div class="carousel__container">
           <img :src="item" class="carousel__img" draggable="false" />
-          <button class="carousel__remove-btn" @click="onRemovePhotoBtnClick" />
+          <button type="button" class="carousel__remove-btn" @click="onRemovePhotoBtnClick(item)" />
         </div>
       </UCarousel>
       <span class="photos-input__preview-no-img" v-else>изображения отсутствуют</span>

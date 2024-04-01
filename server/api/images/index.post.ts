@@ -36,11 +36,14 @@ export default defineEventHandler(async (event) => {
   try {
     await callNodeListener(
       // @ts-expect-error: Nuxt 3
-      upload.any('images'),
+      upload.array('images', 8),
       event.node.req,
       event.node.res
     );
-    return allFileNames;
+    const allFiles = allFileNames.slice();
+    allFileNames.length = 0;
+
+    return allFiles;
   } catch (error: any) {
     return createError({
       status: error.statusCode,

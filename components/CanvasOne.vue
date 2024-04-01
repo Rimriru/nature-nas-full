@@ -21,6 +21,7 @@ const contentValues = ref<CanvasOneContent>({
 const personaPhotoForUploading = ref<File | string>('');
 const personaPhotoInputChanged = ref(false);
 const carouselPhotosForLoading = ref<FileList | []>([]);
+const carouselPhotosFromDbForRemove = ref<string[]>([]);
 
 const isInEditMode = ref(false);
 let wasContentBefore = false;
@@ -59,6 +60,8 @@ if (content.data.value) {
   wasContentBefore = true;
   contentValues.value = content.data.value as CanvasOneContent;
 
+  //console.log(contentValues.value.photos);
+
   useSeoMeta({
     title: () => content.data.value!.title,
     description: () => content.data.value!.description
@@ -86,6 +89,13 @@ let originalState: OriginalContentValues = {
 
 const onPhotosSelected = (files: FileList) => {
   carouselPhotosForLoading.value = files;
+  //console.log(originalState);
+};
+
+const onPhotosFromDbRemove = (removedValue: string) => {
+  contentValues.value.photos = contentValues.value.photos.filter((photo) => photo !== removedValue);
+  carouselPhotosFromDbForRemove.value.push(removedValue);
+  //console.log(removedValue, contentValues.value.photos);
 };
 
 const onPersonaPhotoSelected = (newPhoto: File | string) => {
@@ -108,6 +118,8 @@ const enableEditMode = () => {
   originalState.personaOne.description = contentValues.value.personaOne.description;
   originalState.personaOne.photo = contentValues.value.personaOne.photo;
   isInEditMode.value = true;
+
+  //console.log(originalState);
 };
 
 // очистка промежуточных значений
@@ -206,12 +218,29 @@ const handleCanvasFormSubmit = async () => {
     }
   }
 
+  if (carouselPhotosFromDbForRemove.value.length > 0) {
+    await $fetch('/api/images', {
+      method: 'delete',
+      body: carouselPhotosFromDbForRemove.value,
+      onResponse({ response }) {
+        if (!response.ok) {
+          notifications.add({
+            id: 'file-delete',
+            title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
+          });
+          return;
+        }
+      }
+    });
+  }
+
   if (carouselPhotosForLoading.value.length > 0) {
     const body = new FormData();
     const images = Array.from(carouselPhotosForLoading.value);
-    images.forEach((image) => {
-      body.append('images', image);
-    });
+    //console.log('carouselPhotoForLoading', carouselPhotosForLoading.value);
+    images.forEach((image) => body.append('images', image));
+
+    //console.log('body', body);
 
     await $fetch('/api/images', {
       method: 'post',
@@ -224,23 +253,10 @@ const handleCanvasFormSubmit = async () => {
           });
           return;
         } else {
-          const previousPhotos = contentValues.value.photos;
-          contentValues.value.photos = response._data;
-          if (previousPhotos) {
-            await $fetch('/api/images', {
-              method: 'delete',
-              body: previousPhotos,
-              onResponse({ response }) {
-                if (!response.ok) {
-                  notifications.add({
-                    id: 'file-delete',
-                    title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
-                  });
-                  return;
-                }
-              }
-            });
-          }
+          response._data.forEach((photo: string) => {
+            return contentValues.value.photos.push(photo);
+          });
+          //console.log('from /api/images/ POST', contentValues.value.photos);
         }
       }
     });
@@ -265,20 +281,20 @@ const handleCanvasFormSubmit = async () => {
       console.error(error);
     }
   } else {
-    if (JSON.stringify(originalState) === JSON.stringify(contentBody)) {
+    try {
+      await $fetch(`/api/content/${contentValues.value._id}`, {
+        method: 'patch',
+        body: contentBody
+      });
       disableEditMode();
-    } else {
-      try {
-        await $fetch(`/api/content/${contentValues.value._id}`, {
-          method: 'patch',
-          body: contentBody
-        });
-        disableEditMode();
-      } catch (error) {
-        console.error(error);
-      }
+    } catch (error) {
+      console.error(error);
     }
   }
+
+  // if (JSON.stringify(originalState) === JSON.stringify(contentBody)) {
+  // disableEditMode();
+  // }
 };
 </script>
 
@@ -291,15 +307,15 @@ const handleCanvasFormSubmit = async () => {
           {{ contentValues.description }}
         </p>
       </div>
-      <div v-html="contentValues.text" class="page__plain-text"></div>
+      <div v-html="contentValues.text" class="page__plain-text content"></div>
       <UCarousel
         v-if="contentValues.photos.length > 0"
         v-slot="{ item }"
         :items="contentValues.photos"
         :ui="{ item: 'basis-full snap-center justify-center' }"
         class="carousel"
-        arrows
-        indicators
+        :arrows="contentValues.photos.length > 1"
+        :indicators="contentValues.photos.length > 1"
       >
         <img :src="`${config.public.domen}/image/${item}`" class="carousel__img" />
       </UCarousel>
@@ -321,10 +337,14 @@ const handleCanvasFormSubmit = async () => {
       <PhotosInputField
         :photos-from-db="contentValues.photos"
         @on-photos-selected="onPhotosSelected"
+        @update:photos-from-db="onPhotosFromDbRemove"
       />
     </CanvasForm>
-    <!-- Секции -->
-    <PageSections :sections="contentValues.sections" :content-id="contentValues._id" />
+    <PageSections
+      v-if="!isInEditMode"
+      :sections="contentValues.sections"
+      :content-id="contentValues._id"
+    />
   </main>
 </template>
 
