@@ -65,8 +65,6 @@ if (content.data.value) {
   wasContentBefore = true;
   contentValues.value = content.data.value as CanvasOneContent;
 
-  //console.log(contentValues.value.photos);
-
   useSeoMeta({
     title: () => content.data.value!.title,
     description: () => content.data.value!.description
@@ -95,13 +93,11 @@ let originalState: OriginalContentValues = {
 
 const onPhotosSelected = (files: FileList) => {
   carouselPhotosForLoading.value = files;
-  //console.log(originalState);
 };
 
 const onPhotosFromDbRemove = (removedValue: string) => {
   contentValues.value.photos = contentValues.value.photos.filter((photo) => photo !== removedValue);
   carouselPhotosFromDbForRemove.value.push(removedValue);
-  //console.log(removedValue, contentValues.value.photos);
 };
 
 const onPersonaPhotoSelected = (newPhoto: File | string) => {
@@ -119,19 +115,6 @@ const enableEditMode = () => {
     photos,
     personaOne
   };
-  // originalState.title = title;
-  // originalState.description = description;
-  // originalState.text = text;
-  // originalState.photos = photos;
-
-  // originalState.personaOne.position = contentValues.value.personaOne.position;
-  // originalState.personaOne.name = contentValues.value.personaOne.name;
-  // originalState.personaOne.phd = contentValues.value.personaOne.phd;
-  // originalState.personaOne.telNumber = contentValues.value.personaOne.telNumber;
-  // originalState.personaOne.faxNumber = contentValues.value.personaOne.faxNumber;
-  // originalState.personaOne.email = contentValues.value.personaOne.email;
-  // originalState.personaOne.description = contentValues.value.personaOne.description;
-  // originalState.personaOne.photo = contentValues.value.personaOne.photo;
   isInEditMode.value = true;
 };
 

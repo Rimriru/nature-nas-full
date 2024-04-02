@@ -5,7 +5,9 @@ useSeoMeta({
   title
 });
 
-usePageTitleChange(title);
+definePageMeta({
+  title: 'Карта сайта'
+});
 </script>
 
 <template>
