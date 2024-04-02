@@ -1,4 +1,5 @@
 import type PersonaData from './PersonasDataFromDb';
+import type { SectionFromDb } from './SectionDataFromDb';
 
 interface ContentFromDb {
   _id: string;
@@ -7,7 +8,7 @@ interface ContentFromDb {
   description: string;
   photos: any[];
   route: string;
-  sections: string[];
+  sections: SectionFromDb[];
   personaOne: PersonaData;
   personaTwo: PersonaData;
 }
@@ -18,7 +19,7 @@ interface CanvasOneContent {
   text: string;
   description: string;
   photos: any[];
-  sections: string[];
+  sections: SectionFromDb[];
   personaOne: PersonaData;
 }
 

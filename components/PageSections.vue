@@ -18,7 +18,11 @@ const isConfirmPopupOpened = ref(false);
 const notifications = useToast();
 const removalError = '';
 
-const props = defineProps(['sections', 'contentId']);
+const props = defineProps<{
+  sections: SectionFromDb[];
+  contentId: string;
+  isSingle: boolean;
+}>();
 
 let sectionDataBeforeEdit = {
   title: '',
@@ -64,8 +68,22 @@ const handleSectionRemoval = async () => {
     const { message } = await $fetch(`/api/section/${sectionIdOfInterest.value}`, {
       method: 'delete'
     });
+    const newContent = await $fetch(`/api/content/sections/${props.contentId}`, {
+      method: 'delete',
+      body: {
+        sectionId: sectionIdOfInterest.value
+      }
+    });
     sections.value = sections.value.filter((section) => section._id !== sectionIdOfInterest.value);
-    whatSectionShown.value = sections.value[0];
+    if (sections.value.length > 0) {
+      whatSectionShown.value = sections.value[0];
+    } else {
+      whatSectionShown.value = {
+        _id: '',
+        title: '',
+        content: ''
+      };
+    }
     notifications.add({ id: 'remove-sections', title: message });
     onConfirmPopupClose();
   } catch (error) {
@@ -85,15 +103,15 @@ const handleSectionsSubmit = async () => {
         method: 'post',
         body: editedSectionData
       });
-      const newContent = await $fetch('/api/content', {
+      await $fetch(`/api/content/sections/${props.contentId}`, {
         method: 'put',
-        query: {
-          contentId: props.contentId,
+        body: {
           sectionId: newSection._id
         }
       });
-      notifications.add({ id: 'add-sections', title: message });
       sections.value.push(newSection as unknown as SectionFromDb);
+      whatSectionShown.value = newSection;
+      notifications.add({ id: 'add-sections', title: message });
       onClose();
     } catch (error) {
       console.error(error);
@@ -138,7 +156,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="sections">
+  <div :class="[{ sections_single: props.isSingle }, 'sections']">
     <div class="sections__container">
       <ul class="sections__titles">
         <li v-for="section in sections" :key="section._id">
@@ -183,6 +201,10 @@ onMounted(() => {
 
 .sections {
   margin-block: 20px 80px;
+
+  &_single {
+    border-top: 1px solid rgb(191, 189, 189);
+  }
 
   .sections__container {
     display: flex;

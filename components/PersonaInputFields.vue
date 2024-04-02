@@ -69,6 +69,10 @@ onMounted(() => {
           Имя (ФИО)
           <UInput v-model="model!.name" placeholder="Введите имя..." />
         </UFormGroup>
+        <UFormGroup name="phd">
+          Специальность
+          <UInput v-model="model!.phd" placeholder="Введите специальность..." />
+        </UFormGroup>
         <UFormGroup name="telNumber">
           Тел.
           <UInput v-model="model!.telNumber" placeholder="Введите номер телефона..." />

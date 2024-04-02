@@ -1,4 +1,5 @@
 import { sections } from '../../models/index';
+import { BAD_REQUEST_ERROR_MESSAGE } from '~/utils/errorMessages';
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id');
@@ -7,7 +8,7 @@ export default defineEventHandler(async (event) => {
   if (!id || !sectionBody) {
     throw createError({
       status: 400,
-      message: 'Отсутствует необходимый параметр для запроса – id/body'
+      message: BAD_REQUEST_ERROR_MESSAGE
     });
   }
 

@@ -14,6 +14,7 @@ const config = useRuntimeConfig();
       <div class="persona-card__info">
         <h2>{{ props.personaData.position }}</h2>
         <h3>{{ props.personaData.name }}</h3>
+        <p>{{ props.personaData.phd }}</p>
         <p v-if="props.personaData.telNumber">
           <UIcon name="i-material-symbols-phone-enabled-outline" />
           Тел.: {{ props.personaData.telNumber }}

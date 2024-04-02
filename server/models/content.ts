@@ -21,6 +21,10 @@ const contentSchema = new mongoose.Schema(
         type: String,
         default: ''
       },
+      phd: {
+        type: String,
+        default: ''
+      },
       telNumber: {
         type: String,
         default: ''

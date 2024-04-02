@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import type { CanvasOneContent, OriginalContentValues } from '~/types/ContentDataFromDb';
+import type {
+  CanvasOneContent,
+  ContentFromDb,
+  OriginalContentValues
+} from '~/types/ContentDataFromDb';
 
 const contentValues = ref<CanvasOneContent>({
   _id: '',
@@ -10,6 +14,7 @@ const contentValues = ref<CanvasOneContent>({
   personaOne: {
     position: '',
     name: '',
+    phd: '',
     telNumber: '',
     faxNumber: '',
     email: '',
@@ -79,6 +84,7 @@ let originalState: OriginalContentValues = {
   personaOne: {
     position: '',
     name: '',
+    phd: '',
     telNumber: '',
     faxNumber: '',
     email: '',
@@ -105,21 +111,28 @@ const onPersonaPhotoSelected = (newPhoto: File | string) => {
 
 // сохранение промежуточных значений контента и персоны
 const enableEditMode = () => {
-  originalState.title = contentValues.value.title;
-  originalState.description = contentValues.value.description;
-  originalState.text = contentValues.value.text;
-  originalState.photos = contentValues.value.photos;
+  const { title, description, text, photos, personaOne } = contentValues.value;
+  originalState = {
+    title,
+    description,
+    text,
+    photos,
+    personaOne
+  };
+  // originalState.title = title;
+  // originalState.description = description;
+  // originalState.text = text;
+  // originalState.photos = photos;
 
-  originalState.personaOne.position = contentValues.value.personaOne.position;
-  originalState.personaOne.name = contentValues.value.personaOne.name;
-  originalState.personaOne.telNumber = contentValues.value.personaOne.telNumber;
-  originalState.personaOne.faxNumber = contentValues.value.personaOne.faxNumber;
-  originalState.personaOne.email = contentValues.value.personaOne.email;
-  originalState.personaOne.description = contentValues.value.personaOne.description;
-  originalState.personaOne.photo = contentValues.value.personaOne.photo;
+  // originalState.personaOne.position = contentValues.value.personaOne.position;
+  // originalState.personaOne.name = contentValues.value.personaOne.name;
+  // originalState.personaOne.phd = contentValues.value.personaOne.phd;
+  // originalState.personaOne.telNumber = contentValues.value.personaOne.telNumber;
+  // originalState.personaOne.faxNumber = contentValues.value.personaOne.faxNumber;
+  // originalState.personaOne.email = contentValues.value.personaOne.email;
+  // originalState.personaOne.description = contentValues.value.personaOne.description;
+  // originalState.personaOne.photo = contentValues.value.personaOne.photo;
   isInEditMode.value = true;
-
-  //console.log(originalState);
 };
 
 // очистка промежуточных значений
@@ -134,6 +147,7 @@ const disableEditMode = () => {
     personaOne: {
       position: '',
       name: '',
+      phd: '',
       telNumber: '',
       faxNumber: '',
       email: '',
@@ -152,6 +166,7 @@ const handleCancelBtnClick = () => {
 
   contentValues.value.personaOne.position = originalState.personaOne.position;
   contentValues.value.personaOne.name = originalState.personaOne.name;
+  contentValues.value.personaOne.phd = originalState.personaOne.phd;
   contentValues.value.personaOne.telNumber = originalState.personaOne.telNumber;
   contentValues.value.personaOne.faxNumber = originalState.personaOne.faxNumber;
   contentValues.value.personaOne.email = originalState.personaOne.email;
@@ -163,6 +178,8 @@ const handleCancelBtnClick = () => {
 
 // сабмит формы
 const handleCanvasFormSubmit = async () => {
+  const originalValues = JSON.stringify(originalState);
+
   if (personaPhotoForUploading.value) {
     const body = new FormData();
     body.append('images', personaPhotoForUploading.value);
@@ -237,10 +254,7 @@ const handleCanvasFormSubmit = async () => {
   if (carouselPhotosForLoading.value.length > 0) {
     const body = new FormData();
     const images = Array.from(carouselPhotosForLoading.value);
-    //console.log('carouselPhotoForLoading', carouselPhotosForLoading.value);
     images.forEach((image) => body.append('images', image));
-
-    //console.log('body', body);
 
     await $fetch('/api/images', {
       method: 'post',
@@ -256,7 +270,6 @@ const handleCanvasFormSubmit = async () => {
           response._data.forEach((photo: string) => {
             return contentValues.value.photos.push(photo);
           });
-          //console.log('from /api/images/ POST', contentValues.value.photos);
         }
       }
     });
@@ -271,16 +284,22 @@ const handleCanvasFormSubmit = async () => {
       route: props.routeData._id
     };
     try {
-      await $fetch('/api/content', {
+      const newContent = await $fetch('/api/content', {
         method: 'post',
         body: newContentBody
       });
+      contentValues.value._id = (newContent as unknown as ContentFromDb)._id;
       disableEditMode();
       wasContentBefore = true;
     } catch (error) {
       console.error(error);
     }
   } else {
+    if (originalValues === JSON.stringify(contentBody)) {
+      disableEditMode();
+      return;
+    }
+
     try {
       await $fetch(`/api/content/${contentValues.value._id}`, {
         method: 'patch',
@@ -291,10 +310,6 @@ const handleCanvasFormSubmit = async () => {
       console.error(error);
     }
   }
-
-  // if (JSON.stringify(originalState) === JSON.stringify(contentBody)) {
-  // disableEditMode();
-  // }
 };
 </script>
 
@@ -341,9 +356,10 @@ const handleCanvasFormSubmit = async () => {
       />
     </CanvasForm>
     <PageSections
-      v-if="!isInEditMode"
+      v-if="!isInEditMode && contentValues._id"
       :sections="contentValues.sections"
       :content-id="contentValues._id"
+      :is-single="false"
     />
   </main>
 </template>
@@ -355,12 +371,11 @@ const handleCanvasFormSubmit = async () => {
   flex-direction: column;
   margin: 0 auto;
   gap: 20px;
-  border-bottom: 1px solid rgb(191, 189, 189);
   padding-bottom: 20px;
 
   .page__container {
     display: flex;
-    justify-content: space-between;
+    gap: 80px;
   }
 
   .page__plain-text {
