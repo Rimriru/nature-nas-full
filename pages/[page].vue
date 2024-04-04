@@ -23,7 +23,7 @@ definePageMeta({
       } else {
         router.addRoute({
           path: isInDb.path,
-          name: isInDb.path,
+          name: isInDb.name,
           component: canvases[isInDb.component],
           props: {
             routeData: isInDb

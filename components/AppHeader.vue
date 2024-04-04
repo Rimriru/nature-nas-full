@@ -2,8 +2,8 @@
 import { HEADER_LINK_GROUPS } from '~/utils/linksData';
 import homeIcon from '~/assets/images/home-icon.svg';
 import mapIcon from '~/assets/images/map-icon.svg';
-import type { Link, Group } from '~/types/LinkDataFromDb';
 import type { Form } from '#ui/types';
+import type { LinkGroup } from '~/types/LinkDataFromDb';
 
 const linkValue = reactive({
   title: '',
@@ -11,10 +11,10 @@ const linkValue = reactive({
 });
 const groupingLink = reactive({
   title: '',
-  group: ''
+  groupId: ''
 });
 const linkForm: Ref<Form<string> | null> = ref(null);
-const linksState = useLinksState();
+const linkGroupsState = useLinkGroupsState();
 const isAddLinkPopupOpened = ref(false);
 const addLinkError = ref('');
 const notifications = useToast();
@@ -23,10 +23,10 @@ const onLinkFormMount = (form: Form<string>) => {
   linkForm.value = form;
 };
 
-const onAddLinkButtonClick = (mainLinkTitle: string, mainLinkGroup: string) => {
+const onAddLinkButtonClick = (linkTitle: string, linkGroupId: string) => {
   isAddLinkPopupOpened.value = true;
-  groupingLink.title = mainLinkTitle;
-  groupingLink.group = mainLinkGroup;
+  groupingLink.title = linkTitle;
+  groupingLink.groupId = linkGroupId;
 };
 
 const resetFormFields = () => {
@@ -41,21 +41,27 @@ const onCloseLinkForm = () => {
   isAddLinkPopupOpened.value = false;
   addLinkError.value = '';
   groupingLink.title = '';
-  groupingLink.group = '';
+  groupingLink.groupId = '';
 };
 
 const onAddLinkFormSubmit = async () => {
-  const newLinkBody: Link = {
+  const newLinkBody = {
     title: linkValue.title,
     to: linkValue.to,
-    group: groupingLink.group as Group
+    groupId: groupingLink.groupId
   };
+
+  console.log(newLinkBody);
   try {
-    const data = await $fetch('/api/links', {
+    const { updatedGroup, newLinkTyped } = await $fetch('/api/links', {
       method: 'post',
       body: newLinkBody
     });
-    linksState.value.push(data as unknown as Link);
+    const index = linkGroupsState.value.findIndex(
+      (group: LinkGroup) => group._id === updatedGroup._id
+    );
+    linkGroupsState.value[index] = updatedGroup;
+    console.log(updatedGroup, newLinkTyped, linkGroupsState.value);
     notifications.add({ id: 'link-create', title: `Ссылка "${newLinkBody.title}" создана!` });
     onCloseLinkForm();
   } catch (err: any) {
@@ -87,7 +93,7 @@ const onAddLinkFormSubmit = async () => {
             <DropdownMenu
               :title="title.toUpperCase()"
               :group="group"
-              :items="linksState"
+              :link-groups="linkGroupsState"
               :to="to"
               @on-add-link="onAddLinkButtonClick"
             />

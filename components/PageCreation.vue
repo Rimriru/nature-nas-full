@@ -25,17 +25,18 @@ const validate = (state: any): FormError[] => {
 };
 
 const handleCreatePageFormSubmit = async () => {
-  if (useRouteFindByPath(routesFromDb.value, newRouteValues.route)) {
+  const newRouteBody = {
+    name: newRouteValues.route.slice(1),
+    path: newRouteValues.route,
+    component: newRouteValues.canvas
+  };
+
+  if (router.hasRoute(newRouteBody.name)) {
     return notifications.add({
       id: 'route-create',
       title: 'Такая страница уже существует!'
     });
   } else {
-    const newRouteBody = {
-      path: newRouteValues.route,
-      component: newRouteValues.canvas
-    };
-
     try {
       const data = await $fetch('/api/routes', {
         method: 'post',
@@ -46,7 +47,7 @@ const handleCreatePageFormSubmit = async () => {
 
       router.addRoute({
         path: data.path,
-        name: data.path,
+        name: data.name,
         component: canvases[data.component],
         props: {
           routeData: data

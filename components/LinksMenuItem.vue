@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import type { RouteLocationRaw } from 'vue-router';
-import type { Link } from '~/types/LinkDataFromDb';
+import type { Link, LinkGroup } from '~/types/LinkDataFromDb';
 
-const props = defineProps({
-  linksArray: {
-    type: Array as () => Link[],
-    required: true
+defineProps({
+  link: {
+    type: Object as () => Link
   },
   group: {
-    type: String
+    type: Object as () => LinkGroup
   },
   isInAdminPage: {
     type: Boolean,
@@ -17,24 +16,19 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['onEdit', 'onRemove']);
-
-const linksOfTheGroup = computed(() => {
-  return props.linksArray.filter((item: Link) => item.group === props.group);
-});
 </script>
 
 <template>
-  <li
-    v-for="item of linksOfTheGroup"
-    :key="JSON.stringify(item)"
-    :class="{ li_admin: isInAdminPage }"
-  >
-    <NuxtLink :to="(item.to as RouteLocationRaw)" :class="{ 'li__link_not-admin': !isInAdminPage }">
-      {{ item.title }}
+  <li :class="{ li_admin: isInAdminPage }">
+    <NuxtLink
+      :to="(link?.to as RouteLocationRaw)"
+      :class="{ 'li__link_not-admin': !isInAdminPage }"
+    >
+      {{ link?.title }}
     </NuxtLink>
     <div v-if="isInAdminPage">
-      <EditBtn @click="emit('onEdit', item._id, item.title, item.to)" />
-      <RemoveBtn @click="emit('onRemove', item._id, item.title)" />
+      <EditBtn @click="emit('onEdit', link?._id, link?.title, link?.to, group?._id)" />
+      <RemoveBtn @click="emit('onRemove', link?._id, link?.title, group?._id)" />
     </div>
   </li>
 </template>

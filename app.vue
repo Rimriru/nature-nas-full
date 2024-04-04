@@ -2,18 +2,18 @@
 import { canvases } from './utils/canvasesData';
 const router = useRouter();
 const routes = await useAllRoutes();
-const links = await useLinks();
+const linkGroups = await useLinkGroups();
 
 const routesState = useRoutesState();
-const linksState = useLinksState();
+const linkGroupsState = useLinkGroupsState();
 
 routesState.value = routes;
-linksState.value = links;
+linkGroupsState.value = linkGroups;
 
 routesState.value.forEach((route) => {
   router.addRoute({
     path: route.path,
-    name: route.path,
+    name: route.name,
     component: canvases[route.component],
     props: {
       routeData: route

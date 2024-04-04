@@ -46,14 +46,14 @@ onMounted(() => {
         <span class="required">*</span>
         <UInput
           color="blue"
-          v-model="props.linkValue.title"
+          v-model.trim="props.linkValue.title"
           placeholder="Введите название ссылки"
         />
       </UFormGroup>
       <UFormGroup name="to" :eager-validation="true">
         Ссылка (http://www.nature-nas.by*ссылка*)
         <span class="required">*</span>
-        <UInput color="blue" v-model="props.linkValue.to" placeholder="Введите ссылку: /..." />
+        <UInput color="blue" v-model.trim="props.linkValue.to" placeholder="Введите ссылку: /..." />
       </UFormGroup>
       <span class="error" v-if="props.error">{{ props.error }}</span>
       <div class="link-form__btns">

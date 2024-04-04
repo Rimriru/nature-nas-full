@@ -5,39 +5,45 @@ import type { Form } from '#ui/types';
 
 const linkData = reactive({
   title: '',
-  to: ''
+  to: '',
+  groupId: ''
 });
 const linkDataBeforeEdit = reactive({
   title: '',
   to: ''
 });
 const linkId = ref('');
+const linkGroupId = ref('');
 const removedLinkTitle = ref('');
 const isEditLinkPopupOpened = ref(false);
 const isConfirmPopupOpened = ref(false);
 const editLinkError = ref('');
 const removeLinkError = ref('');
 const editLinkForm: Ref<Form<string> | null> = ref(null);
+const linkGroups = useLinkGroupsState();
 
-const links = useLinksState();
 const notifications = useToast();
 
 const props = defineProps(['isInAdminPage']);
 
-const onEditLinkClick = (id: string, title: string, to: string) => {
+const onEditLinkClick = (id: string, title: string, to: string, groupId: string) => {
   linkData.title = title;
   linkData.to = to;
+  linkData.groupId = groupId;
   linkDataBeforeEdit.title = title;
   linkDataBeforeEdit.to = to;
   linkId.value = id;
   isEditLinkPopupOpened.value = true;
 };
 
-const onRemoveLinkClick = (id: string, linkTitle: string) => {
+const onRemoveLinkClick = (id: string, linkTitle: string, groupId: string) => {
   linkId.value = id;
+  linkGroupId.value = groupId;
   removedLinkTitle.value = linkTitle;
   isConfirmPopupOpened.value = true;
 };
+
+provide('linkActions', { onEditLinkClick, onRemoveLinkClick });
 
 const resetFormFields = () => {
   linkData.title = '';
@@ -47,8 +53,9 @@ const resetFormFields = () => {
 };
 
 const onCloseLinkForm = () => {
-  resetFormFields();
   isEditLinkPopupOpened.value = false;
+  resetFormFields();
+  linkData.groupId = '';
   editLinkError.value = '';
   linkId.value = '';
 };
@@ -57,6 +64,7 @@ const onCloseConfirmPopup = () => {
   isConfirmPopupOpened.value = false;
   removedLinkTitle.value = '';
   linkId.value = '';
+  linkGroupId.value = '';
 };
 
 const onEditLinkFormMount = (form: Form<string>) => {
@@ -73,10 +81,15 @@ const onEditLinkFormSubmit = async () => {
         body: linkData
       });
 
-      const editedLinkIndex = links.value.findIndex(
-        (link) => link._id === data.editedLinkData?._id
+      const editedLinkGroupIndex = linkGroups.value.findIndex(
+        (group) => group._id === linkData.groupId
       );
-      links.value[editedLinkIndex] = data.editedLinkData as Link;
+      if (editedLinkGroupIndex !== -1) {
+        const editedLinkIndex = linkGroups.value[editedLinkGroupIndex].links.findIndex(
+          (link) => link._id === data.editedLinkData?._id
+        );
+        linkGroups.value[editedLinkGroupIndex].links[editedLinkIndex] = data.editedLinkData as Link;
+      }
       onCloseLinkForm();
       notifications.add({ id: 'link-edited', title: data.message });
     } catch (error: any) {
@@ -90,7 +103,21 @@ const onRemoveLinkPopupAgree = async () => {
     const data = await $fetch(`/api/links/${linkId.value}`, {
       method: 'delete'
     });
-    links.value = links.value.filter((link) => link._id !== linkId.value);
+
+    const removedLinkGroupIndex = linkGroups.value.findIndex(
+      (group) => group._id === linkGroupId.value
+    );
+    if (removedLinkGroupIndex !== -1) {
+      linkGroups.value[removedLinkGroupIndex].links = linkGroups.value[
+        removedLinkGroupIndex
+      ].links.filter((link) => {
+        link._id !== linkId.value;
+      });
+    }
+
+    console.log(linkGroups.value);
+
+    // links.value = links.value.filter((link: Link) => link._id !== linkId.value);
     onCloseConfirmPopup();
     notifications.add({ id: 'link-removed', title: data.message });
   } catch (error: any) {
@@ -110,13 +137,7 @@ const onRemoveLinkPopupAgree = async () => {
           </span>
         </a>
         <ul class="links-list__links">
-          <LinksMenuItem
-            :links-array="links"
-            :group="group.group"
-            :is-in-admin-page="props.isInAdminPage"
-            @on-edit="onEditLinkClick"
-            @on-remove="onRemoveLinkClick"
-          />
+          <LinksListFilter :group="group.group" :is-admin-page="props.isInAdminPage" />
         </ul>
       </li>
     </ul>

@@ -1,7 +1,7 @@
 interface NewLinkRequestBody {
   title: string;
   to: string;
-  group: string;
+  groupId: string;
 }
 
 interface PatchLinkRequestBody {

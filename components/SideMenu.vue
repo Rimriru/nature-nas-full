@@ -7,10 +7,10 @@
         <ul>
           <li></li>
         </ul>
-        <button type="button" />
+        <AddLinkButton :color="'blue'" />
       </li>
     </ul>
-    <button type="button" />
+    <AddLinkButton :color="'white'" />
   </div>
 </template>
 

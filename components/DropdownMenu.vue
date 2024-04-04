@@ -1,7 +1,15 @@
 <script setup lang="ts">
+import type { Link, LinkGroup } from '~/types/LinkDataFromDb';
+
 const isSubMenuVisible = ref(false);
-const props = defineProps(['title', 'group', 'to', 'items']);
+const props = defineProps(['title', 'group', 'to', 'linkGroups']);
 const emit = defineEmits(['onAddLink']);
+
+const linksOfTheGroup = computed(() => {
+  const group: LinkGroup = props.linkGroups.find((item: LinkGroup) => item.group === props.group);
+  const links: Link[] = group.links;
+  return { group, links };
+});
 </script>
 
 <template>
@@ -10,11 +18,14 @@ const emit = defineEmits(['onAddLink']);
     @mouseover="isSubMenuVisible = true"
     @mouseleave="isSubMenuVisible = false"
   >
-    <a v-if="!props.to" class="dropdown-menu__main-link" href="#">{{ title }}</a>
-    <NuxtLink v-else :to="props.to" class="dropdown-menu__main-link">{{ title }}</NuxtLink>
+    <a v-if="!to" class="dropdown-menu__main-link" href="#">{{ title }}</a>
+    <NuxtLink v-else :to="to" class="dropdown-menu__main-link">{{ title }}</NuxtLink>
     <ul v-if="isSubMenuVisible && group" class="dropdown-menu__sub-menu">
-      <LinksMenuItem :links-array="items" :group="props.group" :is-in-admin-page="false" />
-      <div class="dropdown-menu__btn-bg" @click="emit('onAddLink', title, props.group)">
+      <LinksMenuItem v-for="link of linksOfTheGroup.links" :link="link" :is-in-admin-page="false" />
+      <div
+        class="dropdown-menu__btn-bg"
+        @click="emit('onAddLink', title, linksOfTheGroup.group._id)"
+      >
         <button class="dropdown-menu__add-btn" type="button" />
       </div>
     </ul>
