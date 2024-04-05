@@ -1,8 +1,8 @@
 type Link = {
-  _id?: String;
-  title: String;
-  to: String;
-  route?: String;
+  _id?: string;
+  title: string;
+  to: string;
+  route?: string;
 };
 
 interface LinkGroup {

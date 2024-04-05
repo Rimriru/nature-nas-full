@@ -1,11 +1,12 @@
 import { linkGroups } from '../../models/index';
+import type { LinkGroup } from '~/types/LinkDataFromDb';
 
 export default defineEventHandler(async (evt) => {
-  const newGroupTitle = await readBody(evt);
+  const newGroupData = await readBody(evt);
   try {
-    const newGroup = await linkGroups.create(newGroupTitle);
+    const newGroup = await linkGroups.create(newGroupData);
     setResponseStatus(evt, 201);
-    return newGroup;
+    return newGroup as unknown as LinkGroup;
   } catch (error: any) {
     throw createError({
       status: error.statusCode,

@@ -1,4 +1,3 @@
-import multer from 'multer';
 import { contents } from '../../models/index';
 import { CONFLICT_ROUTE_ERROR_MESSAGE } from '~/utils/errorMessages';
 import type { newRouteContentRequestBody } from './types/content';

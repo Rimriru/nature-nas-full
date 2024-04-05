@@ -7,7 +7,7 @@ import type { Link } from '~/types/LinkDataFromDb';
 export default defineEventHandler(async (evt) => {
   const { title, to, groupId } = await readBody<NewLinkRequestBody>(evt);
 
-  const session = await links.startSession();
+  const session = await mongoose.startSession();
 
   try {
     const result = session.withTransaction(async () => {
