@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { FormError } from '#ui/types';
+import type { Form, FormError } from '#ui/types';
 
-const form = ref(null);
+const form = ref<Form<string> | null>(null);
 
-const props = defineProps(['linkValue', 'isOpened', 'groupingLinkTitle', 'error', 'place']);
-const emit = defineEmits(['onClose', 'onSubmit', 'onMount']);
+const props = defineProps(['linkValue', 'isOpened', 'groupingLinkTitle', 'error']);
+const emit = defineEmits(['onClose', 'onSubmit']);
 
 const validate = (state: any): FormError[] => {
   const errors = [];
@@ -20,13 +20,14 @@ const validate = (state: any): FormError[] => {
   return errors;
 };
 
-onMounted(() => {
-  emit('onMount', form.value);
-});
+const handleClose = () => {
+  form.value?.clear();
+  emit('onClose');
+};
 </script>
 
 <template>
-  <AppPopup :is-opened="props.isOpened" @on-close="emit('onClose')">
+  <AppPopup :is-opened="props.isOpened" @on-close="handleClose">
     <UForm
       :state="props.linkValue"
       :validate="validate"
@@ -34,13 +35,9 @@ onMounted(() => {
       class="link-form"
       @submit="emit('onSubmit')"
     >
-      <h3>
-        {{
-          props.place === 'header'
-            ? `Добавить ссылку в ${props.groupingLinkTitle}`
-            : 'Редактировать ссылку'
-        }}
-      </h3>
+      <h4>
+        {{ groupingLinkTitle ? `Добавить ссылку в ${groupingLinkTitle}` : 'Редактировать ссылку' }}
+      </h4>
       <UFormGroup name="title">
         Название
         <span class="required">*</span>
@@ -57,7 +54,7 @@ onMounted(() => {
       </UFormGroup>
       <span class="error" v-if="props.error">{{ props.error }}</span>
       <div class="link-form__btns">
-        <MenuButton @click="emit('onClose')" :size="'small'">Отмена</MenuButton>
+        <MenuButton @click="handleClose" :size="'small'">Отмена</MenuButton>
         <MenuButton :is-active="true" :button-type="'submit'" :size="'small'">Добавить</MenuButton>
       </div>
     </UForm>

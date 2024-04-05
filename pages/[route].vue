@@ -3,11 +3,10 @@ import { canvases } from '~/utils/canvasesData';
 
 definePageMeta({
   middleware: async (to) => {
-    //const nuxtApp = useNuxtApp();
     const routes = await useAllRoutes();
 
-    const links = await useLinks();
-    const linksState = useLinksState();
+    const links = await useLinkGroups();
+    const linksState = useLinkGroupsState();
     linksState.value = links;
 
     const router = useRouter();

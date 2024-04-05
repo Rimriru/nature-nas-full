@@ -8,7 +8,7 @@ const routeDataForRemove = reactive({
 });
 const removeRouteError = ref('');
 
-const links = useLinksState();
+//const links = useLinksState();
 const routesFromDb = useRoutesState();
 const notifications = useToast();
 const router = useRouter();
@@ -30,7 +30,7 @@ const handleRouteRemove = async () => {
     const data = await $fetch(`/api/routes/${routeDataForRemove.id}`, {
       method: 'delete'
     });
-    links.value = links.value.filter((link) => link.to !== routeDataForRemove.path);
+    //links.value = links.value.filter((link) => link.to !== routeDataForRemove.path);
     routesFromDb.value = routesFromDb.value.filter(
       (route: RouteDataFromDb) => route._id !== routeDataForRemove.id
     );

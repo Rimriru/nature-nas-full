@@ -13,15 +13,10 @@ const groupingLink = reactive({
   title: '',
   groupId: ''
 });
-const linkForm: Ref<Form<string> | null> = ref(null);
 const linkGroupsState = useLinkGroupsState();
 const isAddLinkPopupOpened = ref(false);
 const addLinkError = ref('');
 const notifications = useToast();
-
-const onLinkFormMount = (form: Form<string>) => {
-  linkForm.value = form;
-};
 
 const onAddLinkButtonClick = (linkTitle: string, linkGroupId: string) => {
   isAddLinkPopupOpened.value = true;
@@ -32,8 +27,6 @@ const onAddLinkButtonClick = (linkTitle: string, linkGroupId: string) => {
 const resetFormFields = () => {
   linkValue.title = '';
   linkValue.to = '';
-
-  if (linkForm?.value) return linkForm.value.clear();
 };
 
 const onCloseLinkForm = () => {
@@ -51,7 +44,6 @@ const onAddLinkFormSubmit = async () => {
     groupId: groupingLink.groupId
   };
 
-  console.log(newLinkBody);
   try {
     const { updatedGroup, newLinkTyped } = await $fetch('/api/links', {
       method: 'post',
@@ -109,7 +101,6 @@ const onAddLinkFormSubmit = async () => {
       :place="'header'"
       @on-close="onCloseLinkForm"
       @on-submit="onAddLinkFormSubmit"
-      @on-mount="onLinkFormMount"
     />
   </header>
 </template>

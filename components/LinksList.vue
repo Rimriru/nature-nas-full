@@ -12,14 +12,15 @@ const linkDataBeforeEdit = reactive({
   title: '',
   to: ''
 });
-const linkId = ref('');
-const linkGroupId = ref('');
-const removedLinkTitle = ref('');
+const removedOrEditedLinkData = reactive({
+  id: '',
+  title: '',
+  groupId: ''
+});
 const isEditLinkPopupOpened = ref(false);
 const isConfirmPopupOpened = ref(false);
 const editLinkError = ref('');
 const removeLinkError = ref('');
-const editLinkForm: Ref<Form<string> | null> = ref(null);
 const linkGroups = useLinkGroupsState();
 
 const notifications = useToast();
@@ -32,14 +33,14 @@ const onEditLinkClick = (id: string, title: string, to: string, groupId: string)
   linkData.groupId = groupId;
   linkDataBeforeEdit.title = title;
   linkDataBeforeEdit.to = to;
-  linkId.value = id;
+  removedOrEditedLinkData.id = id;
   isEditLinkPopupOpened.value = true;
 };
 
 const onRemoveLinkClick = (id: string, linkTitle: string, groupId: string) => {
-  linkId.value = id;
-  linkGroupId.value = groupId;
-  removedLinkTitle.value = linkTitle;
+  removedOrEditedLinkData.id = id;
+  removedOrEditedLinkData.groupId = groupId;
+  removedOrEditedLinkData.title = linkTitle;
   isConfirmPopupOpened.value = true;
 };
 
@@ -48,8 +49,6 @@ provide('linkActions', { onEditLinkClick, onRemoveLinkClick });
 const resetFormFields = () => {
   linkData.title = '';
   linkData.to = '';
-
-  if (editLinkForm?.value) return editLinkForm.value.clear();
 };
 
 const onCloseLinkForm = () => {
@@ -57,18 +56,14 @@ const onCloseLinkForm = () => {
   resetFormFields();
   linkData.groupId = '';
   editLinkError.value = '';
-  linkId.value = '';
+  removedOrEditedLinkData.id = '';
 };
 
 const onCloseConfirmPopup = () => {
   isConfirmPopupOpened.value = false;
-  removedLinkTitle.value = '';
-  linkId.value = '';
-  linkGroupId.value = '';
-};
-
-const onEditLinkFormMount = (form: Form<string>) => {
-  editLinkForm.value = form;
+  removedOrEditedLinkData.title = '';
+  removedOrEditedLinkData.id = '';
+  removedOrEditedLinkData.groupId = '';
 };
 
 const onEditLinkFormSubmit = async () => {
@@ -76,22 +71,25 @@ const onEditLinkFormSubmit = async () => {
     onCloseLinkForm();
   } else {
     try {
-      const data = await $fetch(`/api/links/${linkId.value}`, {
+      const { editedLinkData, message } = await $fetch(`/api/links/${removedOrEditedLinkData.id}`, {
         method: 'patch',
         body: linkData
       });
+
+      // поиск самой группы в массиве групп, затем поиск ссылки, что была изменена в запросе. Затем в первичном массиве (что хранится в глобальной переменной) мы находим группу, в ней необходимую ссылку и уже её заменяем на полученную в запросе
 
       const editedLinkGroupIndex = linkGroups.value.findIndex(
         (group) => group._id === linkData.groupId
       );
       if (editedLinkGroupIndex !== -1) {
         const editedLinkIndex = linkGroups.value[editedLinkGroupIndex].links.findIndex(
-          (link) => link._id === data.editedLinkData?._id
+          (link) => link._id === editedLinkData?._id
         );
-        linkGroups.value[editedLinkGroupIndex].links[editedLinkIndex] = data.editedLinkData as Link;
+        linkGroups.value[editedLinkGroupIndex].links[editedLinkIndex] = editedLinkData as Link;
       }
+
       onCloseLinkForm();
-      notifications.add({ id: 'link-edited', title: data.message });
+      notifications.add({ id: 'link-edited', title: message });
     } catch (error: any) {
       editLinkError.value = error?.data.message;
     }
@@ -100,26 +98,24 @@ const onEditLinkFormSubmit = async () => {
 
 const onRemoveLinkPopupAgree = async () => {
   try {
-    const data = await $fetch(`/api/links/${linkId.value}`, {
-      method: 'delete'
+    const { message, editedGroup } = await $fetch(`/api/links/${removedOrEditedLinkData.id}`, {
+      method: 'delete',
+      query: {
+        groupId: removedOrEditedLinkData.groupId
+      }
     });
 
+    // поиск группы в глобальном стейте, а затем заменяем на отредактированную
+
     const removedLinkGroupIndex = linkGroups.value.findIndex(
-      (group) => group._id === linkGroupId.value
+      (group) => group._id === removedOrEditedLinkData.groupId
     );
     if (removedLinkGroupIndex !== -1) {
-      linkGroups.value[removedLinkGroupIndex].links = linkGroups.value[
-        removedLinkGroupIndex
-      ].links.filter((link) => {
-        link._id !== linkId.value;
-      });
+      linkGroups.value[removedLinkGroupIndex] = editedGroup;
     }
 
-    console.log(linkGroups.value);
-
-    // links.value = links.value.filter((link: Link) => link._id !== linkId.value);
     onCloseConfirmPopup();
-    notifications.add({ id: 'link-removed', title: data.message });
+    notifications.add({ id: 'link-removed', title: message });
   } catch (error: any) {
     removeLinkError.value = error.data.message;
   }
@@ -149,13 +145,12 @@ const onRemoveLinkPopupAgree = async () => {
       :error="editLinkError"
       @on-close="onCloseLinkForm"
       @on-submit="onEditLinkFormSubmit"
-      @on-mount="onEditLinkFormMount"
     />
     <LazyConfirmPopup
       v-if="props.isInAdminPage"
       :is-open="isConfirmPopupOpened"
       :what-is-removed="'link'"
-      :removed-item-title="removedLinkTitle"
+      :removed-item-title="removedOrEditedLinkData.title"
       :error="removeLinkError"
       @on-close="onCloseConfirmPopup"
       @on-agree="onRemoveLinkPopupAgree"
