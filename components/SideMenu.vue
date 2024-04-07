@@ -92,18 +92,28 @@ const handleLinkFormSubmit = async () => {
 </script>
 
 <template>
-  <div>
-    <ul>
-      <li v-for="{ _id: groupId, title, links } of labsCentersLinkGroups">
-        {{ title }}
-        <ul>
-          <li v-for="{ title, to } of links">
-            <NuxtLink :to="`/labs-and-centers${to}`">
+  <div class="side-menu">
+    <ul class="side-menu__link-groups">
+      <li
+        v-for="{ _id: groupId, title, links } of labsCentersLinkGroups"
+        class="side-menu__link-group"
+      >
+        <div class="side-menu__group-container">
+          <EditBtn :color="'gray'" :appliedClass="'side-menu__edit-btn'" />
+          <p class="side-menu__group-title">{{ title }}</p>
+        </div>
+        <ul class="side-menu__links centered-links">
+          <li v-for="{ title, to } of links" class="side-menu__link">
+            <NuxtLink :to="`/labs-and-centers${to}`" exact-active-class="side-menu__link">
               {{ title }}
             </NuxtLink>
           </li>
         </ul>
-        <AddLinkButton :color="'blue'" @on-click="handleAddLinkBtnClick(title, groupId)" />
+        <AddLinkButton
+          :color="'blue'"
+          :applied-styles="'centered-links'"
+          @on-click="handleAddLinkBtnClick(title, groupId)"
+        />
       </li>
     </ul>
     <AddLinkButton :color="'white'" @on-click="handleAddGroupBtnClick" />
@@ -124,4 +134,66 @@ const handleLinkFormSubmit = async () => {
   </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+@use '~/assets/styles/variables.scss' as *;
+
+.centered-links {
+  margin-left: 50px;
+}
+
+.side-menu {
+  max-width: 300px;
+  text-align: center;
+  padding-top: 20px;
+  margin-left: 25px;
+
+  .side-menu__link-groups {
+    display: flex;
+    flex-direction: column;
+    row-gap: 15px;
+
+    .side-menu__group-container {
+      display: flex;
+      align-items: center;
+      border: $mid-blue 1px solid;
+      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+      margin-bottom: 5px;
+
+      .side-menu__edit-btn {
+        margin: 5px 12px;
+      }
+
+      .side-menu__group-title {
+        border-left: $mid-blue 1px solid;
+        padding-block: 10px;
+        width: 100%;
+        transition: all 0.1s ease-in;
+        cursor: pointer;
+
+        &:hover {
+          background-color: $gray;
+          color: #fff;
+        }
+      }
+    }
+
+    .side-menu__links {
+      border: $mid-blue 1px solid;
+      max-width: 250px;
+
+      .side-menu__link {
+        padding-block: 5px;
+
+        &:hover {
+          background-color: $gray;
+          color: #fff;
+        }
+
+        &_active {
+          background-color: $mid-blue;
+        }
+      }
+    }
+  }
+}
+</style>
