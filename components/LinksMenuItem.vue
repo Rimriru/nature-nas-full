@@ -27,7 +27,10 @@ const emit = defineEmits(['onEdit', 'onRemove']);
       {{ link?.title }}
     </NuxtLink>
     <div v-if="isInAdminPage">
-      <EditBtn @click="emit('onEdit', link?._id, link?.title, link?.to, group?._id)" />
+      <EditBtn
+        :color="'black'"
+        @click="emit('onEdit', link?._id, link?.title, link?.to, group?._id)"
+      />
       <RemoveBtn @click="emit('onRemove', link?._id, link?.title, group?._id)" />
     </div>
   </li>

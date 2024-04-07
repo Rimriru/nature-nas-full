@@ -175,7 +175,7 @@ onMounted(() => {
           v-html="sections.find((section: SectionFromDb) => section._id === whatSectionShown._id)?.content"
         />
         <div class="sections__content-management">
-          <EditBtn @click="onEditBtnClick" />
+          <EditBtn :color="'black'" @click="onEditBtnClick" />
           <RemoveBtn @click="onRemoveBtnClick" />
         </div>
       </div>
@@ -201,6 +201,8 @@ onMounted(() => {
 
 .sections {
   margin-block: 20px 80px;
+  max-width: 1100px;
+  margin: 0 auto;
 
   &_single {
     border-top: 1px solid rgb(191, 189, 189);
