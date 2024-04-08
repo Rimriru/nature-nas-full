@@ -1,5 +1,6 @@
 <script setup lang="ts">
-type RemovedItem = 'link' | 'route' | 'section';
+import type RemovedItem from '~/types/RemovedItemForConfirmPopup';
+
 const props = defineProps({
   isOpen: {
     type: Boolean,
@@ -18,6 +19,7 @@ const props = defineProps({
 const emit = defineEmits(['onClose', 'onAgree']);
 
 const message = {
+  linkGroup: () => `Вы уверены, что хотите удалить группу ссылок "${props.removedItemTitle}"?`,
   link: () => `Вы уверены, что хотите удалить ссылку "${props.removedItemTitle}"?`,
   route: () => `Вы уверены, что хотите удалить страницу "${props.removedItemTitle}"?`,
   section: () => `Вы уверены, что хотите удалить раздел "${props.removedItemTitle}"?`
@@ -28,7 +30,7 @@ const message = {
   <AppPopup :is-opened="isOpen" @on-close="emit('onClose')">
     <div class="confirm-popup">
       <h3>
-        {{ message[whatIsRemoved]() }}
+        {{ whatIsRemoved ? message[whatIsRemoved]() : '' }}
       </h3>
       <p v-if="props.whatIsRemoved === 'route'">
         Обратите внимание: будут удалены все ссылки, ведущие на эту страницу

@@ -27,38 +27,49 @@ const handleClose = () => {
 </script>
 
 <template>
-  <AppPopup :is-opened="props.isOpened" @on-close="handleClose">
-    <UForm
-      :state="props.linkValue"
-      :validate="validate"
-      ref="form"
-      class="link-form"
-      @submit="emit('onSubmit')"
-    >
-      <h4>
-        {{ groupingLinkTitle ? `Добавить ссылку в ${groupingLinkTitle}` : 'Редактировать ссылку' }}
-      </h4>
-      <UFormGroup name="title">
-        Название
-        <span class="required">*</span>
-        <UInput
-          color="blue"
-          v-model.trim="props.linkValue.title"
-          placeholder="Введите название ссылки"
-        />
-      </UFormGroup>
-      <UFormGroup name="to" :eager-validation="true">
-        Ссылка (http://www.nature-nas.by*ссылка*)
-        <span class="required">*</span>
-        <UInput color="blue" v-model.trim="props.linkValue.to" placeholder="Введите ссылку: /..." />
-      </UFormGroup>
-      <span class="error" v-if="props.error">{{ props.error }}</span>
-      <div class="link-form__btns">
-        <MenuButton @click="handleClose" :size="'small'">Отмена</MenuButton>
-        <MenuButton :is-active="true" :button-type="'submit'" :size="'small'">Добавить</MenuButton>
-      </div>
-    </UForm>
-  </AppPopup>
+  <ClientOnly>
+    <AppPopup :is-opened="props.isOpened" @on-close="handleClose">
+      <UForm
+        :state="props.linkValue"
+        :validate="validate"
+        ref="form"
+        class="link-form"
+        @submit="emit('onSubmit')"
+      >
+        <h4>
+          {{
+            groupingLinkTitle ? `Добавить ссылку в ${groupingLinkTitle}` : 'Редактировать ссылку'
+          }}
+        </h4>
+        <UFormGroup name="title">
+          Название
+          <span class="required">*</span>
+          <UInput
+            color="blue"
+            v-model.trim="props.linkValue.title"
+            placeholder="Введите название ссылки"
+          />
+        </UFormGroup>
+        <UFormGroup name="to" :eager-validation="true">
+          Ссылка (http://www.nature-nas.by*ссылка*)
+          <span class="required">*</span>
+          <UInput
+            color="blue"
+            v-model.trim="props.linkValue.to"
+            placeholder="Введите ссылку: /..."
+          />
+        </UFormGroup>
+        <span class="error" v-if="props.error">{{ props.error }}</span>
+        <div class="link-form__btns">
+          <MenuButton @click="handleClose" :size="'small'">Отмена</MenuButton>
+          <MenuButton :is-active="true" :button-type="'submit'" :size="'small'"
+            >Добавить</MenuButton
+          >
+        </div>
+      </UForm>
+      <slot />
+    </AppPopup>
+  </ClientOnly>
 </template>
 
 <style lang="scss">

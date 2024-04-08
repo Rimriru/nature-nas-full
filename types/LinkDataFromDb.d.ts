@@ -1,5 +1,5 @@
 type Link = {
-  _id?: string;
+  _id: string;
   title: string;
   to: string;
   route?: string;

@@ -63,10 +63,6 @@ export default defineNuxtConfig({
         'style-src': ["'self'", "'unsafe-inline'", '*.tinymce.com', '*.tiny.cloud'],
         'font-src': ["'self'", '*.tinymce.com', '*.tiny.cloud']
       }
-    },
-    rateLimiter: {
-      tokensPerInterval: 30,
-      interval: 10000
     }
   },
   css: ['~/assets/styles/base.css', '~/assets/styles/main.scss'],

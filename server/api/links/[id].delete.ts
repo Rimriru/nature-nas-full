@@ -8,24 +8,15 @@ export default defineEventHandler(async (evt) => {
   const session = await mongoose.startSession();
   try {
     const result = session.withTransaction(async () => {
-      const deletedLink = (await links.findByIdAndDelete(linkId)) as Link;
-      if (deletedLink) {
-        const editedGroup = await $fetch(`/api/link-groups/links/${groupId}`, {
-          method: 'delete',
-          query: {
-            linkId
-          }
-        });
-
-        if (editedGroup) {
-          return { message: `Ссылка '${deletedLink.title}' удалена`, editedGroup };
-        } else {
-          throw createError({
-            status: 500,
-            message: 'Произошла ошибка во время выполнения запроса /api/link-groups/links'
-          });
+      await links.findByIdAndDelete(linkId);
+      await $fetch(`/api/link-groups/links/${groupId}`, {
+        method: 'delete',
+        query: {
+          linkId
         }
-      }
+      });
+
+      return { message: 'Ссылка  удалена' };
     });
 
     return result;

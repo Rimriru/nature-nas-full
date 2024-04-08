@@ -18,9 +18,7 @@ if (labsLinkGroups.value[0]) {
 <template>
   <div class="labs-centers">
     <SideMenu />
-    <KeepAlive>
-      <NuxtPage />
-    </KeepAlive>
+    <NuxtPage :keepalive="true" />
   </div>
 </template>
 

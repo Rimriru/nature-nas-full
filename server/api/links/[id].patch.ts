@@ -15,7 +15,7 @@ export default defineEventHandler(async (evt) => {
         { title },
         { new: true }
       );
-      return { editedLinkData, message: `Ссылка "${title}" была изменена` };
+      return editedLinkData;
     } else {
       // Если роут был изменён
       const route = await routes.findOne({ path: to });
@@ -24,7 +24,7 @@ export default defineEventHandler(async (evt) => {
         { title, to, route },
         { new: true }
       );
-      return { editedLinkData, message: `Ссылка "${title}" была изменена` };
+      return editedLinkData;
     }
   } catch (error: any) {
     throw createError({
