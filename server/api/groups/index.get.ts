@@ -1,9 +1,10 @@
-import { linkGroups } from '../../models/index';
+import { groups, links } from '../../models/index';
 import type { LinkGroup } from '~/types/LinkDataFromDb';
 
 export default defineEventHandler(async (evt) => {
+  const _ = [groups.length, links.length];
   try {
-    const allLinkGroups = linkGroups.find().populate('links');
+    const allLinkGroups = await groups.find({}).populate('links');
     return allLinkGroups as unknown as LinkGroup[];
   } catch (error: any) {
     throw createError({

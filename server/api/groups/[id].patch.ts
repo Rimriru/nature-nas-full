@@ -1,11 +1,11 @@
-import { linkGroups } from '~/server/models';
+import { groups } from '../../models/index';
 import type { LinkGroup } from '~/types/LinkDataFromDb';
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id');
   const groupData = await readBody(event);
   try {
-    const editedGroup: LinkGroup | null = await linkGroups.findByIdAndUpdate(id, groupData, {
+    const editedGroup: LinkGroup | null = await groups.findByIdAndUpdate(id, groupData, {
       new: true
     });
     return editedGroup;

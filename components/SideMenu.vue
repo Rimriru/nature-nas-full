@@ -142,7 +142,7 @@ const handleConfirmPopupClose = () => {
 
 const handleAddLinkGroup = async () => {
   try {
-    const data = await $fetch('/api/link-groups', {
+    const data = await $fetch('/api/groups', {
       method: 'post',
       body: {
         title: groupData.title,
@@ -166,7 +166,7 @@ const handleEditLinkGroup = async () => {
     handleGroupLinkFormClose();
   } else {
     try {
-      const data = await $fetch(`/api/link-groups/${groupData.id}`, {
+      const data = await $fetch(`/api/groups/${groupData.id}`, {
         method: 'patch',
         body
       });
@@ -192,7 +192,7 @@ const handleEditLinkGroup = async () => {
 const handleRemoveLinkGroup = async () => {
   const groupId = groupDataForRemoval.value.id;
   try {
-    const data = await $fetch(`/api/link-groups/${groupId}`, {
+    const data = await $fetch(`/api/groups/${groupId}`, {
       method: 'delete'
     });
 

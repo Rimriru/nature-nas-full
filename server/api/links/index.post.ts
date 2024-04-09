@@ -28,7 +28,7 @@ export default defineEventHandler(async (evt) => {
 
       let updatedGroup;
       if (groupId) {
-        updatedGroup = await $fetch(`/api/link-groups/links/${groupId}`, {
+        updatedGroup = await $fetch(`/api/groups/links/${groupId}`, {
           method: 'put',
           body: {
             linkId: newLinkTyped._id

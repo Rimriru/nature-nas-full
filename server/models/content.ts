@@ -8,10 +8,12 @@ const contentSchema = new mongoose.Schema(
     },
     text: String,
     description: String,
-    sections: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: 'section'
-    },
+    sections: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'section'
+      }
+    ],
     personaOne: {
       position: {
         type: String,
@@ -66,7 +68,7 @@ const contentSchema = new mongoose.Schema(
       }
     },
     photos: {
-      type: [mongoose.Schema.Types.Mixed]
+      type: [String]
     },
     route: {
       type: mongoose.Schema.Types.ObjectId,

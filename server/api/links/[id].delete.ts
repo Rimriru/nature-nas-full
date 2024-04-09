@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import { links } from '../../models/index';
-import type { Link } from '~/types/LinkDataFromDb';
 
 export default defineEventHandler(async (evt) => {
   const linkId = getRouterParam(evt, 'id');
@@ -9,7 +8,7 @@ export default defineEventHandler(async (evt) => {
   try {
     const result = session.withTransaction(async () => {
       await links.findByIdAndDelete(linkId);
-      await $fetch(`/api/link-groups/links/${groupId}`, {
+      await $fetch(`/api/groups/links/${groupId}`, {
         method: 'delete',
         query: {
           linkId

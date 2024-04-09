@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { linkGroups, links } from '~/server/models';
+import { links, groups } from '../../models/index';
 import type { LinkGroup } from '~/types/LinkDataFromDb';
 
 export default defineEventHandler(async (event) => {
@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   const session = await mongoose.startSession();
   try {
     const result: Promise<{ message: string }> = session.withTransaction(async () => {
-      const deletedGroup = await linkGroups.findByIdAndDelete(groupId);
+      const deletedGroup = await groups.findByIdAndDelete(groupId);
       const deletedGroupTyped = deletedGroup as unknown as LinkGroup;
       await links.deleteMany({
         _id: { $in: deletedGroupTyped.links }
