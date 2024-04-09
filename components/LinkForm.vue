@@ -36,7 +36,7 @@ const handleClose = () => {
         class="link-form"
         @submit="emit('onSubmit')"
       >
-        <h4>
+        <h4 class="link-form__heading">
           {{
             groupingLinkTitle ? `Добавить ссылку в ${groupingLinkTitle}` : 'Редактировать ссылку'
           }}
@@ -79,6 +79,12 @@ const handleClose = () => {
   flex-direction: column;
   gap: 10px;
   max-width: 350px;
+  text-align: left;
+
+  .link-form__heading {
+    font-size: 17px;
+    text-align: center;
+  }
 
   .link-form__btns {
     display: flex;

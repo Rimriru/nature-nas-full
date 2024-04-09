@@ -38,7 +38,7 @@ const validate = (state: any): FormError[] => {
       class="group-form"
     >
       <h4 class="group-form__heading">
-        {{ isEditing ? 'Изменить или удалить ссылку' : 'Создать новую ссылку' }}
+        {{ isEditing ? 'Изменить или удалить группу' : 'Создать новую группу' }}
       </h4>
       <UFormGroup name="title">
         Название

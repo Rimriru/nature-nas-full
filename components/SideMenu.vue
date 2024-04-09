@@ -342,18 +342,10 @@ onMounted(() => {
           </p>
         </div>
         <ul
-          :class="[
-            { 'side-menu__links_showed': groupLinkShowed === groupId },
-            'side-menu__links',
-            'centered-links'
-          ]"
+          :class="[{ 'side-menu__links_showed': groupLinkShowed === groupId }, 'side-menu__links']"
         >
           <li v-for="{ _id: linkId, title, to } of links" :key="linkId" class="side-menu__link">
-            <EditBtn
-              :color="'gray'"
-              :appliedClass="'edit-btn'"
-              @click="handleEditLinkBtnClick(title, to, linkId, groupId)"
-            />
+            <EditBtn :color="'gray'" @click="handleEditLinkBtnClick(title, to, linkId, groupId)" />
             <NuxtLink
               :to="`/labs-and-centers${to}`"
               :class="{ 'side-menu__link_active': $route.fullPath === `/labs-and-centers${to}` }"
@@ -361,15 +353,15 @@ onMounted(() => {
               {{ title }}
             </NuxtLink>
           </li>
-          <AddLinkButton
-            :color="'blue'"
-            :applied-styles="'add-btn'"
-            @on-click="handleAddLinkBtnClick(title, groupId)"
-          />
+          <AddLinkButton :color="'blue'" @on-click="handleAddLinkBtnClick(title, groupId)" />
         </ul>
       </li>
     </ul>
-    <AddLinkButton :color="'white'" @on-click="handleAddGroupBtnClick" />
+    <AddLinkButton
+      :color="'white'"
+      :applied-styles="'add-btn'"
+      @on-click="handleAddGroupBtnClick"
+    />
     <LazyLinkGroupForm
       v-model="groupData"
       :is-open="isGroupPopupOpen"
@@ -406,92 +398,5 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
-@use '~/assets/styles/variables.scss' as *;
-
-.centered-links {
-  margin-left: 50px;
-}
-
-.edit-btn {
-  margin: 5px 12px;
-}
-
-.side-menu {
-  max-width: 300px;
-  text-align: center;
-  padding-top: 20px;
-  margin-left: 25px;
-
-  .side-menu__link-groups {
-    display: flex;
-    flex-direction: column;
-    row-gap: 15px;
-
-    .side-menu__group-container {
-      display: flex;
-      align-items: center;
-      border: $mid-blue 2px solid;
-      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-      margin-bottom: 5px;
-
-      .side-menu__group-title {
-        border-left: $mid-blue 2px solid;
-        padding-block: 10px;
-        width: 100%;
-        transition: all 0.1s ease-in;
-        cursor: pointer;
-        font-size: 18px;
-
-        &:hover {
-          background-color: $gray;
-          color: #fff;
-        }
-      }
-    }
-
-    .side-menu__links {
-      max-width: 250px;
-      height: 0;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.5s ease-out;
-      border: none;
-
-      &_showed {
-        border: $mid-blue 1px solid;
-        margin-bottom: 10px;
-        max-height: 1000px;
-        overflow: visible;
-        height: auto;
-      }
-
-      .side-menu__link {
-        position: relative;
-
-        button.edit-btn {
-          position: absolute;
-          top: 0;
-          left: -50px;
-        }
-
-        a {
-          padding: 5px;
-          display: flex;
-          justify-content: center;
-          transition: all 0.1s ease-in;
-
-          &.side-menu__link_active {
-            background-color: $mid-blue;
-            color: #fff;
-          }
-
-          &:hover {
-            background-color: $gray;
-            color: #fff;
-          }
-        }
-      }
-    }
-  }
-}
+@import url('~/assets/styles/components/sideMenu.scss');
 </style>

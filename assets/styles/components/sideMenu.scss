@@ -1,0 +1,111 @@
+@use '~/assets/styles/variables.scss' as *;
+
+.add-btn {
+  width: 100%;
+  height: 100%;
+}
+
+.edit-btn {
+  margin: 5px 12px;
+}
+
+.side-menu {
+  max-width: 300px;
+  text-align: center;
+  padding-top: 20px;
+  margin-left: 25px;
+  width: 100%;
+
+  .side-menu__link-groups {
+    display: flex;
+    flex-direction: column;
+
+    .side-menu__link-group {
+      margin-bottom: 15px;
+
+      .side-menu__group-container {
+        display: flex;
+        align-items: center;
+        border: $mid-blue 2px solid;
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        margin-bottom: 5px;
+
+        .side-menu__group-title {
+          border-left: $mid-blue 2px solid;
+          padding-block: 10px;
+          width: 100%;
+          transition: all 0.1s ease-in;
+          cursor: pointer;
+          font-size: 18px;
+
+          &:hover {
+            background-color: $gray;
+            color: #fff;
+          }
+        }
+      }
+    }
+
+    .side-menu__links {
+      width: 100%;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease-in;
+      display: grid;
+      opacity: 0;
+
+      &_showed {
+        max-height: 1000px;
+        opacity: 1;
+      }
+
+      button.add-link-btn {
+        justify-self: end;
+        width: 85%;
+        margin-top: 10px;
+      }
+
+      .side-menu__link {
+        display: flex;
+        align-items: center;
+
+        &:first-of-type {
+          a {
+            border: $mid-blue 1px solid;
+          }
+        }
+
+        &:not(:first-of-type):not(:last-of-type) {
+          a {
+            border-bottom: $mid-blue 1px solid;
+          }
+        }
+
+        &:last-of-type {
+          a {
+            border-bottom: $mid-blue 1px solid;
+          }
+        }
+
+        a {
+          padding: 5px;
+          display: flex;
+          justify-content: center;
+          transition: all 0.1s ease-in;
+          width: 90%;
+          border-inline: $mid-blue 1px solid;
+
+          &.side-menu__link_active {
+            background-color: $mid-blue;
+            color: #fff;
+          }
+
+          &:hover {
+            background-color: $gray;
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+}
