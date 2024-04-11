@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { canvases } from './utils/canvasesData';
-const router = useRouter();
-const routes = await useAllRoutes();
-const linkGroups = await useLinkGroups();
+import { canvases } from '~/utils/canvasesData';
 
 const routesState = useRoutesState();
 const linkGroupsState = useLinkGroupsState();
 
+const routes = await useAllRoutes();
+const linkGroups = await useLinkGroups();
+const router = useRouter();
+
 routesState.value = routes;
 linkGroupsState.value = linkGroups;
 
-routesState.value.forEach((route) => {
+routes.forEach((route) => {
   router.addRoute({
     path: route.path,
     name: route.name,
@@ -25,7 +26,7 @@ routesState.value.forEach((route) => {
 <template>
   <NuxtLayout>
     <div class="layout">
-      <HeadingImage v-if="router.currentRoute.value.path !== '/admin'" />
+      <HeadingImage v-if="$router.currentRoute.value.path !== '/admin'" />
       <NuxtPage />
     </div>
   </NuxtLayout>

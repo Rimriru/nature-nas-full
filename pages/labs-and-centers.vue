@@ -2,6 +2,7 @@
 import type { Link } from '~/types/LinkDataFromDb';
 
 const linkGroups = useLinkGroupsState();
+const router = useRouter();
 
 const labsLinkGroups = computed(() => {
   const links: Link[] = [];
@@ -11,7 +12,7 @@ const labsLinkGroups = computed(() => {
 });
 
 if (labsLinkGroups.value[0]) {
-  await navigateTo(`/labs-and-centers${labsLinkGroups.value[0].to}`, { replace: true });
+  router.push(`/labs-and-centers${labsLinkGroups.value[0].to}`);
 }
 </script>
 

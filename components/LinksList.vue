@@ -71,7 +71,7 @@ const onEditLinkFormSubmit = async () => {
     onCloseLinkForm();
   } else {
     try {
-      const { editedLinkData, message } = await $fetch(`/api/links/${removedOrEditedLinkData.id}`, {
+      const editedLinkData = await $fetch(`/api/links/${removedOrEditedLinkData.id}`, {
         method: 'patch',
         body: linkData
       });
@@ -88,8 +88,8 @@ const onEditLinkFormSubmit = async () => {
         linkGroups.value[editedLinkGroupIndex].links[editedLinkIndex] = editedLinkData as Link;
       }
 
+      notifications.add({ id: 'link', title: `Ссылка "${linkData.title}" была изменена` });
       onCloseLinkForm();
-      notifications.add({ id: 'link-edited', title: message });
     } catch (error: any) {
       editLinkError.value = error?.data.message;
     }
@@ -98,24 +98,26 @@ const onEditLinkFormSubmit = async () => {
 
 const onRemoveLinkPopupAgree = async () => {
   try {
-    const { message, editedGroup } = await $fetch(`/api/links/${removedOrEditedLinkData.id}`, {
+    const { message } = await $fetch(`/api/links/${removedOrEditedLinkData.id}`, {
       method: 'delete',
       query: {
         groupId: removedOrEditedLinkData.groupId
       }
     });
 
-    // поиск группы в глобальном стейте, а затем заменяем на отредактированную
+    // поиск группы в глобальном стейте, а затем фильтруем её ссылки
 
     const removedLinkGroupIndex = linkGroups.value.findIndex(
       (group) => group._id === removedOrEditedLinkData.groupId
     );
     if (removedLinkGroupIndex !== -1) {
-      linkGroups.value[removedLinkGroupIndex] = editedGroup;
+      linkGroups.value[removedLinkGroupIndex].links = linkGroups.value[
+        removedLinkGroupIndex
+      ].links.filter((link) => link._id !== removedOrEditedLinkData.id);
     }
 
     onCloseConfirmPopup();
-    notifications.add({ id: 'link-removed', title: message });
+    notifications.add({ id: 'link', title: message });
   } catch (error: any) {
     removeLinkError.value = error.data.message;
   }
@@ -178,6 +180,9 @@ const onRemoveLinkPopupAgree = async () => {
   .links-list__links {
     padding-left: 60px;
     list-style: disc;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
   }
 }
 </style>

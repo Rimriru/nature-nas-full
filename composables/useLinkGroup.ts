@@ -4,9 +4,9 @@ export const useLinkGroupsState: () => globalThis.Ref<LinkGroup[] | []> = () =>
   useState('links', () => []);
 
 export const useLinkGroups = async () => {
-  const { data } = await useFetch('/api/groups');
+  const data = await $fetch('/api/groups');
 
-  if (!data.value) {
+  if (!data) {
     return [];
   } else {
     return data as unknown as LinkGroup[];

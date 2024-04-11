@@ -14,7 +14,7 @@ const currentPage = computed(() => {
   <div>
     <component
       :is="currentPage?.components?.default"
-      :route-data="currentPage.props.default.routeData"
+      :route-data="currentPage?.props.default.routeData"
     ></component>
   </div>
 </template>

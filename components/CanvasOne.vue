@@ -305,7 +305,11 @@ const handleCanvasFormSubmit = async () => {
           {{ contentValues.description }}
         </p>
       </div>
-      <div v-html="contentValues.text" class="page__plain-text content"></div>
+      <div
+        v-if="contentValues.text"
+        v-html="contentValues.text"
+        class="page__plain-text content"
+      ></div>
       <UCarousel
         v-if="contentValues.photos.length > 0"
         v-slot="{ item }"
@@ -353,20 +357,24 @@ const handleCanvasFormSubmit = async () => {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
+  margin-right: 20px;
+  margin-bottom: 20px;
   gap: 20px;
-  padding-bottom: 20px;
+  padding: 30px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  border-radius: 20px;
 
   .page__container {
     display: flex;
     gap: 80px;
   }
+}
 
-  .page__plain-text {
-    margin-bottom: 50px;
-  }
+.page__plain-text {
+  margin-bottom: 50px;
+}
 
-  .page__edit-btn {
-    margin: 0 auto;
-  }
+.page__edit-btn {
+  margin: 0 auto;
 }
 </style>

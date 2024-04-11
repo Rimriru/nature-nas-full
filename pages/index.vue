@@ -1,6 +1,4 @@
-<script setup lang="ts">
-const linkGroups = await useLinkGroups();
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <main class="main">
@@ -9,7 +7,6 @@ const linkGroups = await useLinkGroups();
       <NuxtLink to="/admin">To admin</NuxtLink>
       <NuxtLink to="/look">To Canvas One</NuxtLink>
     </div>
-    {{ linkGroups }}
   </main>
 </template>
 

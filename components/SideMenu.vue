@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Link } from '~/types/LinkDataFromDb';
 import type RemovedItem from '~/types/RemovedItemForConfirmPopup';
 
 const groupData = reactive({
@@ -39,14 +40,20 @@ const requestError = ref('');
 const allGroupLinks = useLinkGroupsState();
 const groupLinkShowed = ref('');
 
+const route = useRoute();
 const notifications = useToast();
 
 const labsCentersLinkGroups = computed(() => {
   return allGroupLinks.value.filter((group) => group.group === 'labs-and-centers');
 });
 
-const handleGroupLinkShowedToggle = (groupId: string) => {
+const handleGroupLinkShowedToggle = async (groupId: string, links: Link[]) => {
   groupLinkShowed.value = groupId;
+  if (links.length) {
+    await navigateTo(`/labs-and-centers${links[0].to}`);
+  } else {
+    await navigateTo('/labs-and-centers');
+  }
 };
 
 const handleAddGroupBtnClick = () => {
@@ -196,7 +203,15 @@ const handleRemoveLinkGroup = async () => {
       method: 'delete'
     });
 
+    const groupIndex = labsCentersLinkGroups.value.findIndex((group) => group._id === groupId);
+    const firstGroup = labsCentersLinkGroups.value[0];
+    if (labsCentersLinkGroups.value.length > 1 && groupIndex > 0) {
+      handleGroupLinkShowedToggle(firstGroup._id, firstGroup.links);
+    } else {
+      await navigateTo('/labs-and-centers');
+    }
     allGroupLinks.value = allGroupLinks.value.filter((group) => group._id !== groupId);
+
     handleConfirmPopupClose();
     notifications.add({
       id: 'link-group',
@@ -230,6 +245,7 @@ const handleAddLink = async () => {
       id: 'link',
       title: `Ссылка ${body.title} создана!`
     });
+    await navigateTo(`/labs-and-centers${newLinkTyped.to}`);
   } catch (error: any) {
     requestError.value = `Ошибка ${error.statusCode}: ${error.message}`;
     console.error(error);
@@ -275,8 +291,7 @@ const handleEditLink = async () => {
 };
 
 const handleRemoveLink = async () => {
-  const linkId = linkValuesForRemoval.value.linkId;
-  const groupId = linkValuesForRemoval.value.groupId;
+  const { linkId, groupId } = linkValuesForRemoval.value;
 
   try {
     const data = await $fetch(`/api/links/${linkId}`, {
@@ -287,9 +302,31 @@ const handleRemoveLink = async () => {
     });
 
     const removedLinkGroupIndex = allGroupLinks.value.findIndex((group) => group._id === groupId);
-    allGroupLinks.value[removedLinkGroupIndex].links = allGroupLinks.value[
-      removedLinkGroupIndex
-    ].links.filter((link) => link._id !== linkId);
+    const groupLinks = allGroupLinks.value[removedLinkGroupIndex].links;
+    const removedLinkIndex = groupLinks.findIndex((link) => link._id === linkId);
+
+    if (groupLinks.length > 1 && removedLinkIndex !== 0) {
+      await navigateTo(`/labs-and-centers${groupLinks[removedLinkIndex - 1].to}`);
+    } else if (groupLinks.length > 1 && removedLinkIndex === 0) {
+      await navigateTo(`/labs-and-centers${groupLinks[removedLinkIndex + 1].to}`);
+    } else {
+      // в случае, если количество ссылок было равно 1
+      const removedLinkGroupIndexInLabsAndCentersGroup = labsCentersLinkGroups.value.findIndex(
+        (group) => group._id === groupId
+      );
+      const previousGroup =
+        labsCentersLinkGroups.value[removedLinkGroupIndexInLabsAndCentersGroup - 1];
+      if (previousGroup) {
+        groupLinkShowed.value = previousGroup._id;
+        await navigateTo(`/labs-and-centers${previousGroup.links[0].to}`);
+      } else {
+        await navigateTo('/labs-and-centers');
+      }
+    }
+
+    allGroupLinks.value[removedLinkGroupIndex].links = groupLinks.filter(
+      (link) => link._id !== linkId
+    );
 
     handleConfirmPopupClose();
     notifications.add({
@@ -334,10 +371,10 @@ onMounted(() => {
         <div class="side-menu__group-container">
           <EditBtn
             :color="'gray'"
-            :appliedClass="'edit-btn'"
+            :appliedClass="'side-menu-edit-btn'"
             @click="handleEditGroupBtnClick(title, groupId)"
           />
-          <p class="side-menu__group-title" @click="handleGroupLinkShowedToggle(groupId)">
+          <p class="side-menu__group-title" @click="handleGroupLinkShowedToggle(groupId, links)">
             {{ title }}
           </p>
         </div>
@@ -345,10 +382,14 @@ onMounted(() => {
           :class="[{ 'side-menu__links_showed': groupLinkShowed === groupId }, 'side-menu__links']"
         >
           <li v-for="{ _id: linkId, title, to } of links" :key="linkId" class="side-menu__link">
-            <EditBtn :color="'gray'" @click="handleEditLinkBtnClick(title, to, linkId, groupId)" />
+            <EditBtn
+              :color="'gray'"
+              :appliedClass="'side-menu-edit-btn'"
+              @click="handleEditLinkBtnClick(title, to, linkId, groupId)"
+            />
             <NuxtLink
               :to="`/labs-and-centers${to}`"
-              :class="{ 'side-menu__link_active': $route.fullPath === `/labs-and-centers${to}` }"
+              :class="{ 'side-menu__link_active': route.fullPath === `/labs-and-centers${to}` }"
             >
               {{ title }}
             </NuxtLink>
