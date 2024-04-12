@@ -394,15 +394,15 @@ onMounted(() => {
               {{ title }}
             </NuxtLink>
           </li>
-          <AddLinkButton :color="'blue'" @on-click="handleAddLinkBtnClick(title, groupId)" />
+          <AddLinkButton
+            :color="'mid-blue'"
+            :size="'md'"
+            @on-click="handleAddLinkBtnClick(title, groupId)"
+          />
         </ul>
       </li>
     </ul>
-    <AddLinkButton
-      :color="'white'"
-      :applied-styles="'add-btn'"
-      @on-click="handleAddGroupBtnClick"
-    />
+    <AddLinkButton :color="'white'" :size="'md'" @on-click="handleAddGroupBtnClick" />
     <LazyLinkGroupForm
       v-model="groupData"
       :is-open="isGroupPopupOpen"

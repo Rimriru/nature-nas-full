@@ -14,6 +14,7 @@ export default defineEventHandler(async (event) => {
       });
       return { message: 'Группа ссылок удалена' };
     });
+
     return result;
   } catch (error: any) {
     throw createError({

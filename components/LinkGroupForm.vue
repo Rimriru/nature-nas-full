@@ -29,35 +29,37 @@ const validate = (state: any): FormError[] => {
 </script>
 
 <template>
-  <AppPopup :is-opened="isOpen" @on-close="handlePopupClose">
-    <UForm
-      ref="form"
-      :state="groupData"
-      :validate="validate"
-      @submit="isEditing ? emit('onEdit') : emit('onAdd')"
-      class="group-form"
-    >
-      <h4 class="group-form__heading">
-        {{ isEditing ? 'Изменить или удалить группу' : 'Создать новую группу' }}
-      </h4>
-      <UFormGroup name="title">
-        Название
-        <span class="required">*</span>
-        <UInput color="sky" v-model="groupData!.title" placeholder="Введите название группы..." />
-      </UFormGroup>
-      <span class="error" v-if="error">{{ error }}</span>
-      <div class="group-form__btn-container">
-        <MenuButton :size="'small'" @click="handlePopupClose"> Отменить </MenuButton>
-        <MenuButton :size="'small'" :is-active="true" :button-type="'submit'">
-          Сохранить
-        </MenuButton>
+  <LazyClientOnly>
+    <AppPopup :is-opened="isOpen" @on-close="handlePopupClose">
+      <UForm
+        ref="form"
+        :state="groupData"
+        :validate="validate"
+        @submit="isEditing ? emit('onEdit') : emit('onAdd')"
+        class="group-form"
+      >
+        <h4 class="group-form__heading">
+          {{ isEditing ? 'Изменить или удалить группу' : 'Создать новую группу' }}
+        </h4>
+        <UFormGroup name="title">
+          Название
+          <span class="required">*</span>
+          <UInput color="sky" v-model="groupData!.title" placeholder="Введите название группы..." />
+        </UFormGroup>
+        <span class="error" v-if="error">{{ error }}</span>
+        <div class="group-form__btn-container">
+          <MenuButton :size="'small'" @click="handlePopupClose"> Отменить </MenuButton>
+          <MenuButton :size="'small'" :is-active="true" :button-type="'submit'">
+            Сохранить
+          </MenuButton>
+        </div>
+      </UForm>
+      <div v-if="isEditing">
+        <UDivider label="ИЛИ" class="divider" />
+        <UButton block color="red" variant="soft" @click="emit('onRemove')">Удалить</UButton>
       </div>
-    </UForm>
-    <div v-if="isEditing">
-      <UDivider label="ИЛИ" class="divider" />
-      <UButton block color="red" variant="soft" @click="emit('onRemove')">Удалить</UButton>
-    </div>
-  </AppPopup>
+    </AppPopup>
+  </LazyClientOnly>
 </template>
 
 <style lang="scss">
