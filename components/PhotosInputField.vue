@@ -9,7 +9,7 @@ const config = useRuntimeConfig();
 
 const onPhotosChange = (event: Event) => {
   photosError.value = '';
-  const filesInputData = event.target as HTMLInputElement;
+  let filesInputData = event.target as HTMLInputElement;
   if (filesInputData.files && filesInputData.files.length > 0) {
     const files = filesInputData.files;
     const filesArray = Array.from(files);
@@ -25,9 +25,13 @@ const onPhotosChange = (event: Event) => {
 
     photosForUpload.value = files;
 
+    console.log(photosForUpload.value);
+
     filesArray.forEach((file) => {
       photosForDemonstration.value.push(URL.createObjectURL(file));
     });
+
+    // filesInputData.files.length = [];
   } else {
     emit('onPhotosSelected', []);
   }
@@ -38,7 +42,7 @@ const onRemovePhotoBtnClick = (src: string) => {
     // находим индекс удаляемого фото
     const indexPhotoOfInterest = photosForDemonstration.value.findIndex((photo) => photo === src);
 
-    // находим сам файл в массиве загруженных файлов, а заемт оставшиеся файлы загружаем в новый filelist, даём измененный список файлов в массив для загрузки -> emit from watch
+    // находим сам файл в массиве загруженных файлов, а затем оставшиеся файлы загружаем в новый filelist, даём измененный список файлов в массив для загрузки -> emit from watch
     if (photosForUpload.value.length > 1) {
       const photosForUploadArray = Array.from(photosForUpload.value);
       photosForUploadArray.splice(indexPhotoOfInterest, 1);
@@ -64,8 +68,8 @@ const onRemovePhotoBtnClick = (src: string) => {
 
 watch(
   photosForUpload,
-  () => {
-    console.log(photosForUpload.value);
+  (newValue) => {
+    console.log(newValue);
     emit('onPhotosSelected', photosForUpload.value);
   },
   { deep: true }
@@ -94,8 +98,10 @@ onMounted(() => {
         ref="fileInput"
         accept="image/jpeg, image/png"
         @change="onPhotosChange"
+        @click="($refs.fileInput as HTMLInputElement).value = ''"
       />
       <UButton color="blue" variant="soft" @click="($refs.fileInput as HTMLInputElement).click()">
+        <UIcon name="i-material-symbols-attach-file-rounded" />
         Выбрать файл
       </UButton>
     </label>

@@ -2,7 +2,6 @@
 import { HEADER_LINK_GROUPS } from '~/utils/linksData';
 import homeIcon from '~/assets/images/home-icon.svg';
 import mapIcon from '~/assets/images/map-icon.svg';
-import type { Form } from '#ui/types';
 import type { LinkGroup } from '~/types/LinkDataFromDb';
 
 const linkValue = reactive({
@@ -53,7 +52,6 @@ const onAddLinkFormSubmit = async () => {
       (group: LinkGroup) => group._id === updatedGroup._id
     );
     linkGroupsState.value[index] = updatedGroup;
-    console.log(updatedGroup, newLinkTyped, linkGroupsState.value);
     notifications.add({ id: 'link-create', title: `Ссылка "${newLinkBody.title}" создана!` });
     onCloseLinkForm();
   } catch (err: any) {

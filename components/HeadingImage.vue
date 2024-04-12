@@ -4,15 +4,7 @@ const router = useRouter();
 
 router.beforeEach((to, from) => {
   pageTitle.value = '';
-
-  if (to.meta.title) {
-    pageTitle.value = to.meta.title as string;
-  }
 });
-
-if (router.currentRoute.value.meta.title) {
-  pageTitle.value = router.currentRoute.value.meta.title as string;
-}
 </script>
 
 <template>

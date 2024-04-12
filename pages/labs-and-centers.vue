@@ -19,7 +19,7 @@ if (labsLinkGroups.value[0]) {
 <template>
   <div class="labs-centers">
     <SideMenu />
-    <NuxtPage :keepalive="true" />
+    <NuxtPage />
   </div>
 </template>
 

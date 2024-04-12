@@ -1,12 +1,11 @@
 <script setup lang="ts">
 const title = 'Карта сайта';
+const pageTitleState = usePageTitle();
+
+pageTitleState.value = title;
 
 useSeoMeta({
   title
-});
-
-definePageMeta({
-  title: 'Карта сайта'
 });
 </script>
 

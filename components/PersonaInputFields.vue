@@ -51,6 +51,7 @@ onMounted(() => {
             variant="soft"
             @click="($refs.personaPhotoInput as HTMLInputElement).click()"
           >
+            <UIcon name="i-material-symbols-attach-file-rounded" />
             Выбрать файл
           </UButton>
           <p class="persona-fieldset__perview">

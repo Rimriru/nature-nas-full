@@ -32,7 +32,6 @@ const isInEditMode = ref(false);
 let wasContentBefore = false;
 const pageTitle = usePageTitle();
 const notifications = useToast();
-const config = useRuntimeConfig();
 
 // данные о странице от router
 const props = defineProps(['routeData']);
@@ -44,7 +43,7 @@ watch(
     pageTitle.value = newValue;
   }
 );
-
+// при редактировании происходит скролл до верхнего края window
 watch(isInEditMode, (newValue) => {
   if (newValue) {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -57,7 +56,7 @@ const content = await useFetch(`/api/content/${props.routeData._id}`, {
   pick: ['_id', 'title', 'description', 'text', 'sections', 'photos', 'personaOne']
 });
 
-// если запрос был ранее сохранён, то
+// если контент был ранее сохранён, то
 // меняем значение wasContentBefore (на его основе происходит определение запроса, который будет отправляться - post или patch (см. handleCanvasFormSubmit))
 // заполняем значения контента для формы и отображения на странице
 // добавляем мета теги в виде заголовка и описания страницы
@@ -298,33 +297,12 @@ const handleCanvasFormSubmit = async () => {
 
 <template>
   <main class="main">
-    <article v-if="!isInEditMode" class="page">
-      <div class="page__container">
-        <PersonaCard :persona-data="contentValues.personaOne"></PersonaCard>
-        <p v-if="contentValues.description" class="page__description">
-          {{ contentValues.description }}
-        </p>
-      </div>
-      <div
-        v-if="contentValues.text"
-        v-html="contentValues.text"
-        class="page__plain-text content"
-      ></div>
-      <UCarousel
-        v-if="contentValues.photos.length > 0"
-        v-slot="{ item }"
-        :items="contentValues.photos"
-        :ui="{ item: 'basis-full snap-center justify-center' }"
-        class="carousel"
-        :arrows="contentValues.photos.length > 1"
-        :indicators="contentValues.photos.length > 1"
-      >
-        <img :src="`${config.public.domen}/image/${item}`" class="carousel__img" />
-      </UCarousel>
-      <MenuButton class="page__edit-btn" :size="'middle'" @click="enableEditMode">
-        Редактировать
-      </MenuButton>
-    </article>
+    <CanvasContent
+      v-if="!isInEditMode"
+      :content-values="contentValues"
+      :canvas="'one'"
+      @edit-btn-click="enableEditMode"
+    />
     <CanvasForm
       v-else
       :content-values="contentValues"
@@ -350,31 +328,3 @@ const handleCanvasFormSubmit = async () => {
     />
   </main>
 </template>
-
-<style lang="scss">
-.page {
-  max-width: 1400px;
-  display: flex;
-  flex-direction: column;
-  margin: 0 auto;
-  margin-right: 20px;
-  margin-bottom: 20px;
-  gap: 20px;
-  padding: 30px;
-  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
-  border-radius: 20px;
-
-  .page__container {
-    display: flex;
-    gap: 80px;
-  }
-}
-
-.page__plain-text {
-  margin-bottom: 50px;
-}
-
-.page__edit-btn {
-  margin: 0 auto;
-}
-</style>

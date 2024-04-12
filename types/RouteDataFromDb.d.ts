@@ -3,7 +3,6 @@ interface RouteDataFromDb {
   path: string;
   component: string;
   _id: string;
-  link: string;
 }
 
 export default RouteDataFromDb;
