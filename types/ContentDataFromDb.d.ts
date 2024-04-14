@@ -13,7 +13,7 @@ interface ContentFromDb {
   personaTwo: PersonaData;
 }
 
-interface CanvasOneContent {
+interface CanvasContent {
   _id: string;
   title: string;
   text: string;
@@ -21,6 +21,7 @@ interface CanvasOneContent {
   photos: any[];
   sections: SectionFromDb[];
   personaOne: PersonaData;
+  personaTwo: PersonaData;
 }
 
 interface OriginalContentValues {
@@ -29,6 +30,9 @@ interface OriginalContentValues {
   text: string;
   photos: any[];
   personaOne: PersonaData;
+  personaTwo: PersonaData;
 }
 
-export { ContentFromDb, CanvasOneContent, OriginalContentValues };
+type CanvasOptions = 'one' | 'two' | 'three' | 'four' | 'five' | 'six';
+
+export { ContentFromDb, CanvasContent, OriginalContentValues, CanvasOptions };

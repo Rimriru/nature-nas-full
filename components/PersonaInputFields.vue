@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { ModelRef } from 'vue';
 import type PersonaData from '~/types/PersonasDataFromDb';
+
 const model: ModelRef<PersonaData | undefined, string> = defineModel('personaData');
 const emit = defineEmits(['onPhotoChange']);
-const props = defineProps(['photo']);
+const props = defineProps(['photo', 'heading']);
 const photoForPreview = ref<string>('');
 const config = useRuntimeConfig();
 const photoError = ref('');
@@ -32,7 +33,7 @@ onMounted(() => {
 
 <template>
   <fieldset class="persona-fieldset">
-    <legend class="persona-fieldset__title">Контакт</legend>
+    <legend class="persona-fieldset__title">{{ props.heading ? props.heading : 'Контакт' }}</legend>
     <div class="persona-fieldset__main-block">
       <div>
         <span class="required persona-fieldset__photo-err">{{ photoError }}</span>

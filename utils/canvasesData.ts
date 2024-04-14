@@ -5,7 +5,7 @@ import canvasFour from '~/assets/images/canvas-4.png';
 import canvasFive from '~/assets/images/canvas-5.png';
 import canvasSix from '~/assets/images/canvas-6.png';
 
-import { CanvasOne, CanvasTwo } from '#components';
+import { CanvasOne, CanvasTwo, CanvasThree, CanvasFour, CanvasFive, CanvasSix } from '#components';
 import type { DefineComponent } from 'vue';
 
 interface Canvases {
@@ -47,5 +47,9 @@ export const CANVAS_OPTIONS = [
 
 export const canvases: Canvases = {
   CanvasOne: CanvasOne as DefineComponent,
-  CanvasTwo: CanvasTwo as DefineComponent
+  CanvasTwo: CanvasTwo as DefineComponent,
+  CanvasThree: CanvasThree as DefineComponent,
+  CanvasFour: CanvasFour as DefineComponent,
+  CanvasFive: CanvasFive as DefineComponent,
+  CanvasSix: CanvasSix as DefineComponent
 };

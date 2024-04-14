@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Form, FormError } from '#ui/types';
 const canvasForm = ref(null);
-const props = defineProps(['contentValues']);
+const props = defineProps(['contentValues', 'onPhotosSelected', 'onPhotosFromDbRemoved']);
 const emit = defineEmits(['onCancel', 'onSubmit']);
 
 const validate = (state: any): FormError[] => {
@@ -35,15 +35,7 @@ const onCancel = () => {
       />
     </UFormGroup>
 
-    <UFormGroup name="description">
-      Описание
-      <UTextarea
-        color="sky"
-        size="xl"
-        v-model="props.contentValues.description"
-        placeholder="Введите описание..."
-      />
-    </UFormGroup>
+    <slot />
 
     <UFormGroup name="plainText">
       Содержимое
@@ -51,7 +43,12 @@ const onCancel = () => {
         <ContentEditor v-model="props.contentValues.text" />
       </ClientOnly>
     </UFormGroup>
-    <slot />
+
+    <PhotosInputField
+      :photos-from-db="contentValues.photos"
+      @on-photos-selected="props.onPhotosSelected"
+      @update:photos-from-db="props.onPhotosFromDbRemoved"
+    />
 
     <div class="canvas-form__btns-container">
       <MenuButton @click="onCancel" :size="'middle'"> Отменить </MenuButton>

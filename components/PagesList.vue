@@ -4,39 +4,44 @@ import type RouteDataFromDb from '~/types/RouteDataFromDb';
 const isConfirmPopupOpen = ref(false);
 const routeDataForRemove = reactive({
   id: '',
+  name: '',
   path: ''
 });
 const removeRouteError = ref('');
 
-//const links = useLinksState();
+const linkGroups = useLinkGroupsState();
 const routesFromDb = useRoutesState();
 const notifications = useToast();
 const router = useRouter();
 
-const onRemoveBtnClick = (routeId: string, path: string) => {
+const onRemoveBtnClick = (routeId: string, name: string, path: string) => {
   isConfirmPopupOpen.value = true;
   routeDataForRemove.id = routeId;
+  routeDataForRemove.name = name;
   routeDataForRemove.path = path;
 };
 
 const onConfirmPopupClose = () => {
   isConfirmPopupOpen.value = false;
   routeDataForRemove.id = '';
+  routeDataForRemove.name = '';
   routeDataForRemove.path = '';
 };
 
 const handleRouteRemove = async () => {
   try {
-    const data = await $fetch(`/api/routes/${routeDataForRemove.id}`, {
+    const { message, links } = await $fetch(`/api/routes/${routeDataForRemove.id}`, {
       method: 'delete'
     });
-    //links.value = links.value.filter((link) => link.to !== routeDataForRemove.path);
     routesFromDb.value = routesFromDb.value.filter(
       (route: RouteDataFromDb) => route._id !== routeDataForRemove.id
     );
-    router.removeRoute(routeDataForRemove.path);
+    router.removeRoute(routeDataForRemove.name);
+
+    // TODO: заменять удалённые ссылки в группах
+
     onConfirmPopupClose();
-    notifications.add({ id: 'route-remove', title: data.message });
+    notifications.add({ id: 'route-remove', title: message });
   } catch (error: any) {
     removeRouteError.value = error.data.message;
   }
@@ -55,10 +60,10 @@ const handleRouteRemove = async () => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="({ path, _id: id }, index) in routesFromDb" :key="id">
+        <tr v-for="({ path, _id: id, name }, index) in routesFromDb" :key="id">
           <td>{{ index + 1 }}</td>
           <td>{{ path }}</td>
-          <td><RemoveBtn @click="onRemoveBtnClick(id, path)" /></td>
+          <td><RemoveBtn @click="onRemoveBtnClick(id, name, path)" /></td>
         </tr>
       </tbody>
     </table>

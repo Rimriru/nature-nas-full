@@ -6,10 +6,10 @@ const routeId: string = routeData._id;
 // запрос на контент
 const { data: content } = await useFetch(`/api/content/${routeId}`, {
   watch: false,
-  pick: ['_id', 'title', 'description', 'text', 'sections', 'photos', 'personaOne']
+  pick: ['_id', 'title', 'text', 'sections', 'photos', 'personaOne', 'personaTwo']
 });
 
-provide('canvas', 'one');
+provide('canvas', 'three');
 </script>
 
 <template>

@@ -9,7 +9,7 @@ export default defineEventHandler(async (evt) => {
     const result: Promise<{ message: string }> = session.withTransaction(async () => {
       const deletedContent = (await contents.findOneAndDelete({ route: id })) as ContentFromDb;
       // если было фото у контакта
-      if (deletedContent.personaOne.photo) {
+      if (deletedContent && deletedContent.personaOne && deletedContent.personaOne.photo) {
         await $fetch(`/api/images/${deletedContent.personaOne.photo}`, {
           method: 'delete',
           onResponse({ response }) {
@@ -23,7 +23,7 @@ export default defineEventHandler(async (evt) => {
         });
       }
 
-      if (deletedContent.photos && deletedContent.photos.length > 0) {
+      if (deletedContent && deletedContent.photos && deletedContent.photos.length) {
         await $fetch('/api/images', {
           method: 'delete',
           body: deletedContent.photos,

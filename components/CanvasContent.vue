@@ -1,12 +1,15 @@
 <script setup lang="ts">
+import type { CanvasOptions } from '~/types/ContentDataFromDb';
+
 defineProps<{
   contentValues: any;
-  canvas: 'one' | 'two' | 'three' | 'four' | 'five' | 'six';
 }>();
 
 const emit = defineEmits<{
   (e: 'editBtnClick'): void;
 }>();
+
+const canvas = inject<CanvasOptions>('canvas');
 
 const config = useRuntimeConfig();
 </script>
@@ -20,7 +23,11 @@ const config = useRuntimeConfig();
       ]"
     >
       <PersonaCard :persona-data="contentValues.personaOne" />
-      <p v-if="contentValues.description" class="canvas-content__description">
+      <PersonaCard v-if="contentValues.personaTwo" :persona-data="contentValues.personaTwo" />
+      <p
+        v-if="contentValues.description && (canvas === 'one' || canvas === 'two')"
+        class="canvas-content__description"
+      >
         {{ contentValues.description }}
       </p>
     </div>
@@ -75,7 +82,9 @@ const config = useRuntimeConfig();
     }
 
     .canvas-content__description {
-      flex-basis: 40%;
+      flex-basis: 50%;
+      text-indent: 50px;
+      text-align: justify;
     }
   }
 
