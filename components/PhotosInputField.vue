@@ -25,13 +25,9 @@ const onPhotosChange = (event: Event) => {
 
     photosForUpload.value = files;
 
-    console.log(photosForUpload.value);
-
     filesArray.forEach((file) => {
       photosForDemonstration.value.push(URL.createObjectURL(file));
     });
-
-    // filesInputData.files.length = [];
   } else {
     emit('onPhotosSelected', []);
   }
@@ -68,8 +64,7 @@ const onRemovePhotoBtnClick = (src: string) => {
 
 watch(
   photosForUpload,
-  (newValue) => {
-    console.log(newValue);
+  () => {
     emit('onPhotosSelected', photosForUpload.value);
   },
   { deep: true }
@@ -98,7 +93,6 @@ onMounted(() => {
         ref="fileInput"
         accept="image/jpeg, image/png"
         @change="onPhotosChange"
-        @click="($refs.fileInput as HTMLInputElement).value = ''"
       />
       <UButton color="blue" variant="soft" @click="($refs.fileInput as HTMLInputElement).click()">
         <UIcon name="i-material-symbols-attach-file-rounded" />

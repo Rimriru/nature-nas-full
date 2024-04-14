@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { remove } from 'winston';
 import type {
   CanvasOneContent,
   OriginalContentValues,
@@ -145,13 +144,11 @@ const handleCancelBtnClick = () => {
 
 const onPhotosSelected = (files: FileList) => {
   carouselPhotosForLoading.value = files;
-  console.log(carouselPhotosForLoading.value);
 };
 
 const onPhotosFromDbRemove = (removedValue: string) => {
   contentValues.value.photos = contentValues.value.photos.filter((photo) => photo !== removedValue);
   carouselPhotosFromDbForRemove.value.push(removedValue);
-  console.log(removedValue);
 };
 
 const onPersonaPhotoSelected = (newPhoto: File | string) => {
@@ -178,6 +175,7 @@ const handleCanvasFormSubmit = async () => {
           });
           return;
         } else {
+          personaPhotoForUploading.value = '';
           const previousPhoto = contentValues.value.personaOne.photo;
           contentValues.value.personaOne.photo = response._data[0];
 
@@ -218,7 +216,7 @@ const handleCanvasFormSubmit = async () => {
     }
   }
 
-  if (carouselPhotosFromDbForRemove.value.length > 0) {
+  if (carouselPhotosFromDbForRemove.value.length) {
     await $fetch('/api/images', {
       method: 'delete',
       body: carouselPhotosFromDbForRemove.value,
@@ -229,12 +227,14 @@ const handleCanvasFormSubmit = async () => {
             title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
           });
           return;
+        } else {
+          carouselPhotosFromDbForRemove.value = [];
         }
       }
     });
   }
 
-  if (carouselPhotosForLoading.value.length > 0) {
+  if (carouselPhotosForLoading.value.length) {
     const body = new FormData();
     const images = Array.from(carouselPhotosForLoading.value);
     images.forEach((image) => body.append('images', image));
@@ -250,6 +250,7 @@ const handleCanvasFormSubmit = async () => {
           });
           return;
         } else {
+          carouselPhotosForLoading.value = [];
           response._data.forEach((photo: string) => {
             return contentValues.value.photos.push(photo);
           });

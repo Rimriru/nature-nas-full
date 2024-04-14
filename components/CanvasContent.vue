@@ -13,7 +13,12 @@ const config = useRuntimeConfig();
 
 <template>
   <article class="canvas-content">
-    <div class="canvas-content__container">
+    <div
+      :class="[
+        'canvas-content__container',
+        { 'canvas-content__container_reversed': canvas === 'two' }
+      ]"
+    >
       <PersonaCard :persona-data="contentValues.personaOne" />
       <p v-if="contentValues.description" class="canvas-content__description">
         {{ contentValues.description }}
@@ -22,18 +27,23 @@ const config = useRuntimeConfig();
     <div
       v-if="contentValues.text"
       v-html="contentValues.text"
-      class="canvas-content__plain-text content"
+      :class="[
+        'canvas-content__plain-text',
+        'content',
+        { 'canvas-content__plain-text_reversed': canvas === 'two' }
+      ]"
     ></div>
     <UCarousel
       v-if="contentValues.photos.length > 0"
-      v-slot="{ item }"
       :items="contentValues.photos"
       :ui="{ item: 'basis-full snap-center justify-center' }"
       class="carousel"
       :arrows="contentValues.photos.length > 1"
       :indicators="contentValues.photos.length > 1"
     >
-      <img :src="`${config.public.domen}/image/${item}`" class="carousel__img" />
+      <template #default="{ item }">
+        <img :src="`${config.public.domen}/image/${item}`" class="carousel__img" />
+      </template>
     </UCarousel>
     <MenuButton class="canvas-content__edit-btn" :size="'middle'" @click="emit('editBtnClick')">
       Редактировать
@@ -42,12 +52,14 @@ const config = useRuntimeConfig();
 </template>
 
 <style lang="scss">
+@use '~/assets/styles/variables.scss' as *;
+
 .canvas-content {
   max-width: 1400px;
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  margin-right: 20px;
+  // margin-right: 20px;
   margin-bottom: 20px;
   gap: 20px;
   padding: 30px;
@@ -56,11 +68,39 @@ const config = useRuntimeConfig();
 
   .canvas-content__container {
     display: flex;
-    gap: 80px;
+    justify-content: space-between;
+
+    &_reversed {
+      flex-direction: row-reverse;
+    }
+
+    .canvas-content__description {
+      flex-basis: 40%;
+    }
   }
 
   .canvas-content__plain-text {
     margin-bottom: 50px;
+    padding-left: 25px;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 4px;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-color: $mid-blue;
+      border-radius: 10px;
+    }
+
+    &_reversed {
+      padding-inline: 0 25px;
+      &::before {
+        left: 100%;
+      }
+    }
   }
 
   .canvas-content__edit-btn {

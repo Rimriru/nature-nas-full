@@ -27,21 +27,23 @@ const message = {
 </script>
 
 <template>
-  <AppPopup :is-opened="isOpen" @on-close="emit('onClose')">
-    <div class="confirm-popup">
-      <h3>
-        {{ whatIsRemoved ? message[whatIsRemoved]() : '' }}
-      </h3>
-      <p v-if="props.whatIsRemoved === 'route'">
-        Обратите внимание: будут удалены все ссылки, ведущие на эту страницу
-      </p>
-      <span v-if="props.error" class="error">{{ props.error }}</span>
-      <div class="confirm-popup__btns">
-        <MenuButton :size="'small'" @click="emit('onClose')">Нет</MenuButton>
-        <MenuButton :is-active="true" :size="'small'" @click="emit('onAgree')">Да</MenuButton>
+  <ClientOnly>
+    <AppPopup :is-opened="isOpen" @on-close="emit('onClose')">
+      <div class="confirm-popup">
+        <h3>
+          {{ whatIsRemoved ? message[whatIsRemoved]() : '' }}
+        </h3>
+        <p v-if="props.whatIsRemoved === 'route'">
+          Обратите внимание: будут удалены все ссылки, ведущие на эту страницу
+        </p>
+        <span v-if="props.error" class="error">{{ props.error }}</span>
+        <div class="confirm-popup__btns">
+          <MenuButton :size="'small'" @click="emit('onClose')">Нет</MenuButton>
+          <MenuButton :is-active="true" :size="'small'" @click="emit('onAgree')">Да</MenuButton>
+        </div>
       </div>
-    </div>
-  </AppPopup>
+    </AppPopup>
+  </ClientOnly>
 </template>
 
 <style lang="scss">
