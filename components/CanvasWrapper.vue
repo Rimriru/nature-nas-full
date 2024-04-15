@@ -46,6 +46,7 @@ const carouselPhotosForLoading = ref<FileList | []>([]);
 const carouselPhotosFromDbForRemove = ref<string[]>([]);
 const isInEditMode = ref(false);
 let wasContentBefore = false;
+const isLoaderVisible = useLoaderVisibilityState();
 const pageTitle = usePageTitle();
 const notifications = useToast();
 
@@ -73,7 +74,27 @@ watch(isInEditMode, (newValue) => {
 // добавляем мета теги в виде заголовка и описания страницы
 if (props.content) {
   wasContentBefore = true;
-  contentValues.value = props.content as CanvasContent;
+
+  if (!props.content.personaTwo) {
+    const personaTwoFromDB = {
+      position: '',
+      name: '',
+      phd: '',
+      telNumber: '',
+      faxNumber: '',
+      email: '',
+      description: '',
+      photo: ''
+    };
+
+    contentValues.value = {
+      ...contentValues.value,
+      ...props.content,
+      personaTwo: personaTwoFromDB
+    };
+  } else {
+    contentValues.value = props.content;
+  }
 
   useSeoMeta({
     title: () => props.content.title,
@@ -209,6 +230,7 @@ const uploadPersonaPhoto = async (
       body,
       async onResponse({ response }) {
         if (!response.ok) {
+          isLoaderVisible.value = false;
           notifications.add({
             id: 'file-upload',
             title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
@@ -226,6 +248,7 @@ const uploadPersonaPhoto = async (
             await $fetch(`/api/images/${previousPhoto}`, {
               method: 'delete',
               onResponse({ response }) {
+                isLoaderVisible.value = false;
                 if (!response.ok) {
                   notifications.add({
                     id: 'file-delete',
@@ -252,6 +275,7 @@ const uploadPersonaPhoto = async (
         method: 'delete',
         onResponse({ response }) {
           if (!response.ok) {
+            isLoaderVisible.value = false;
             notifications.add({
               id: 'file-delete',
               title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
@@ -267,15 +291,16 @@ const uploadPersonaPhoto = async (
 // сабмит формы
 const handleCanvasFormSubmit = async () => {
   const originalValues = JSON.stringify(originalState);
+  isLoaderVisible.value = true;
 
   await uploadPersonaPhoto(
     personaOnePhoto.value.photoForUploading,
-    'personOne',
+    'personaOne',
     personaOnePhoto.value.isInputTouched
   );
   await uploadPersonaPhoto(
     personaTwoPhoto.value.photoForUploading,
-    'personTwo',
+    'personaTwo',
     personaTwoPhoto.value.isInputTouched
   );
 
@@ -285,6 +310,7 @@ const handleCanvasFormSubmit = async () => {
       body: carouselPhotosFromDbForRemove.value,
       onResponse({ response }) {
         if (!response.ok) {
+          isLoaderVisible.value = false;
           notifications.add({
             id: 'file-delete',
             title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
@@ -307,6 +333,7 @@ const handleCanvasFormSubmit = async () => {
       body,
       async onResponse({ response }) {
         if (!response.ok) {
+          isLoaderVisible.value = false;
           notifications.add({
             id: 'file-upload',
             title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
@@ -322,8 +349,8 @@ const handleCanvasFormSubmit = async () => {
     });
   }
 
-  const { title, description, text, photos, personaOne } = contentValues.value;
-  const contentBody = { title, description, text, photos, personaOne };
+  const { title, description, text, photos, personaOne, personaTwo } = contentValues.value;
+  const contentBody = { title, description, text, photos, personaOne, personaTwo };
 
   if (!wasContentBefore) {
     const newContentBody = {
@@ -338,11 +365,14 @@ const handleCanvasFormSubmit = async () => {
       contentValues.value._id = (newContent as unknown as ContentFromDb)._id;
       disableEditMode();
       wasContentBefore = true;
+      isLoaderVisible.value = false;
     } catch (error) {
+      isLoaderVisible.value = false;
       console.error(error);
     }
   } else {
     if (originalValues === JSON.stringify(contentBody)) {
+      isLoaderVisible.value = false;
       disableEditMode();
       return;
     }
@@ -352,8 +382,10 @@ const handleCanvasFormSubmit = async () => {
         method: 'patch',
         body: contentBody
       });
+      isLoaderVisible.value = false;
       disableEditMode();
     } catch (error) {
+      isLoaderVisible.value = false;
       console.error(error);
     }
   }
@@ -385,6 +417,7 @@ const handleCanvasFormSubmit = async () => {
         />
       </UFormGroup>
       <PersonaInputFields
+        v-if="['one', 'two', 'three', 'four'].includes(canvas!)"
         v-model:persona-data="contentValues.personaOne"
         :photo="contentValues.personaOne.photo"
         :heading="`Контакт${canvas === 'three' || canvas === 'four' ? ' 1' : ''}`"

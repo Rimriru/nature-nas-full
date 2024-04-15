@@ -1,9 +1,14 @@
+<script setup lang="ts">
+const isLoaderVisible = useLoaderVisibilityState();
+</script>
+
 <template>
   <div class="layout">
     <AppHeader />
     <slot />
     <AppFooter />
     <UNotifications />
+    <Loader :is-visible="isLoaderVisible" />
   </div>
 </template>
 
