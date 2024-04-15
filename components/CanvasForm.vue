@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import type { Form, FormError } from '#ui/types';
+import type { CanvasOptions } from '~/types/ContentDataFromDb';
 const canvasForm = ref(null);
 const props = defineProps(['contentValues', 'onPhotosSelected', 'onPhotosFromDbRemoved']);
 const emit = defineEmits(['onCancel', 'onSubmit']);
+
+const canvas = inject<CanvasOptions>('canvas');
 
 const validate = (state: any): FormError[] => {
   const errors = [];
@@ -33,6 +36,13 @@ const onCancel = () => {
         v-model="props.contentValues.title"
         placeholder="Введите заголовок страницы..."
       />
+    </UFormGroup>
+
+    <UFormGroup v-if="canvas === 'six'" name="plainText">
+      Содержимое
+      <ClientOnly>
+        <ContentEditor v-model="props.contentValues.description" />
+      </ClientOnly>
     </UFormGroup>
 
     <slot />

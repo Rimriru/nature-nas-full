@@ -1,12 +1,17 @@
 <script setup lang="ts">
-const props = defineProps(['personaData']);
+const props = defineProps(['personaData', 'isReversed']);
 
 const config = useRuntimeConfig();
 </script>
 
 <template>
   <div class="persona-card">
-    <div class="persona-card__main-block">
+    <div
+      :class="[
+        'persona-card__main-block',
+        { 'persona-card__main-block_reversed': props.isReversed }
+      ]"
+    >
       <NuxtImg
         v-if="props.personaData.photo"
         :src="`${config.public.domen}/image/${props.personaData.photo}`"

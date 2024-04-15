@@ -38,7 +38,16 @@ const handleRouteRemove = async () => {
     );
     router.removeRoute(routeDataForRemove.name);
 
-    // TODO: заменять удалённые ссылки в группах
+    console.log(links);
+
+    if (links && links.length) {
+      linkGroups.value = linkGroups.value.map((group) => {
+        group.links = group.links.filter((groupLink) => {
+          return links.every((link) => link._id !== groupLink._id);
+        });
+        return group;
+      });
+    }
 
     onConfirmPopupClose();
     notifications.add({ id: 'route-remove', title: message });

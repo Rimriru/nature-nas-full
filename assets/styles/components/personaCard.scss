@@ -1,7 +1,7 @@
 @use '../variables.scss' as *;
 
 .persona-card {
-  width: clamp(250px, 50vw, 550px);
+  width: clamp(250px, 30vw, 550px);
   display: flex;
   flex-direction: column;
   gap: 25px;
@@ -9,7 +9,10 @@
   .persona-card__main-block {
     display: flex;
     gap: 20px;
-    justify-content: space-between;
+
+    &_reversed {
+      flex-direction: row-reverse;
+    }
 
     img {
       width: 200px;
