@@ -65,10 +65,10 @@ const onAddLinkFormSubmit = async () => {
     <div class="header__top-bg">
       <nav class="header__top">
         <span class="header__name">Институт природопользования НАН Беларуси</span>
-        <NuxtLink to="/">
+        <NuxtLink to="/" aria-label="Home">
           <Icon :icon="homeIcon" />
         </NuxtLink>
-        <NuxtLink to="/site-map">
+        <NuxtLink to="/site-map" aria-label="Site-map">
           <Icon :icon="mapIcon" />
         </NuxtLink>
       </nav>
@@ -76,10 +76,10 @@ const onAddLinkFormSubmit = async () => {
     <div class="header__bottom-bg">
       <nav class="header__bottom">
         <ul class="header__bottom-links">
-          <NuxtLink to="/" class="header__bottom-logo">
-            <NuxtImg src="/logo.png" alt="Логотип" width="60" />
+          <NuxtLink to="/" class="header__bottom-logo" aria-label="Link">
+            <NuxtImg src="/logo-white.png" alt="Логотип" width="60" />
           </NuxtLink>
-          <li v-for="{ id, title, group, to } of HEADER_LINK_GROUPS" :key="id">
+          <li v-for="{ _id: id, title, group, to } of HEADER_LINK_GROUPS" :key="id">
             <DropdownMenu
               :title="title.toUpperCase()"
               :group="group"

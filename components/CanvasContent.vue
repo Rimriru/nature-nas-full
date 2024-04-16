@@ -15,7 +15,7 @@ const config = useRuntimeConfig();
 </script>
 
 <template>
-  <div class="canvas-content">
+  <section class="canvas-content">
     <article
       :class="[
         'canvas-article',
@@ -86,7 +86,7 @@ const config = useRuntimeConfig();
     <MenuButton class="canvas-content__edit-btn" :size="'middle'" @click="emit('editBtnClick')">
       Редактировать
     </MenuButton>
-  </div>
+  </section>
 </template>
 
 <style lang="scss">
@@ -104,6 +104,7 @@ const config = useRuntimeConfig();
     display: flex;
     flex-direction: column;
     margin: 0 auto;
+    width: 100%;
 
     &_reversed {
       flex-direction: column-reverse;
@@ -137,6 +138,7 @@ const config = useRuntimeConfig();
       margin-bottom: 50px;
       padding-left: 25px;
       position: relative;
+      flex-basis: 100%;
 
       &::before {
         content: '';

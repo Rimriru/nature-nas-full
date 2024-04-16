@@ -3,7 +3,7 @@
 ## ✨ Описание
 
 <p align="center">
-<img src="./public/logo.png"
+<img src="./public/logo-white.png"
      alt="Логотип"
      style="width: 80px;" />
 </p>

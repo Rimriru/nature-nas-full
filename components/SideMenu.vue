@@ -361,7 +361,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="side-menu">
+  <aside class="side-menu">
     <ul class="side-menu__link-groups">
       <li
         v-for="{ _id: groupId, title, links } of labsCentersLinkGroups"
@@ -435,7 +435,7 @@ onMounted(() => {
       @on-close="handleConfirmPopupClose"
       @on-agree="removedInstanceData.handler"
     />
-  </div>
+  </aside>
 </template>
 
 <style lang="scss">
