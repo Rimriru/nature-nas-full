@@ -118,6 +118,11 @@ const config = useRuntimeConfig();
       display: flex;
       justify-content: space-between;
       gap: 30px;
+      margin-bottom: 30px;
+
+      &:empty {
+        display: none;
+      }
 
       &_reversed {
         flex-direction: row-reverse;

@@ -197,7 +197,8 @@ const handleCancelBtnClick = () => {
 };
 
 const onPhotosSelected = (files: FileList) => {
-  carouselPhotosForLoading.value = files;
+  // @ts-ignore
+  carouselPhotosForLoading.value = [...carouselPhotosForLoading.value, ...files];
 };
 
 const onPhotosFromDbRemove = (removedValue: string) => {
