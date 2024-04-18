@@ -76,7 +76,7 @@ const handleRouteRemove = async () => {
         </tr>
       </tbody>
     </table>
-    <ConfirmPopup
+    <LazyConfirmPopup
       :is-open="isConfirmPopupOpen"
       :what-is-removed="'route'"
       :removed-item-title="routeDataForRemove.path"

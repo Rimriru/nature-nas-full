@@ -180,12 +180,12 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <SectionForm
+    <LazySectionForm
       v-model:section-values="sectionValues"
       @close="onClose"
       @submit="handleSectionsSubmit"
     />
-    <ConfirmPopup
+    <LazyConfirmPopup
       :is-open="isConfirmPopupOpened"
       :what-is-removed="'section'"
       :removed-item-title="whatSectionShown.title"

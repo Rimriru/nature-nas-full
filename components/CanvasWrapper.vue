@@ -400,7 +400,7 @@ const handleCanvasFormSubmit = async () => {
       :content-values="contentValues"
       @edit-btn-click="enableEditMode"
     />
-    <CanvasForm
+    <LazyCanvasForm
       v-else
       :content-values="contentValues"
       @on-cancel="handleCancelBtnClick"
@@ -431,7 +431,7 @@ const handleCanvasFormSubmit = async () => {
         :heading="'Контакт 2'"
         @on-photo-change="onPersonaTwoPhotoSelected"
       />
-    </CanvasForm>
+    </LazyCanvasForm>
     <PageSections
       v-if="!isInEditMode && contentValues._id"
       :sections="contentValues.sections"

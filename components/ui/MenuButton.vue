@@ -6,6 +6,10 @@ defineProps({
     type: Boolean,
     default: false
   },
+  isDisabled: {
+    type: Boolean,
+    default: false
+  },
   size: {
     type: String as () => Size
   },
@@ -20,6 +24,7 @@ defineProps({
   <button
     :class="{
       'menu-button_active': isActive,
+      'menu-button_disabled': isDisabled,
       'menu-button_size_small': size === 'small',
       'menu-button_size_middle': size === 'middle'
     }"
@@ -31,5 +36,5 @@ defineProps({
 </template>
 
 <style lang="scss">
-@import url('~/assets/styles/components/menuButton.scss');
+@import url('~/assets/styles/components/ui/menuButton.scss');
 </style>

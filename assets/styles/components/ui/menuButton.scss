@@ -1,4 +1,4 @@
-@use '../variables.scss' as *;
+@use '../../variables.scss' as *;
 
 .menu-button {
   color: #fff;
@@ -10,6 +10,16 @@
 
   &_active {
     background-color: $light-blue;
+  }
+
+  &_disabled {
+    background-color: $gray;
+    opacity: 0.5;
+
+    &:hover {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
   }
 
   &_size_middle {

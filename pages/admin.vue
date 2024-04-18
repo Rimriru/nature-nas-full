@@ -38,7 +38,7 @@ useServerSeoMeta({
   display: flex;
   margin: 0 auto;
   gap: 50px;
-  padding-block: 50px;
+  padding-block: 40px;
 
   ul li:not(:last-of-type) {
     margin-bottom: 10px;

@@ -3,13 +3,16 @@ import { canvases } from '~/utils/canvasesData';
 
 const routesState = useRoutesState();
 const linkGroupsState = useLinkGroupsState();
+const photoState = useMainPhotoState();
 
 const routes = await useAllRoutes();
 const linkGroups = await useLinkGroups();
+const photoFromDb = await useMainPhotoRequest();
 const router = useRouter();
 
 routesState.value = routes;
 linkGroupsState.value = linkGroups;
+photoState.value = photoFromDb;
 
 routes.forEach((route) => {
   router.addRoute({
@@ -26,7 +29,7 @@ routes.forEach((route) => {
 <template>
   <NuxtLayout>
     <div class="layout">
-      <HeadingImage v-if="$router.currentRoute.value.path !== '/admin'" />
+      <HeadingImage />
       <NuxtPage />
     </div>
   </NuxtLayout>

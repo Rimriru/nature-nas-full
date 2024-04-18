@@ -13,7 +13,7 @@ const onPhotoChange = (event: Event) => {
   photoError.value = '';
   photoForPreview.value = '';
   const fileInputData = event.target as HTMLInputElement;
-  if (fileInputData.files && fileInputData.files.length > 0) {
+  if (fileInputData.files && fileInputData.files.length) {
     const file = fileInputData.files[0];
     if (file.size > 5242880)
       return (photoError.value = 'Размер загружаемого файла превышает 5 мб!');
@@ -47,14 +47,7 @@ onMounted(() => {
             accept="image/jpeg, image/png"
             @change="onPhotoChange"
           />
-          <UButton
-            color="blue"
-            variant="soft"
-            @click="($refs.personaPhotoInput as HTMLInputElement).click()"
-          >
-            <UIcon name="i-material-symbols-attach-file-rounded" />
-            Выбрать файл
-          </UButton>
+          <LoadButton @on-click="($refs.fileInput as HTMLInputElement).click()" />
           <p class="persona-fieldset__perview">
             Загруженный файл:
             <img v-if="photoForPreview" :src="photoForPreview" />

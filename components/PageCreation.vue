@@ -16,10 +16,10 @@ const router = useRouter();
 const validate = (state: any): FormError[] => {
   const errors = [];
   if (!state.route) errors.push({ path: 'route', message: 'Поле "Ссылка" является обязательным' });
-  if (!/^\/(?!\/)[a-zA-Z]/.test(state.route))
+  if (!/^\/(?!.*--)[a-z-]+$/.test(state.route))
     errors.push({
       path: 'route',
-      message: 'Ссылка должна начинаться с / и содержать латинские символы после'
+      message: 'Ссылка должна начинаться с / и содержать строчные латинские символы после'
     });
   return errors;
 };

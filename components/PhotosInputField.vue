@@ -94,10 +94,7 @@ onMounted(() => {
         accept="image/jpeg, image/png"
         @change="onPhotosChange"
       />
-      <UButton color="blue" variant="soft" @click="($refs.fileInput as HTMLInputElement).click()">
-        <UIcon name="i-material-symbols-attach-file-rounded" />
-        Выбрать файл
-      </UButton>
+      <LoadButton @on-click="($refs.fileInput as HTMLInputElement).click()" />
     </label>
     <div class="photos-input__preview">
       <span class="photos-input__preview-text">Предпросмотр:</span>
