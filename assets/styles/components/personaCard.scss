@@ -1,7 +1,7 @@
 @use '../variables.scss' as *;
 
 .persona-card {
-  width: clamp(250px, 30vw, 550px);
+  flex-basis: clamp(250px, 40vw, 600px);
   display: flex;
   flex-direction: column;
   gap: 25px;

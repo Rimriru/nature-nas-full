@@ -5,13 +5,13 @@
 
   .carousel__container {
     position: relative;
-    display: flex;
-    justify-content: center;
+    // display: flex;
+    // justify-content: center;
   }
 
   .carousel__img {
     max-width: 900px;
-    width: 90%;
+    width: 100%;
     max-height: 564px;
     object-fit: contain;
     border-radius: 10px;
@@ -20,7 +20,7 @@
   .carousel__remove-btn {
     position: absolute;
     top: 0;
-    right: 0;
+    right: -30px;
     background-image: url('~/assets/images/remove-cross-btn.svg');
     width: 24px;
     height: 24px;
