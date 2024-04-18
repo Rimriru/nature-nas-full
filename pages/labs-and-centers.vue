@@ -1,20 +1,4 @@
-<script setup lang="ts">
-import type { Link } from '~/types/LinkDataFromDb';
-
-const linkGroups = useLinkGroupsState();
-const router = useRouter();
-
-const labsLinkGroups = computed(() => {
-  const links: Link[] = [];
-  const groups = linkGroups.value.filter((group) => group.group === 'labs-and-centers');
-  groups.forEach((group) => links.push(...group.links));
-  return links;
-});
-
-if (labsLinkGroups.value[0]) {
-  router.push(`/labs-and-centers${labsLinkGroups.value[0].to}`);
-}
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="labs-centers">

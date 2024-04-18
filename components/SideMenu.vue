@@ -41,6 +41,7 @@ const allGroupLinks = useLinkGroupsState();
 const groupLinkShowed = ref('');
 
 const route = useRoute();
+const router = useRouter();
 const notifications = useToast();
 
 const labsCentersLinkGroups = computed(() => {
@@ -350,12 +351,17 @@ const removedInstanceData = computed(() => {
 });
 
 onMounted(() => {
-  if (
-    labsCentersLinkGroups.value &&
-    labsCentersLinkGroups.value.length &&
-    labsCentersLinkGroups.value[0].links.length
-  ) {
-    groupLinkShowed.value = labsCentersLinkGroups.value[0]._id;
+  if (labsCentersLinkGroups.value && labsCentersLinkGroups.value.length) {
+    const linkTo = route.fullPath.split('/labs-and-centers')[1];
+    if (linkTo) {
+      const filteredGroups = labsCentersLinkGroups.value.filter((group) => {
+        return group.links.some((link) => link.to === linkTo);
+      });
+      groupLinkShowed.value = filteredGroups[0]._id;
+    } else {
+      router.push(`/labs-and-centers${labsCentersLinkGroups.value[0].links[0].to}`);
+      groupLinkShowed.value = labsCentersLinkGroups.value[0]._id;
+    }
   }
 });
 </script>

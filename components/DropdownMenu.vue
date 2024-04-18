@@ -18,7 +18,7 @@ const linksOfTheGroup = computed(() => {
     @mouseover="isSubMenuVisible = true"
     @mouseleave="isSubMenuVisible = false"
   >
-    <a v-if="!to" class="dropdown-menu__main-link" href="#">{{ title }}</a>
+    <a v-if="!to" class="dropdown-menu__main-link">{{ title }}</a>
     <NuxtLink v-else :to="to" class="dropdown-menu__main-link">{{ title }}</NuxtLink>
     <ul v-if="isSubMenuVisible && group" class="dropdown-menu__sub-menu">
       <LinksMenuItem v-for="link of linksOfTheGroup.links" :link="link" :is-in-admin-page="false" />
