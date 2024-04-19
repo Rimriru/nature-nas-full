@@ -375,11 +375,13 @@ onMounted(() => {
         :key="groupId"
       >
         <div class="side-menu__group-container">
-          <EditBtn
-            :color="'gray'"
-            :appliedClass="'side-menu-edit-btn'"
-            @click="handleEditGroupBtnClick(title, groupId)"
-          />
+          <ClientOnly>
+            <EditBtn
+              :color="'gray'"
+              :appliedClass="'side-menu-edit-btn'"
+              @click="handleEditGroupBtnClick(title, groupId)"
+            />
+          </ClientOnly>
           <p class="side-menu__group-title" @click="handleGroupLinkShowedToggle(groupId, links)">
             {{ title }}
           </p>
@@ -388,11 +390,13 @@ onMounted(() => {
           :class="[{ 'side-menu__links_showed': groupLinkShowed === groupId }, 'side-menu__links']"
         >
           <li v-for="{ _id: linkId, title, to } of links" :key="linkId" class="side-menu__link">
-            <EditBtn
-              :color="'gray'"
-              :appliedClass="'side-menu-edit-btn'"
-              @click="handleEditLinkBtnClick(title, to, linkId, groupId)"
-            />
+            <ClientOnly>
+              <EditBtn
+                :color="'gray'"
+                :appliedClass="'side-menu-edit-btn'"
+                @click="handleEditLinkBtnClick(title, to, linkId, groupId)"
+              />
+            </ClientOnly>
             <NuxtLink
               :to="`/labs-and-centers${to}`"
               :class="{ 'side-menu__link_active': route.fullPath === `/labs-and-centers${to}` }"

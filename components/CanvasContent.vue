@@ -83,9 +83,11 @@ const config = useRuntimeConfig();
         </template>
       </UCarousel>
     </article>
-    <MenuButton class="canvas-content__edit-btn" :size="'middle'" @click="emit('editBtnClick')">
-      Редактировать
-    </MenuButton>
+    <LazyClientOnly>
+      <MenuButton class="canvas-content__edit-btn" :size="'middle'" @click="emit('editBtnClick')">
+        Редактировать
+      </MenuButton>
+    </LazyClientOnly>
   </section>
 </template>
 

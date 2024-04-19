@@ -167,17 +167,21 @@ onMounted(() => {
             {{ section.title }}
           </MenuButton>
         </li>
-        <button class="sections__add-btn" @click="isSectionPopupOpened = true" type="button" />
+        <ClientOnly>
+          <button class="sections__add-btn" @click="isSectionPopupOpened = true" type="button" />
+        </ClientOnly>
       </ul>
       <div v-if="sections && sections.length > 0" class="sections__content">
         <article
           class="content"
           v-html="sections.find((section: SectionFromDb) => section._id === whatSectionShown._id)?.content"
         />
-        <div class="sections__content-management">
-          <EditBtn :color="'black'" @click="onEditBtnClick" />
-          <RemoveBtn @click="onRemoveBtnClick" />
-        </div>
+        <ClientOnly>
+          <div class="sections__content-management">
+            <EditBtn :color="'black'" @click="onEditBtnClick" />
+            <RemoveBtn @click="onRemoveBtnClick" />
+          </div>
+        </ClientOnly>
       </div>
     </div>
     <LazySectionForm

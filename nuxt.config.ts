@@ -33,11 +33,9 @@ export default defineNuxtConfig({
     }
   },
   security: {
-    nonce: true,
     headers: {
+      crossOriginEmbedderPolicy: 'unsafe-none',
       crossOriginResourcePolicy: 'cross-origin',
-      crossOriginEmbedderPolicy:
-        process.env.NODE_ENV === 'development' ? 'unsafe-none' : 'require-corp',
       contentSecurityPolicy: {
         'script-src': [
           "'self'",
@@ -45,11 +43,18 @@ export default defineNuxtConfig({
           'https:',
           '*.tinymce.com',
           '*.tiny.cloud',
+          'https://cdn.tiny.cloud',
           'http://www.localhost:3000',
           'http://www.localhost:4000'
         ],
         'script-src-attr': ["'self'"],
-        'connect-src': ["'self'", '*.tinymce.com', '*.tiny.cloud', 'blob:'],
+        'connect-src': [
+          "'self'",
+          '*.tinymce.com',
+          '*.tiny.cloud',
+          'https://cdn.tiny.cloud',
+          'blob:'
+        ],
         'img-src': [
           "'self'",
           '*.tinymce.com',
@@ -60,8 +65,15 @@ export default defineNuxtConfig({
           'http://www.localhost:3000',
           'http://www.localhost:4000'
         ],
-        'style-src': ["'self'", "'unsafe-inline'", '*.tinymce.com', '*.tiny.cloud'],
-        'font-src': ["'self'", '*.tinymce.com', '*.tiny.cloud']
+        'style-src': [
+          "'self'",
+          "'unsafe-inline'",
+          '*.tinymce.com',
+          '*.tiny.cloud',
+          'https://cdn.tiny.cloud'
+        ],
+        'font-src': ["'self'", '*.tinymce.com', '*.tiny.cloud'],
+        'media-src': ["'self'", '*.youtube.com']
       }
     }
   },
