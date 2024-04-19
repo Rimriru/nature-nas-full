@@ -7,17 +7,12 @@ router.beforeEach((to, from) => {
   pageTitle.value = '';
 });
 
-const initialPhoto = ref<Photo>({
-  _id: '',
-  name: ''
-});
 const photoForLoading = ref<File | ''>('');
 const isImageLoadFormOpen = ref(false);
 const notifications = useToast();
 const config = useRuntimeConfig();
 
 const photoState = useMainPhotoState();
-initialPhoto.value = photoState.value[0];
 
 const handleEditBtnClick = () => {
   isImageLoadFormOpen.value = true;
@@ -42,26 +37,45 @@ const handleFormSubmit = async () => {
       body,
       async onResponse({ response }) {
         if (response.ok) {
-          const previousPhoto = initialPhoto.value;
-          if (previousPhoto.name) {
-            $fetch(`/api/images/${previousPhoto}`, {
+          const previousPhoto = photoState.value;
+          if (previousPhoto) {
+            await $fetch(`/api/images/${previousPhoto[0].name}`, {
               method: 'delete'
             });
+
+            await $fetch(`/api/main-photo/${photoState.value[0]._id}`, {
+              method: 'patch',
+              body: {
+                name: response._data[0]
+              },
+              onResponse({ response }) {
+                if (response.ok) {
+                  photoState.value[0] = response._data;
+                  handleFormClose();
+
+                  notifications.add({
+                    id: 'photo',
+                    title: 'Главное фото успешно изменено!'
+                  });
+                } else {
+                  notifications.add({
+                    id: 'photo',
+                    title: String(response.status),
+                    description: response.statusText
+                  });
+                }
+              }
+            });
           }
-          photoState.value = response._data;
-          handleFormClose();
         } else {
           notifications.add({
             id: 'photo',
             title: String(response.status),
             description: response.statusText
           });
-          return;
         }
       }
     });
-
-    await $fetch(`/api/main-photo/${photoState.value}`);
   } catch (error: any) {
     console.error(error);
     notifications.add({
@@ -83,7 +97,7 @@ const handleFormSubmit = async () => {
         'heading-image__img',
         { 'heading-image__img_main': ['/', '/admin'].includes($route.fullPath) }
       ]"
-      :style="{ backgroundImage: `url(${config.public.domen}/image/${photoState})` }"
+      :style="{ backgroundImage: `url(${config.public.domen}/image/${photoState[0].name})` }"
     ></div>
     <div
       v-if="$route.fullPath === '/admin'"
@@ -127,22 +141,21 @@ const handleFormSubmit = async () => {
   }
 
   .heading-image__img {
-    //background-image: url('~/assets/images/main-photo.jpg');
     position: relative;
     width: 100%;
     height: 100%;
     background-repeat: no-repeat;
-    background-size: 100% 100%;
     z-index: 1;
+    background-size: cover;
+    background-position-y: 70%;
 
     &_main {
-      //background-image: url('~/assets/images/main-photo-full.jpg');
+      background-size: 100% 100%;
     }
   }
 
   .heading-image__edit-btn {
     background-color: $light-blue;
-    mix-blend-mode: screen;
     position: absolute;
     bottom: 10px;
     left: 10px;

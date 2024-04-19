@@ -16,7 +16,6 @@ const onPhotoChange = (event: Event) => {
     const file = fileInputData.files[0];
     if (file.size > 5242880)
       return (photoError.value = 'Размер загружаемого файла превышает 5 мб!');
-    console.log(file);
     emit('onChange', file);
   } else {
     emit('onChange', '');
@@ -41,6 +40,7 @@ const onPhotoChange = (event: Event) => {
           <LoadButton @on-click="($refs.fileInput as HTMLInputElement).click()" />
         </label>
         <p>Загруженный файл: {{ loadedPhoto ? (loadedPhoto as File).name : 'отсутствует' }}</p>
+        <span v-if="photoError" class="error">{{ photoError }}</span>
         <div class="image-load__btn-container">
           <MenuButton :size="'small'" @click="emit('onClose')">Отмена</MenuButton>
           <MenuButton

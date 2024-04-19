@@ -38,8 +38,6 @@ const handleRouteRemove = async () => {
     );
     router.removeRoute(routeDataForRemove.name);
 
-    console.log(links);
-
     if (links && links.length) {
       linkGroups.value = linkGroups.value.map((group) => {
         group.links = group.links.filter((groupLink) => {
