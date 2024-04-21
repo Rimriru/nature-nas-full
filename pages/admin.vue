@@ -14,7 +14,7 @@ useServerSeoMeta({
 
 <template>
   <main class="admin">
-    <ul>
+    <ul class="admin__menu">
       <li v-for="({ id, title }, index) in ADMIN_PAGES" :key="index">
         <MenuButton
           :is-active="whatPageIsShown === id ? true : false"
@@ -27,7 +27,7 @@ useServerSeoMeta({
     <PageCreation v-if="whatPageIsShown === 'page-creation'" />
     <PagesList v-if="whatPageIsShown === 'pages-list'" />
     <LinksList v-if="whatPageIsShown === 'links-list'" :is-in-admin-page="true" />
-    <NewsCreation v-if="whatPageIsShown === 'add-news'" />
+    <NewsForm v-if="whatPageIsShown === 'add-news'" />
   </main>
 </template>
 
@@ -38,11 +38,10 @@ useServerSeoMeta({
   display: flex;
   margin: 0 auto;
   gap: 50px;
-  padding-block: 40px;
+  padding-block: 40px 60px;
 
-  ul li:not(:last-of-type) {
+  .admin__menu li:not(:last-of-type) {
     margin-bottom: 10px;
   }
 }
 </style>
-~/utils/linksData

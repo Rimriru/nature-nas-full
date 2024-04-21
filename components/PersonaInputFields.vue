@@ -15,7 +15,7 @@ const onPhotoChange = (event: Event) => {
   const fileInputData = event.target as HTMLInputElement;
   if (fileInputData.files && fileInputData.files.length) {
     const file = fileInputData.files[0];
-    if (file.size > 5242880)
+    if (file.size > 5000000)
       return (photoError.value = 'Размер загружаемого файла превышает 5 мб!');
     emit('onPhotoChange', file);
     photoForPreview.value = URL.createObjectURL(file);
@@ -47,7 +47,7 @@ onMounted(() => {
             accept="image/jpeg, image/png"
             @change="onPhotoChange"
           />
-          <LoadButton @on-click="($refs.fileInput as HTMLInputElement).click()" />
+          <LoadButton @on-click="($refs.personaPhotoInput as HTMLInputElement).click()" />
           <p class="persona-fieldset__perview">
             Загруженный файл:
             <img v-if="photoForPreview" :src="photoForPreview" />

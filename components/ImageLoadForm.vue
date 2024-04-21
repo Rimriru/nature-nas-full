@@ -5,7 +5,6 @@ defineProps<{
 }>();
 const emit = defineEmits(['onChange', 'onSubmit', 'onClose']);
 
-const fileInput = ref<HTMLInputElement | null>(null);
 const photoError = ref('');
 
 const onPhotoChange = (event: Event) => {
@@ -39,7 +38,9 @@ const onPhotoChange = (event: Event) => {
           />
           <LoadButton @on-click="($refs.fileInput as HTMLInputElement).click()" />
         </label>
-        <p>Загруженный файл: {{ loadedPhoto ? (loadedPhoto as File).name : 'отсутствует' }}</p>
+        <p class="photos-input__loaded">
+          Загруженный файл: {{ loadedPhoto ? (loadedPhoto as File).name : 'отсутствует' }}
+        </p>
         <span v-if="photoError" class="error">{{ photoError }}</span>
         <div class="image-load__btn-container">
           <MenuButton :size="'small'" @click="emit('onClose')">Отмена</MenuButton>
@@ -65,6 +66,13 @@ const onPhotoChange = (event: Event) => {
 
   h2 {
     font-size: 18px;
+  }
+
+  .photos-input__loaded {
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .image-load__btn-container {
