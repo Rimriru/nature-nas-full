@@ -127,7 +127,7 @@ const onRemoveLinkPopupAgree = async () => {
 <template>
   <div>
     <ul class="links-list">
-      <li v-for="group of HEADER_LINK_GROUPS" :key="group.id">
+      <li v-for="group of HEADER_LINK_GROUPS" :key="group._id">
         <a :href="group.to" class="links-list__title">
           <Icon :icon="group.icon" />
           <span>
@@ -171,6 +171,7 @@ const onRemoveLinkPopupAgree = async () => {
     display: flex;
     align-items: center;
     gap: 16px;
+    margin-bottom: 12px;
 
     span {
       font-weight: 600;

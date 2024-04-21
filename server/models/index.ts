@@ -5,3 +5,4 @@ export { default as groups } from './group';
 export { default as contents } from './content';
 export { default as sections } from './section';
 export { default as mainPhoto } from './mainPhoto';
+export { default as news } from './news';

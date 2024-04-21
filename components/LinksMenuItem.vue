@@ -20,10 +20,10 @@ const emit = defineEmits(['onEdit', 'onRemove']);
 
 <template>
   <li :class="{ li_admin: isInAdminPage }">
-    <NuxtLink :to="(link?.to as RouteLocationRaw)">
+    <NuxtLink class="li__link" :to="(link?.to as RouteLocationRaw)">
       {{ link?.title }}
     </NuxtLink>
-    <div v-if="isInAdminPage">
+    <div v-if="isInAdminPage && link?.couldBeEdited">
       <EditBtn
         :color="'black'"
         @click="emit('onEdit', link?._id, link?.title, link?.to, group?._id)"
@@ -38,12 +38,14 @@ const emit = defineEmits(['onEdit', 'onRemove']);
   position: relative;
   display: flex;
   gap: 25px;
+  align-items: center;
+  margin-bottom: 10px;
 
   &::before {
     content: '';
     position: absolute;
     transform: translateY(-50%);
-    top: 75%;
+    top: 66%;
     border-radius: 50%;
     left: -15px;
     margin-top: -7px;
@@ -51,9 +53,17 @@ const emit = defineEmits(['onEdit', 'onRemove']);
     height: 6px;
     background: #000;
   }
+
+  .li__link {
+    padding: 0;
+  }
   div {
     display: inline-flex;
     gap: 5px;
   }
+}
+
+.li__link {
+  padding: 8px;
 }
 </style>

@@ -14,6 +14,10 @@ const linkSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: [true, 'Необходимо передать роут'],
       ref: 'route'
+    },
+    couldBeEdited: {
+      type: Boolean,
+      default: true
     }
   },
   { versionKey: false }
