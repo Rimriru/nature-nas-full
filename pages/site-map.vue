@@ -7,6 +7,10 @@ pageTitleState.value = title;
 useSeoMeta({
   title
 });
+
+definePageMeta({
+  title: 'Карта сайта'
+});
 </script>
 
 <template>
