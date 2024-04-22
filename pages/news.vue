@@ -1,7 +1,7 @@
-<script setup lang="ts"></script>
-
 <template>
-  <div></div>
+  <NuxtPage :page-key="(route) => route.fullPath" />
 </template>
 
-<style lang="scss"></style>
+<script setup lang="ts"></script>
+
+<style scoped></style>
