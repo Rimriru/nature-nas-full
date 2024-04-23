@@ -359,7 +359,10 @@ onMounted(() => {
       });
       groupLinkShowed.value = filteredGroups[0]._id;
     } else {
-      router.push(`/labs-and-centers${labsCentersLinkGroups.value[0].links[0].to}`);
+      router.push({
+        path: `/labs-and-centers${labsCentersLinkGroups.value[0].links[0].to}`,
+        replace: true
+      });
       groupLinkShowed.value = labsCentersLinkGroups.value[0]._id;
     }
   }
