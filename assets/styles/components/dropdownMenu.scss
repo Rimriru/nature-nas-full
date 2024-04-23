@@ -22,7 +22,7 @@
   .dropdown-menu__sub-menu {
     position: absolute;
     top: 64px;
-    background: rgba(88, 116, 149, 0.5);
+    background: rgba($gray, 0.5);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     backdrop-filter: blur(100px);
     -webkit-backdrop-filter: blur(100px);

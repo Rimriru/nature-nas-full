@@ -6,8 +6,8 @@ const newsState = useNewsState();
 const item = ref<NewsDataFromDb | null>(null);
 
 const newsItemId = route.params.id;
-const newsItem = newsState.value.find((item) => item._id === newsItemId);
-item.value = newsItem as NewsDataFromDb;
+const newsItem = computed(() => newsState.value.find((item) => item._id === newsItemId));
+item.value = newsItem.value as NewsDataFromDb;
 
 useSeoMeta({
   title: () => String(item.value?.title)
@@ -22,19 +22,20 @@ definePageMeta({
   <main class="main">
     <div class="news-item">
       <h2 class="news-item__title">{{ item?.title }}</h2>
+      <p class="news-item__date">{{ item?.creationDate }}</p>
       <div class="news-item__content content" v-if="item?.content" v-html="item?.content"></div>
+      <NuxtLink to="/news" class="news-item__back-link">
+        <p class="news-item__back-arrow">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path
+              fill="black"
+              d="m7.825 13l4.9 4.9q.3.3.288.7t-.313.7q-.3.275-.7.288t-.7-.288l-6.6-6.6q-.15-.15-.213-.325T4.426 12t.063-.375t.212-.325l6.6-6.6q.275-.275.688-.275t.712.275q.3.3.3.713t-.3.712L7.825 11H19q.425 0 .713.288T20 12t-.288.713T19 13z"
+            />
+          </svg>
+        </p>
+        <p class="news-item__back-text">Назад</p>
+      </NuxtLink>
     </div>
-    <NuxtLink to="/news" class="news-item__back">
-      <p class="news-card__btn-text">Назад</p>
-      <p class="news-card__btn-arrow">
-        <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 0h24v24H0z" fill="none"></path>
-          <path
-            d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
-            fill="black"
-          ></path>
-        </svg></p
-    ></NuxtLink>
   </main>
 </template>
 
@@ -50,13 +51,18 @@ definePageMeta({
     font-size: 24px;
     font-weight: 400;
     line-height: 1.1;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
   }
 
-  .news-item__back {
+  .news-item__date {
+    color: $mid-blue;
+    margin-bottom: 30px;
+  }
+
+  .news-item__back-link {
     position: absolute;
     top: 0;
-    left: -80px;
+    left: -15%;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -67,8 +73,29 @@ definePageMeta({
     background: transparent;
     color: $black;
     align-self: end;
-    border: $mid-blue 1px solid;
     cursor: pointer;
+
+    &:hover {
+      .news-item__back-text {
+        transform: translateX(-5px);
+      }
+
+      .news-item__back-arrow {
+        transform: translateY(0px);
+      }
+    }
+
+    .news-item__back-text {
+      transform: translateX(-18px);
+      font-size: 1rem;
+      font-weight: 700;
+      transition-duration: 0.3s;
+    }
+
+    .news-item__back-arrow {
+      transform: translateY(35px);
+      transition-duration: 0.3s;
+    }
   }
 }
 </style>

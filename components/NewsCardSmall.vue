@@ -1,0 +1,73 @@
+<script setup lang="ts">
+import { IMAGE_LINK_REG_EXP } from '~/utils/regExp';
+import type { NewsCardData } from '~/types/NewsDataFromDb';
+
+const props = defineProps<{
+  newsItem: NewsCardData;
+}>();
+
+const config = useRuntimeConfig();
+
+const coverAsSrc = IMAGE_LINK_REG_EXP.test(props.newsItem.cover);
+</script>
+
+<template>
+  <NuxtLink :to="`/news/${newsItem._id}`" class="news-card-small">
+    <div class="news-card-small__container">
+      <img
+        :src="coverAsSrc ? newsItem.cover : `${config.public.domen}/image/${newsItem.cover}`"
+        class="news-card-small__img"
+      />
+      <span class="news-card-small__description">{{ newsItem.title }}</span>
+    </div>
+  </NuxtLink>
+</template>
+
+<style lang="scss">
+@use '~/assets/styles/variables.scss' as *;
+
+.news-card-small {
+  position: relative;
+
+  &:hover {
+    .news-card-small__description {
+      visibility: visible;
+      opacity: 1;
+      transition: opacity 0.3 ease-in-out;
+    }
+  }
+
+  .news-card-small__img {
+    width: 275px;
+    height: 189px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 15px;
+  }
+
+  .news-card-small__description {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 5;
+    background: rgba($gray, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    border-radius: 0 0 15px 15px;
+    text-shadow: 1px 1px 1px $gray;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+</style>

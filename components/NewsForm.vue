@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import defaultNewsCover from '~/assets/images/news-preview-default.jpg';
-import { FILE_SIZE_ERROR_BEYOND_2_MB, NEWS_COVER_REQUIRED_ERROR } from '~/utils/errorMessages';
+import {
+  FILE_SIZE_ERROR_BEYOND_2_MB,
+  NEWS_COVER_REQUIRED_ERROR,
+  LINK_VALIDATION_ERROR
+} from '~/utils/errorMessages';
+import { IMAGE_LINK_REG_EXP } from '~/utils/regExp';
 import type { Form, FormError } from '#ui/types';
 
 const newsData = reactive({
@@ -15,11 +20,13 @@ const coverForUploadingAsLink = ref('');
 const coverPreview = ref('');
 const coverErrorVisibility = ref({
   fileSizeError: false,
+  linkValidationError: false,
   requiredError: false
 });
 const newsForm = ref<Form<string> | null>(null);
 const newsCover = ref<HTMLInputElement | null>(null);
 const notifications = useToast();
+const newsState = useNewsState();
 
 const validate = (state: any): FormError[] => {
   const errors = [];
@@ -36,7 +43,8 @@ const handleNewsCoverInputChange = (event: Event) => {
   coverForUploadingAsLink.value = '';
   coverErrorVisibility.value = {
     fileSizeError: false,
-    requiredError: false
+    requiredError: false,
+    linkValidationError: false
   };
   const fileInputData = event.target as HTMLInputElement;
 
@@ -58,8 +66,15 @@ const handleNewsCoverLinkChange = () => {
   }
   coverErrorVisibility.value = {
     fileSizeError: false,
-    requiredError: false
+    requiredError: false,
+    linkValidationError: false
   };
+
+  if (!IMAGE_LINK_REG_EXP.test(coverForUploadingAsLink.value)) {
+    coverErrorVisibility.value.linkValidationError = true;
+    coverPreview.value = '';
+    return;
+  }
   coverPreview.value = coverForUploadingAsLink.value;
 };
 
@@ -148,6 +163,7 @@ const handleNewsFormSubmit = async () => {
       method: 'post',
       body: newsItemBody
     });
+    newsState.value = [...newsState.value, newNewsItem];
     handleResetFormFields();
     notifications.add({ id: 'news', title: 'Новость создана!' });
   } catch (error: any) {
@@ -201,8 +217,11 @@ const handleNewsFormSubmit = async () => {
           <UInput
             v-model="coverForUploadingAsLink"
             placeholder="Вставьте ссылку на изображение..."
-            @change="handleNewsCoverLinkChange"
+            @keyup="handleNewsCoverLinkChange"
           />
+          <span class="error" v-if="coverErrorVisibility.linkValidationError">{{
+            LINK_VALIDATION_ERROR
+          }}</span>
         </div>
         <span v-if="coverErrorVisibility.requiredError" class="error">{{
           NEWS_COVER_REQUIRED_ERROR
@@ -261,6 +280,7 @@ const handleNewsFormSubmit = async () => {
       row-gap: 10px;
       padding: 10px;
       margin-bottom: 5px;
+      max-width: 300px;
 
       &_required {
         border: $required 1px solid;
