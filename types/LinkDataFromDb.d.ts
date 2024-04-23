@@ -3,7 +3,7 @@ type Link = {
   title: string;
   to: string;
   route?: string;
-  couldBeEdited: Boolean;
+  couldBeEdited: true;
 };
 
 interface LinkGroup {

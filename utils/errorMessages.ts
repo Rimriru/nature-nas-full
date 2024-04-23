@@ -6,11 +6,14 @@ const BAD_REQUEST_ERROR_MESSAGE =
 
 const FILE_SIZE_ERROR_BEYOND_2_MB = 'Размер загружаемого файла превышает 2,5 мб!';
 const NEWS_COVER_REQUIRED_ERROR = 'Необходимо загрузить или вставить ссылку на обложку';
+const LINK_VALIDATION_ERROR =
+  'Ссылка на изображение должна начинаться с http или https и оканчиваться форматом (".png"/".jpg"/".jpeg")';
 
 export {
   CONFLICT_ROUTE_ERROR_MESSAGE,
   NOT_FOUND_ERROR_MESSAGE,
   BAD_REQUEST_ERROR_MESSAGE,
   FILE_SIZE_ERROR_BEYOND_2_MB,
-  NEWS_COVER_REQUIRED_ERROR
+  NEWS_COVER_REQUIRED_ERROR,
+  LINK_VALIDATION_ERROR
 };
