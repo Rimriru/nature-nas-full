@@ -7,8 +7,10 @@ import {
 } from '~/utils/errorMessages';
 import { IMAGE_LINK_REG_EXP } from '~/utils/regExp';
 import type { Form, FormError } from '#ui/types';
+import type { NewsDataFromDb } from '~/types/NewsDataFromDb';
 
-const newsData = reactive({
+const newsData = reactive<NewsDataFromDb>({
+  _id: '',
   title: '',
   description: '',
   cover: '',
@@ -27,6 +29,50 @@ const newsForm = ref<Form<string> | null>(null);
 const newsCover = ref<HTMLInputElement | null>(null);
 const notifications = useToast();
 const newsState = useNewsState();
+const config = useRuntimeConfig();
+
+const props = defineProps<{
+  isInPopup: boolean;
+}>();
+
+const emit = defineEmits(['onClose']);
+
+if (props.isInPopup) {
+  const newsItemForEditing: Ref<NewsDataFromDb> | undefined = inject('newsItem');
+
+  watch(
+    () => newsItemForEditing,
+    (newValue) => {
+      if (newValue?.value) {
+        newsData._id = newValue.value._id;
+        newsData.title = newValue.value.title;
+        newsData.description = newValue.value.description;
+        newsData.date = newValue.value.date;
+        newsData.cover = newValue.value.cover;
+        newsData.content = newValue.value.content;
+
+        if (IMAGE_LINK_REG_EXP.test(newsData.cover)) {
+          coverPreview.value = newsData.cover;
+          coverForUploadingAsLink.value = newsData.cover;
+        } else {
+          coverPreview.value = `${config.public.domen}/image/${newsData.cover}`;
+        }
+      } else {
+        resetFields();
+      }
+    },
+    { deep: true }
+  );
+}
+
+const resetFields = () => {
+  newsData._id = '';
+  newsData.title = '';
+  newsData.description = '';
+  newsData.content = '';
+  newsData.cover = '';
+  newsData.date = '';
+};
 
 const validate = (state: any): FormError[] => {
   const errors = [];
@@ -154,7 +200,7 @@ const handleNewsFormSubmit = async () => {
     title: newsData.title,
     description: newsData.description,
     cover: newsData.cover,
-    creationDate: newsData.date,
+    date: newsData.date,
     content: newsData.content
   };
 
@@ -173,95 +219,103 @@ const handleNewsFormSubmit = async () => {
 </script>
 
 <template>
-  <UForm
-    :state="newsData"
-    :validate="validate"
-    class="news-form"
-    ref="newsForm"
-    @submit="handleNewsFormSubmit"
-  >
-    <fieldset class="news-form__top-container">
-      <UFormGroup name="cover">
-        <div
-          :class="[
-            'news-form__cover-block',
-            { 'news-form__cover-block_required': coverErrorVisibility.requiredError }
-          ]"
-        >
+  <div class="container">
+    <UForm
+      :state="newsData"
+      :validate="validate"
+      :class="['news-form', { 'news-form_popup': isInPopup }]"
+      ref="newsForm"
+      @submit="handleNewsFormSubmit"
+    >
+      <fieldset class="news-form__top-container">
+        <UFormGroup name="cover">
           <div
-            class="news-form__cover-perview"
-            :style="{ backgroundImage: `url(${coverPreview ? coverPreview : defaultNewsCover})` }"
-          ></div>
-          <p>
-            <span class="required">*</span>
-            Выбрать фото для обложки:
-          </p>
-          <div class="news-form__cover-file">
-            <input
-              style="display: none"
-              id="newsCover"
-              type="file"
-              ref="newsCover"
-              accept="image/jpeg, image/png"
-              @change="handleNewsCoverInputChange"
+            :class="[
+              'news-form__cover-block',
+              { 'news-form__cover-block_required': coverErrorVisibility.requiredError }
+            ]"
+          >
+            <div
+              class="news-form__cover-perview"
+              :style="{ backgroundImage: `url(${coverPreview ? coverPreview : defaultNewsCover})` }"
+            ></div>
+            <p>
+              <span class="required">*</span>
+              Выбрать фото для обложки:
+            </p>
+            <div class="news-form__cover-file">
+              <input
+                style="display: none"
+                id="newsCover"
+                type="file"
+                ref="newsCover"
+                accept="image/jpeg, image/png"
+                @change="handleNewsCoverInputChange"
+              />
+              <LoadButton
+                class="w-30 mx-auto"
+                @on-click="($refs.newsCover as HTMLInputElement).click()"
+              />
+              <span v-if="coverErrorVisibility.fileSizeError" class="error">{{
+                FILE_SIZE_ERROR_BEYOND_2_MB
+              }}</span>
+            </div>
+            <UDivider label="или" class="mb-5" />
+            <UInput
+              v-model="coverForUploadingAsLink"
+              placeholder="Вставьте ссылку на изображение..."
+              @keyup="handleNewsCoverLinkChange"
             />
-            <LoadButton
-              class="w-30 mx-auto"
-              @on-click="($refs.newsCover as HTMLInputElement).click()"
-            />
-            <span v-if="coverErrorVisibility.fileSizeError" class="error">{{
-              FILE_SIZE_ERROR_BEYOND_2_MB
+            <span class="error" v-if="coverErrorVisibility.linkValidationError">{{
+              LINK_VALIDATION_ERROR
             }}</span>
           </div>
-          <UDivider label="или" class="mb-5" />
-          <UInput
-            v-model="coverForUploadingAsLink"
-            placeholder="Вставьте ссылку на изображение..."
-            @keyup="handleNewsCoverLinkChange"
-          />
-          <span class="error" v-if="coverErrorVisibility.linkValidationError">{{
-            LINK_VALIDATION_ERROR
+          <span v-if="coverErrorVisibility.requiredError" class="error">{{
+            NEWS_COVER_REQUIRED_ERROR
           }}</span>
+        </UFormGroup>
+        <div class="news-form__header-inputs">
+          <UFormGroup name="title">
+            Заголовок
+            <span class="required">*</span>
+            <UInput size="lg" v-model="newsData.title" placeholder="Введите заголовок новости..." />
+          </UFormGroup>
+          <UFormGroup name="description">
+            Описание
+            <span class="required">*</span>
+            <UTextarea
+              size="lg"
+              :rows="13"
+              resize
+              v-model="newsData.description"
+              placeholder="Введите описание новости..."
+            />
+          </UFormGroup>
         </div>
-        <span v-if="coverErrorVisibility.requiredError" class="error">{{
-          NEWS_COVER_REQUIRED_ERROR
-        }}</span>
+      </fieldset>
+      <UFormGroup name="content">
+        Содержимое
+        <span class="required">*</span>
+        <ClientOnly>
+          <ContentEditor v-model="newsData.content" />
+        </ClientOnly>
       </UFormGroup>
-      <div class="news-form__header-inputs">
-        <UFormGroup name="title">
-          Заголовок
-          <span class="required">*</span>
-          <UInput size="lg" v-model="newsData.title" placeholder="Введите заголовок новости..." />
-        </UFormGroup>
-        <UFormGroup name="description">
-          Описание
-          <span class="required">*</span>
-          <UTextarea
-            size="lg"
-            :rows="13"
-            resize
-            v-model="newsData.description"
-            placeholder="Введите описание новости..."
-          />
-        </UFormGroup>
+      <div class="news-form__btn-container">
+        <MenuButton v-if="isInPopup" :size="'middle'" @click="emit('onClose')">Отмена</MenuButton>
+        <MenuButton :button-type="'submit'" :size="'middle'" :is-active="true"
+          >Создать новость</MenuButton
+        >
       </div>
-    </fieldset>
-    <UFormGroup name="content">
-      Содержимое
-      <span class="required">*</span>
-      <ClientOnly>
-        <ContentEditor
-          v-model="newsData.content"
-          :placeholder="'Начните печатать содержимое новости...'"
-        />
-      </ClientOnly>
-    </UFormGroup>
-    <SubmitBtn>Создать новость</SubmitBtn>
-  </UForm>
+    </UForm>
+  </div>
 </template>
 
 <style lang="scss">
 @use '~/assets/styles/variables.scss' as *;
+
+.container {
+  height: 100%;
+}
 
 .news-form {
   width: 100%;
@@ -270,17 +324,21 @@ const handleNewsFormSubmit = async () => {
   flex-direction: column;
   gap: 20px;
 
+  &_popup {
+    margin: 0 auto;
+  }
+
   .news-form__top-container {
     display: flex;
     justify-content: space-evenly;
-    gap: 20px;
+    gap: 40px;
 
     .news-form__cover-block {
       display: grid;
+      grid-template-columns: 1fr;
       row-gap: 10px;
       padding: 10px;
       margin-bottom: 5px;
-      max-width: 300px;
 
       &_required {
         border: $required 1px solid;
@@ -321,6 +379,24 @@ const handleNewsFormSubmit = async () => {
 
   p {
     margin-bottom: 10px;
+  }
+
+  .news-form__btn-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 1350px) {
+  .news-form {
+    .news-form__top-container {
+      flex-wrap: wrap;
+
+      .news-form__header-inputs {
+        flex-basis: 100%;
+      }
+    }
   }
 }
 </style>

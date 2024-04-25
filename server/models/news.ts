@@ -10,7 +10,7 @@ const newsSchema: any = new mongoose.Schema(
       type: String,
       required: [true, 'Описание новости является обязательным']
     },
-    creationDate: {
+    date: {
       type: String,
       required: [true, 'Дата создания новости является обязательной']
     },

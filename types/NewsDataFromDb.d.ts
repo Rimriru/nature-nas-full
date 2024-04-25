@@ -3,7 +3,7 @@ interface NewsCardData {
   title: string;
   description: string;
   cover: string;
-  creationDate: string;
+  date: string;
 }
 
 interface NewsDataFromDb extends NewsCardData {

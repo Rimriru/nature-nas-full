@@ -168,7 +168,11 @@ onMounted(() => {
           </MenuButton>
         </li>
         <ClientOnly>
-          <button class="sections__add-btn" @click="isSectionPopupOpened = true" type="button" />
+          <button
+            class="sections__add-btn button"
+            @click="isSectionPopupOpened = true"
+            type="button"
+          />
         </ClientOnly>
       </ul>
       <div v-if="sections && sections.length > 0" class="sections__content">
@@ -186,6 +190,7 @@ onMounted(() => {
     </div>
     <LazySectionForm
       v-model:section-values="sectionValues"
+      :is-editing="isEditing"
       @close="onClose"
       @submit="handleSectionsSubmit"
     />

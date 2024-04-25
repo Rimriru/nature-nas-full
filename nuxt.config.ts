@@ -7,7 +7,6 @@ export default defineNuxtConfig({
         lang: 'ru'
       },
       title: 'Институт природопользования НАН Беларуси',
-      // meta: [{ name: 'description', content: 'My amazing site.' }],
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1'
     }
@@ -72,8 +71,7 @@ export default defineNuxtConfig({
           '*.tiny.cloud',
           'https://cdn.tiny.cloud'
         ],
-        'font-src': ["'self'", '*.tinymce.com', '*.tiny.cloud'],
-        'media-src': ["'self'", '*.youtube.com']
+        'font-src': ["'self'", '*.tinymce.com', '*.tiny.cloud']
       }
     }
   },

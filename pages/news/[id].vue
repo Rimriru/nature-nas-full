@@ -22,7 +22,7 @@ definePageMeta({
   <main class="main">
     <div class="news-item">
       <h2 class="news-item__title">{{ item?.title }}</h2>
-      <p class="news-item__date">{{ item?.creationDate }}</p>
+      <p class="news-item__date">{{ item?.date }}</p>
       <div class="news-item__content content" v-if="item?.content" v-html="item?.content"></div>
       <NuxtLink to="/news" class="news-item__back-link">
         <p class="news-item__back-arrow">

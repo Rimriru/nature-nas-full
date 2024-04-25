@@ -109,7 +109,11 @@ onMounted(() => {
       >
         <div class="carousel__container">
           <img :src="item" class="carousel__img" draggable="false" />
-          <button type="button" class="carousel__remove-btn" @click="onRemovePhotoBtnClick(item)" />
+          <button
+            type="button"
+            class="carousel__remove-btn button"
+            @click="onRemovePhotoBtnClick(item)"
+          />
         </div>
       </UCarousel>
       <span class="photos-input__preview-no-img" v-else>изображения отсутствуют</span>

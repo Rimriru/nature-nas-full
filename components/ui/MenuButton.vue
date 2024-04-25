@@ -28,7 +28,7 @@ defineProps({
       'menu-button_size_small': size === 'small',
       'menu-button_size_middle': size === 'middle'
     }"
-    class="menu-button"
+    class="menu-button button"
     :type="buttonType"
   >
     <slot />

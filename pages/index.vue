@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const news = useNewsState();
+const reversedNews = computed(() => news.value.slice(0, 15).reverse());
 </script>
 
 <template>
@@ -13,7 +14,7 @@ const news = useNewsState();
       <h2 class="news-title">Новости</h2>
       <UCarousel
         v-slot="{ item }"
-        :items="news"
+        :items="reversedNews"
         :ui="{ item: 'basis-full md:basis-1/2 lg:basis-1/3 justify-evenly' }"
         :prev-button="{
           color: 'blue',

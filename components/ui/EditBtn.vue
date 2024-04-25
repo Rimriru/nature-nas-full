@@ -11,8 +11,10 @@ defineProps<{
       { 'edit-btn_color_black': color === 'black' },
       { 'edit-btn_color_gray': color === 'gray' },
       'edit-btn',
+      'button',
       appliedClass
     ]"
+    type="button"
   />
 </template>
 

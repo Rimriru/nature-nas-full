@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { NewsDataFromDb } from '~/types/NewsDataFromDb';
+
 const title = 'Новости';
 const pageTitleState = usePageTitle();
 const newsState = useNewsState();
@@ -7,6 +9,10 @@ pageTitleState.value = title;
 
 const page = ref(1);
 const pageCount = ref(5);
+const isNewsFormPopupOpen = ref(false);
+const newsItemOfInterest = ref<NewsDataFromDb | ''>('');
+
+provide('newsItem', newsItemOfInterest);
 
 useSeoMeta({
   title
@@ -21,20 +27,31 @@ const indexes = computed(() => {
   const lastIndex = page.value - 1 + pageCount.value;
   return { firstIndex, lastIndex };
 });
-const newsItemsPerPage = computed(() =>
-  newsState.value.slice(indexes.value.firstIndex, indexes.value.lastIndex)
-);
+const newsItemsPerPage = computed(() => {
+  const reversedNews = newsState.value.slice().reverse();
+  return reversedNews.slice(indexes.value.firstIndex, indexes.value.lastIndex);
+});
 
 watch(page, () => {
   window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 });
+
+const onEditBtnClick = (newsItem: NewsDataFromDb) => {
+  isNewsFormPopupOpen.value = true;
+  newsItemOfInterest.value = newsItem;
+};
+
+const onClose = () => {
+  isNewsFormPopupOpen.value = false;
+  newsItemOfInterest.value = '';
+};
 </script>
 
 <template>
   <main class="main">
     <ul class="news">
       <li v-for="item of newsItemsPerPage" :key="item._id" class="news__item">
-        <NewsCard :news-item="item" />
+        <NewsCard :news-item="item" @edit-click="onEditBtnClick" />
       </li>
     </ul>
     <UPagination
@@ -55,6 +72,7 @@ watch(page, () => {
         color: 'gray'
       }"
     />
+    <LazyNewsFormPopup :is-open="isNewsFormPopupOpen" @on-close="onClose" />
   </main>
 </template>
 

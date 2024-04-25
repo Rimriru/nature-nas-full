@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { IMAGE_LINK_REG_EXP } from '#imports';
 import type { NewsCardData } from '~/types/NewsDataFromDb';
 
 const props = defineProps<{
   newsItem: NewsCardData;
 }>();
+
+const emit = defineEmits(['editClick']);
 
 const config = useRuntimeConfig();
 
@@ -20,7 +21,7 @@ const coverAsSrc = IMAGE_LINK_REG_EXP.test(props.newsItem.cover);
     />
     <div class="news-card__info-block">
       <h2 class="news-card__title">{{ newsItem.title }}</h2>
-      <p class="news-card__date">{{ newsItem.creationDate }}</p>
+      <p class="news-card__date">{{ newsItem.date }}</p>
       <p class="news-card__description">
         {{ newsItem.description }}
       </p>
@@ -39,7 +40,7 @@ const coverAsSrc = IMAGE_LINK_REG_EXP.test(props.newsItem.cover);
     </NuxtLink>
     <ClientOnly>
       <div class="news-card__management">
-        <EditBtn :color="'black'" />
+        <EditBtn :color="'black'" @click="emit('editClick', newsItem)" />
         <RemoveBtn />
       </div>
     </ClientOnly>

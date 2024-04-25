@@ -3,6 +3,9 @@ import type { Section } from '~/types/SectionDataFromDb';
 import type { FormError, Form } from '#ui/types';
 
 const sectionValues = defineModel<Section>('sectionValues');
+defineProps<{
+  isEditing: boolean;
+}>();
 const emit = defineEmits(['close', 'submit']);
 const form = ref<Form<string> | null>(null);
 const isSectionPopupOpened = useSectionPopupOpeningState();
@@ -32,7 +35,9 @@ const validate = (state: any): FormError[] => {
         ref="form"
         @submit="emit('submit')"
       >
-        <h4 class="section-form__heading">Добавить новую секцию</h4>
+        <h4 class="section-form__heading">
+          {{ isEditing ? 'Редактировать секцию' : 'Добавить новую секцию' }}
+        </h4>
         <UFormGroup name="title" class="section-form__label">
           Заголовок секции
           <span class="required">*</span>

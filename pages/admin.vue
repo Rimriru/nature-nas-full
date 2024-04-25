@@ -27,7 +27,7 @@ useServerSeoMeta({
     <PageCreation v-if="whatPageIsShown === 'page-creation'" />
     <PagesList v-if="whatPageIsShown === 'pages-list'" />
     <LinksList v-if="whatPageIsShown === 'links-list'" :is-in-admin-page="true" />
-    <NewsForm v-if="whatPageIsShown === 'add-news'" />
+    <NewsForm v-if="whatPageIsShown === 'add-news'" :is-in-popup="false" />
   </main>
 </template>
 

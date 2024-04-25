@@ -19,7 +19,8 @@ const emit = defineEmits(['onClick']);
         'add-link-btn_size_normal': size === 'md',
         'add-link-btn_rounded': rounded
       },
-      'add-link-btn'
+      'add-link-btn',
+      'button'
     ]"
     type="button"
     @click="emit('onClick')"
