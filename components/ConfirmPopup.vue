@@ -22,7 +22,8 @@ const message = {
   linkGroup: () => `Вы уверены, что хотите удалить группу ссылок "${props.removedItemTitle}"?`,
   link: () => `Вы уверены, что хотите удалить ссылку "${props.removedItemTitle}"?`,
   route: () => `Вы уверены, что хотите удалить страницу "${props.removedItemTitle}"?`,
-  section: () => `Вы уверены, что хотите удалить раздел "${props.removedItemTitle}"?`
+  section: () => `Вы уверены, что хотите удалить раздел "${props.removedItemTitle}"?`,
+  newsItem: () => `Вы уверены, что хотите удалить новость "${props.removedItemTitle}"?`
 };
 </script>
 

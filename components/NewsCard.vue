@@ -5,11 +5,11 @@ const props = defineProps<{
   newsItem: NewsCardData;
 }>();
 
-const emit = defineEmits(['editClick']);
+const emit = defineEmits(['editClick', 'removeClick']);
 
 const config = useRuntimeConfig();
 
-const coverAsSrc = IMAGE_LINK_REG_EXP.test(props.newsItem.cover);
+const coverAsSrc = computed(() => IMAGE_LINK_REG_EXP.test(props.newsItem.cover));
 </script>
 
 <template>
@@ -41,7 +41,7 @@ const coverAsSrc = IMAGE_LINK_REG_EXP.test(props.newsItem.cover);
     <ClientOnly>
       <div class="news-card__management">
         <EditBtn :color="'black'" @click="emit('editClick', newsItem)" />
-        <RemoveBtn />
+        <RemoveBtn @click="emit('removeClick', newsItem)" />
       </div>
     </ClientOnly>
   </article>

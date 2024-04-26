@@ -11,6 +11,10 @@ const page = ref(1);
 const pageCount = ref(5);
 const isNewsFormPopupOpen = ref(false);
 const newsItemOfInterest = ref<NewsDataFromDb | ''>('');
+const newsItemTitleForRemove = ref('');
+const isConfirmPopupOpen = ref(false);
+const removeRequestError = ref('');
+const notifications = useToast();
 
 provide('newsItem', newsItemOfInterest);
 
@@ -24,7 +28,7 @@ definePageMeta({
 
 const indexes = computed(() => {
   const firstIndex = (page.value - 1) * pageCount.value;
-  const lastIndex = page.value - 1 + pageCount.value;
+  const lastIndex = firstIndex + pageCount.value;
   return { firstIndex, lastIndex };
 });
 const newsItemsPerPage = computed(() => {
@@ -36,14 +40,49 @@ watch(page, () => {
   window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 });
 
+const resetNewsItemOfInterest = () => {
+  newsItemOfInterest.value = '';
+};
+
 const onEditBtnClick = (newsItem: NewsDataFromDb) => {
   isNewsFormPopupOpen.value = true;
   newsItemOfInterest.value = newsItem;
 };
 
-const onClose = () => {
+const onNewsFormClose = () => {
   isNewsFormPopupOpen.value = false;
-  newsItemOfInterest.value = '';
+  resetNewsItemOfInterest();
+};
+
+const onNewsItemRemoveBtnClick = (newsItem: NewsDataFromDb) => {
+  newsItemOfInterest.value = newsItem;
+  newsItemTitleForRemove.value = newsItem.title;
+  isConfirmPopupOpen.value = true;
+};
+
+const onConfirmPopupClose = () => {
+  isConfirmPopupOpen.value = false;
+  resetNewsItemOfInterest();
+  newsItemTitleForRemove.value = '';
+};
+
+const handleNewsItemRemove = async () => {
+  try {
+    await $fetch(`/api/news/${(newsItemOfInterest.value as NewsDataFromDb)._id}`, {
+      method: 'delete'
+    });
+
+    newsState.value = newsState.value.filter(
+      (item) => item._id !== (newsItemOfInterest.value as NewsDataFromDb)._id
+    );
+    notifications.add({
+      id: 'news',
+      title: `Новость ${(newsItemOfInterest.value as NewsDataFromDb).title} была удалена`
+    });
+    onConfirmPopupClose();
+  } catch (error: any) {
+    removeRequestError.value = `${error.statusCode}: ${error.message}`;
+  }
 };
 </script>
 
@@ -51,7 +90,11 @@ const onClose = () => {
   <main class="main">
     <ul class="news">
       <li v-for="item of newsItemsPerPage" :key="item._id" class="news__item">
-        <NewsCard :news-item="item" @edit-click="onEditBtnClick" />
+        <NewsCard
+          :news-item="item"
+          @edit-click="onEditBtnClick"
+          @remove-click="onNewsItemRemoveBtnClick"
+        />
       </li>
     </ul>
     <UPagination
@@ -72,7 +115,15 @@ const onClose = () => {
         color: 'gray'
       }"
     />
-    <LazyNewsFormPopup :is-open="isNewsFormPopupOpen" @on-close="onClose" />
+    <LazyNewsFormPopup :is-open="isNewsFormPopupOpen" @on-close="onNewsFormClose" />
+    <LazyConfirmPopup
+      :is-open="isConfirmPopupOpen"
+      :what-is-removed="'newsItem'"
+      :removed-item-title="newsItemTitleForRemove"
+      :error="removeRequestError"
+      @on-close="onConfirmPopupClose"
+      @on-agree="handleNewsItemRemove"
+    />
   </main>
 </template>
 

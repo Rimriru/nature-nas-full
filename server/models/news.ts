@@ -20,7 +20,8 @@ const newsSchema: any = new mongoose.Schema(
     },
     cover: {
       type: String,
-      required: [true, 'Обложка новости является обязательной']
+      required: [true, 'Обложка новости является обязательной'],
+      validate: /.(?:png|jpg|jpeg)$/
     }
   },
   { versionKey: false }
