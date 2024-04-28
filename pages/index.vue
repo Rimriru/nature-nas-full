@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import type Slide from '~/types/SlideDataFromDb';
+
+const isSlideFormOpen = ref(false);
+const slideItemOfInterest = ref<Slide | ''>('');
+
 const news = useNewsState();
 const reversedNews = computed(() => news.value.slice(0, 15).reverse());
 
@@ -9,6 +14,16 @@ slidesState.value = slides;
 const firstHomeSliderItems = computed(() =>
   slidesState.value.filter((slide) => slide.placement === 'home-1')
 );
+
+const onEditSlideBtnClick = (slideItem: Slide) => {
+  isSlideFormOpen.value = true;
+  slideItemOfInterest.value = slideItem;
+};
+
+const onSlideFormClose = () => {
+  isSlideFormOpen.value = false;
+  slideItemOfInterest.value = '';
+};
 </script>
 
 <template>
@@ -73,7 +88,12 @@ const firstHomeSliderItems = computed(() =>
         </ul>
       </div>
     </section>
-    <HomeSlider :items="firstHomeSliderItems" />
+    <HomeSlider :items="firstHomeSliderItems" @edit-click="onEditSlideBtnClick" />
+    <LazySlideForm
+      :is-open="isSlideFormOpen"
+      :slide-data="slideItemOfInterest"
+      @on-close="onSlideFormClose"
+    />
   </main>
 </template>
 

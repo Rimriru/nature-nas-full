@@ -135,10 +135,12 @@ const handleResetFormFields = () => {
   newsData.content = '';
   coverPreview.value = '';
 
-  originalNewsItemData.title = '';
-  originalNewsItemData.description = '';
-  originalNewsItemData.content = '';
-  originalNewsItemData.cover = '';
+  originalNewsItemData = {
+    title: '',
+    description: '',
+    cover: '',
+    content: ''
+  };
 };
 
 const handleNewsItemCreationFormSubmit = async () => {
@@ -276,7 +278,6 @@ const handleNewsItemEditFormSubmit = async () => {
 
   if (initialValues === JSON.stringify(newsItemBody)) {
     emit('onClose');
-    console.log('identical');
   } else {
     try {
       const editedNewsItem = await $fetch(`/api/news/${newsItemId}`, {
@@ -393,9 +394,17 @@ onMounted(() => {
       <span v-if="submitError" class="error">{{ submitError }}</span>
       <div class="news-form__btn-container">
         <MenuButton v-if="isInPopup" :size="'middle'" @click="emit('onClose')">Отмена</MenuButton>
-        <MenuButton :button-type="'submit'" :size="'middle'" :is-active="true">{{
-          isInPopup ? 'Сохранить' : 'Создать'
-        }}</MenuButton>
+        <MenuButton
+          :button-type="'submit'"
+          :size="'middle'"
+          :is-active="true"
+          :is-disabled="
+            coverErrorVisibility.fileSizeError ||
+            coverErrorVisibility.linkValidationError ||
+            coverErrorVisibility.requiredError
+          "
+          >{{ isInPopup ? 'Сохранить' : 'Создать' }}</MenuButton
+        >
       </div>
     </UForm>
   </div>

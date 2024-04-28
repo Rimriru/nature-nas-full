@@ -14,7 +14,7 @@ const contentModel = defineModel();
 <template>
   <div>
     <Editor
-      api-key="j9zmlsfscynrcssyawis2dp00r22qej7ry4srjvz4k06rbo6"
+      :api-key="$config.public.tinymce"
       :init="{
         plugins:
           'lists link image table code help wordcount autolink autosave media preview autoresize',
@@ -31,7 +31,7 @@ const contentModel = defineModel();
       v-model="contentModel"
     />
     <span class="error" style="font-size: 13px; line-height: 1.5"
-      >Если при вставке мультимедиа вы заметили, что форма стала размытой – это ошибка браузера
+      >Если при работе с редактором вы заметили, что форма стала размытой – это ошибка браузера
       Chrome. Попробуйте воспользоваться другим браузером, если размытость вам мешает.</span
     >
   </div>

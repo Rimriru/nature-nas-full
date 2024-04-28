@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const props = defineProps(['items']);
+defineProps(['items']);
+
+const emit = defineEmits(['editClick']);
 </script>
 
 <template>
@@ -20,11 +22,24 @@ const props = defineProps(['items']);
     arrows
     indicators
   >
-    <template #default="{ item }">
-      <div class="home-slider__container">
-        <img class="home-slider__img" :src="item.img" />
-        <div class="content home-slider__content" v-html="item.content"></div>
-        <EditBtn class="home-slider__edit-btn" :color="'black'" />
+    <template #default="{ item, index }">
+      <div :class="['home-slider__container', { 'home-slider__container_reversed': index === 1 }]">
+        <img
+          class="home-slider__img"
+          :src="
+            IMAGE_LINK_REG_EXP.test(item.img)
+              ? item.img
+              : `${$config.public.domen}/image/${item.img}`
+          "
+        />
+        <div
+          :class="[
+            'content home-slider__content',
+            { 'content home-slider__content_reversed': index === 1 }
+          ]"
+          v-html="item.content"
+        ></div>
+        <EditBtn class="home-slider__edit-btn" :color="'black'" @click="emit('editClick', item)" />
       </div>
     </template>
   </UCarousel>
@@ -44,6 +59,10 @@ const props = defineProps(['items']);
     overflow: hidden;
     position: relative;
 
+    &_reversed {
+      flex-direction: row-reverse;
+    }
+
     .home-slider__img {
       width: clamp(200px, 30vw, 600px);
       height: 400px;
@@ -52,7 +71,7 @@ const props = defineProps(['items']);
     }
 
     .home-slider__content {
-      background-color: #f2f2f2;
+      background-color: #f8f7f0;
       padding: 40px;
       position: relative;
       z-index: 2;
@@ -67,9 +86,15 @@ const props = defineProps(['items']);
         left: -50px;
         width: 100%;
         height: 100%;
-        background-color: #f2f2f2;
+        background-color: #f8f7f0;
         transform: skewX(-10deg);
         z-index: -1;
+      }
+
+      &_reversed {
+        &::before {
+          left: 50px;
+        }
       }
     }
 
@@ -78,6 +103,8 @@ const props = defineProps(['items']);
       top: 15px;
       right: 15px;
       z-index: 5;
+      background-color: #f8f7f0;
+      border-radius: 100%;
     }
   }
 }

@@ -1,4 +1,4 @@
-type Placement = 'home-1' | 'home-2';
+type Placement = 'home-1' | 'home-2' | '';
 
 interface Slide {
   _id: string;

@@ -16,7 +16,8 @@ export default defineNuxtConfig({
     mongoDbUrl: process.env.MONGODB_URL,
     public: {
       domen: process.env.DOMEN,
-      process: process.env.NODE_ENV
+      process: process.env.NODE_ENV,
+      tinymce: process.env.TINYMCE_API_KEY
     }
   },
   routeRules: {
