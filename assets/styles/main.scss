@@ -4,7 +4,7 @@
 .main {
   width: clamp(800px, 70vw, 1920px);
   margin: 0 auto;
-  padding-block: 40px;
+  padding-block: 40px 80px;
 }
 
 .required {
@@ -19,6 +19,7 @@
 }
 
 .button {
+  opacity: 1;
   transition: opacity 0.3s ease-in-out;
 
   &:hover {

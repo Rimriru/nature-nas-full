@@ -176,4 +176,17 @@ const handleFormSubmit = async () => {
     cursor: pointer;
   }
 }
+
+@media screen and (max-width: 1124px) {
+  .heading-image {
+    &_main {
+      height: clamp(227px, 40vw, 380px);
+    }
+
+    .heading-image__img_main {
+      background-size: cover;
+      background-position-x: 50%;
+    }
+  }
+}
 </style>

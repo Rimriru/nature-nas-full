@@ -6,3 +6,4 @@ export { default as contents } from './content';
 export { default as sections } from './section';
 export { default as mainPhoto } from './mainPhoto';
 export { default as news } from './news';
+export { default as slides } from './slide';

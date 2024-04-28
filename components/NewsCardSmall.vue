@@ -68,6 +68,14 @@ const coverAsSrc = IMAGE_LINK_REG_EXP.test(props.newsItem.cover);
     -webkit-line-clamp: 3;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    @media screen and (max-width: 1024px) {
+      & {
+        visibility: visible;
+        opacity: 1;
+        color: #f6bf25;
+      }
+    }
   }
 }
 </style>
