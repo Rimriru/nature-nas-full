@@ -72,17 +72,6 @@ const validate = (state: any): FormError[] => {
     errors.push({ path: 'content', message: 'Размер содержимого превышает лимит в 1200 символов' });
   return errors;
 };
-
-const handleClose = () => {
-  resetFormValues();
-  setErrorsDefaultValues();
-  slideForm.value?.clear();
-  if (imgInput.value) {
-    imgInput.value.value = '';
-  }
-  emit('onClose');
-};
-
 const setErrorsDefaultValues = () => {
   imgErrorVisibility.value = {
     fileSizeError: false,
@@ -102,6 +91,16 @@ const resetFormValues = () => {
     img: '',
     content: ''
   };
+};
+
+const handleClose = () => {
+  resetFormValues();
+  setErrorsDefaultValues();
+  slideForm.value?.clear();
+  if (imgInput.value) {
+    imgInput.value.value = '';
+  }
+  emit('onClose');
 };
 
 const handleImgFileChange = (event: Event) => {
@@ -326,7 +325,7 @@ const handleSlideFormSubmit = async () => {
   }
 
   .slide-form__img-block {
-    max-width: 600px;
+    max-width: 670px;
     margin: 0 auto;
     padding: 10px;
 
@@ -336,8 +335,8 @@ const handleSlideFormSubmit = async () => {
     }
 
     .slide-form__img-perview {
-      width: clamp(200px, 35vw, 600px);
-      height: 300px;
+      width: clamp(200px, 40vw, 700px);
+      height: 400px;
       background-repeat: no-repeat;
       background-size: cover;
       background-position: center;

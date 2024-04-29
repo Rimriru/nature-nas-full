@@ -88,7 +88,7 @@ const handleNewsItemRemove = async () => {
 
 <template>
   <main class="main">
-    <ul class="news">
+    <ul class="shadow-border news">
       <li v-for="item of newsItemsPerPage" :key="item._id" class="news__item">
         <NewsCard
           :news-item="item"
@@ -132,8 +132,6 @@ const handleNewsItemRemove = async () => {
   display: grid;
   grid-template-columns: 1fr;
   row-gap: 50px;
-  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
-  border-radius: 20px;
   padding: 40px 40px 0;
 
   .news__item {

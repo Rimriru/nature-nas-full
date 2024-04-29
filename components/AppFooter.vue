@@ -2,6 +2,7 @@
 import { HEADER_LINK_GROUPS, FOOTER_LINKS_LOGOS } from '~/utils/linksData';
 
 const linkGroups = useLinkGroupsState();
+const contactsState = useContactsState();
 
 const footerLinks = computed(() => {
   return linkGroups.value.filter((group) =>
@@ -44,18 +45,18 @@ const currentYear = new Date().getFullYear();
         <address class="footer__address">
           <h5 class="heading">Реквизиты института</h5>
           <div class="inside-text">
-            <p>Адрес: ул. Скорины, 10 220076, г. Минск</p>
+            <p>Адрес: {{ contactsState?.address }}</p>
             <p>
               Телефон:
-              <a href="tel:+375172152632">+375 (17) 215-26-32</a>
+              <a href="tel:+375172152632">{{ contactsState?.telNumber }}</a>
             </p>
             <p>
               Факс:
-              <a href="tel:+375172152413">+375 (17) 215-24-13</a>
+              <a href="tel:+375172152413">{{ contactsState?.faxNumber }}</a>
             </p>
             <p>
               Почта:
-              <a href="mailto:info@nature-nas.by">info@nature-nas.by</a>
+              <a href="mailto:info@nature-nas.by">{{ contactsState?.email }}</a>
             </p>
           </div>
         </address>

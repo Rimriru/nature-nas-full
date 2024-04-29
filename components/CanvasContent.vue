@@ -15,7 +15,7 @@ const config = useRuntimeConfig();
 </script>
 
 <template>
-  <section class="canvas-content">
+  <section class="shadow-border canvas-content">
     <article
       :class="[
         'canvas-article',
@@ -97,8 +97,6 @@ const config = useRuntimeConfig();
 .canvas-content {
   max-width: 1400px;
   margin-bottom: 20px;
-  padding: 30px;
-  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
   border-radius: 20px;
   display: grid;
 
