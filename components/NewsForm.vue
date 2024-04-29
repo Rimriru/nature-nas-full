@@ -134,6 +134,9 @@ const handleResetFormFields = () => {
   newsData.date = '';
   newsData.content = '';
   coverPreview.value = '';
+  if (newsCover.value) {
+    newsCover.value.value = '';
+  }
 
   originalNewsItemData = {
     title: '',

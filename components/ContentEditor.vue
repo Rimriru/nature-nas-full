@@ -19,12 +19,15 @@ const contentModel = defineModel();
         plugins:
           'lists link image table code help wordcount autolink autosave media preview autoresize',
         toolbar_mode: 'sliding',
+        toolbar:
+          'undo redo styles bold italic alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
         language: 'ru',
         statusbar: false,
         resize: true,
         min_height: 500,
         placeholder: props.placeholder,
-        referrer_policy: 'origin'
+        referrer_policy: 'origin',
+        resize_img_proportional: true
       }"
       model-events="change keydown focus paste undo redo"
       output-format="html"

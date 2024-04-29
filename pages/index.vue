@@ -14,6 +14,9 @@ slidesState.value = slides;
 const firstHomeSliderItems = computed(() =>
   slidesState.value.filter((slide) => slide.placement === 'home-1')
 );
+const secondHomeSliderItems = computed(() =>
+  slidesState.value.filter((slide) => slide.placement === 'home-2')
+);
 
 const onEditSlideBtnClick = (slideItem: Slide) => {
   isSlideFormOpen.value = true;
@@ -88,7 +91,17 @@ const onSlideFormClose = () => {
         </ul>
       </div>
     </section>
-    <HomeSlider :items="firstHomeSliderItems" @edit-click="onEditSlideBtnClick" />
+    <HomeSlider
+      :items="firstHomeSliderItems"
+      :indicators-on="true"
+      :with-angled-img="true"
+      @edit-click="onEditSlideBtnClick"
+    />
+    <HomeSlider
+      :items="secondHomeSliderItems"
+      :indicators-on="false"
+      @edit-click="onEditSlideBtnClick"
+    />
     <LazySlideForm
       :is-open="isSlideFormOpen"
       :slide-data="slideItemOfInterest"
