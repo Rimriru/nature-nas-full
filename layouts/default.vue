@@ -1,14 +1,29 @@
 <script setup lang="ts">
 const isLoaderVisible = useLoaderVisibilityState();
+const scroll = ref(0);
+
+const handleScroll = () => {
+  scroll.value = window.scrollY;
+};
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+});
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+});
 </script>
 
 <template>
-  <div class="layout">
+  <div class="layout" ref="element">
     <AppHeader />
     <slot />
     <AppFooter />
     <UNotifications />
     <Loader :is-visible="isLoaderVisible" />
+    <Transition>
+      <UpButton v-show="scroll > 0" />
+    </Transition>
   </div>
 </template>
 
@@ -20,5 +35,16 @@ const isLoaderVisible = useLoaderVisibilityState();
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>
