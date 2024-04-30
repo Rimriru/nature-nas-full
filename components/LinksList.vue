@@ -46,6 +46,12 @@ const onRemoveLinkClick = (id: string, linkTitle: string, groupId: string) => {
 
 provide('linkActions', { onEditLinkClick, onRemoveLinkClick });
 
+const labsAndCentersLinks = computed(() => {
+  return linkGroups.value.filter((group) => group.group === 'labs-and-centers');
+});
+
+provide('labsAndCentersGroups', labsAndCentersLinks.value);
+
 const resetFormFields = () => {
   linkData.title = '';
   linkData.to = '';
@@ -127,7 +133,7 @@ const onRemoveLinkPopupAgree = async () => {
 <template>
   <div>
     <ul class="links-list">
-      <li v-for="group of HEADER_LINK_GROUPS" :key="group._id">
+      <li v-for="group of HEADER_LINK_GROUPS" :key="group._id" class="links-list__item">
         <a :href="group.to" class="links-list__title">
           <Icon :icon="group.icon" />
           <span>
@@ -160,11 +166,42 @@ const onRemoveLinkPopupAgree = async () => {
   </div>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .links-list {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px 5vw;
+  gap: 15px;
+  grid-template-areas:
+    '1 column'
+    '2 column'
+    '3 column'
+    '4 column'
+    '5 column'
+    '6 column'
+    '7 column';
+  li:nth-of-type(1) {
+    grid-area: 1;
+  }
+  li:nth-of-type(2) {
+    grid-area: column;
+  }
+  li:nth-of-type(3) {
+    grid-area: 2;
+  }
+  li:nth-of-type(4) {
+    grid-area: 3;
+  }
+  li:nth-of-type(5) {
+    grid-area: 4;
+  }
+  li:nth-of-type(6) {
+    grid-area: 5;
+  }
+  li:nth-of-type(7) {
+    grid-area: 6;
+  }
+  li:nth-of-type(8) {
+    grid-area: 7;
+  }
 
   .links-list__title {
     font-size: 20px;

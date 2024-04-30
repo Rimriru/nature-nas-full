@@ -26,6 +26,7 @@ const filteredLinks = computed(() => {
     :link="link"
     :group="filteredLinks.group"
     :is-in-admin-page="props.isAdminPage"
+    :is-in-site-map="true"
     @on-edit="linkActions.onEditLinkClick"
     @on-remove="linkActions.onRemoveLinkClick"
   />

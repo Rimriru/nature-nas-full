@@ -21,7 +21,12 @@ const linksOfTheGroup = computed(() => {
     <a v-if="!to" class="dropdown-menu__main-link">{{ title }}</a>
     <NuxtLink v-else :to="to" class="dropdown-menu__main-link">{{ title }}</NuxtLink>
     <ul v-if="isSubMenuVisible && group" class="dropdown-menu__sub-menu">
-      <LinksMenuItem v-for="link of linksOfTheGroup.links" :link="link" :is-in-admin-page="false" />
+      <LinksMenuItem
+        v-for="link of linksOfTheGroup.links"
+        :link="link"
+        :is-in-admin-page="false"
+        :is-in-site-map="false"
+      />
       <AddLinkButton
         :color="'dark-blue'"
         :size="'sm'"
