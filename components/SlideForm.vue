@@ -222,7 +222,7 @@ const handleSlideFormSubmit = async () => {
       });
       handleClose();
     } catch (error: any) {
-      submitError.value = `${error.statusCode}: ${error.message}`;
+      submitError.value = `${error.status}: ${error.message}`;
       console.log(error);
     }
   }

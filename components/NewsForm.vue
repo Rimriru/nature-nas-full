@@ -205,7 +205,7 @@ const handleNewsItemCreationFormSubmit = async () => {
     handleResetFormFields();
     notifications.add({ id: 'news', title: 'Новость создана!' });
   } catch (error: any) {
-    submitError.value = `${error.statusCode}: ${error.message}`;
+    submitError.value = `${error.status}: ${error.message}`;
     console.error(error);
   }
 };
@@ -295,7 +295,7 @@ const handleNewsItemEditFormSubmit = async () => {
       });
       emit('onClose');
     } catch (error: any) {
-      submitError.value = `${error.statusCode}: ${error.message}`;
+      submitError.value = `${error.status}: ${error.message}`;
       console.log(error);
     }
   }

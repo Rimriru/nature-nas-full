@@ -81,7 +81,7 @@ const handleNewsItemRemove = async () => {
     });
     onConfirmPopupClose();
   } catch (error: any) {
-    removeRequestError.value = `${error.statusCode}: ${error.message}`;
+    removeRequestError.value = `${error.status}: ${error.message}`;
   }
 };
 </script>
