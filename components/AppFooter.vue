@@ -87,7 +87,7 @@ const currentYear = new Date().getFullYear();
   </footer>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 @use '~/assets/styles/variables.scss' as *;
 
 .heading {
@@ -107,7 +107,7 @@ const currentYear = new Date().getFullYear();
 
   .footer__container {
     margin: 0 auto;
-    max-width: fit-content;
+    max-width: 1200px;
 
     .footer__info {
       display: flex;
@@ -115,9 +115,10 @@ const currentYear = new Date().getFullYear();
       margin-bottom: 85px;
 
       .footer__about {
-        max-width: 470px;
+        flex-basis: 470px;
         h5 {
           text-transform: uppercase;
+          text-align: center;
         }
       }
     }
@@ -133,6 +134,7 @@ const currentYear = new Date().getFullYear();
       ul {
         display: flex;
         justify-content: space-between;
+        flex-wrap: wrap;
 
         a {
           display: block;
@@ -159,6 +161,14 @@ const currentYear = new Date().getFullYear();
       p {
         display: inline;
       }
+    }
+  }
+}
+
+@media screen and (max-width: 1320px) {
+  .footer {
+    .footer__container {
+      width: calc(100% - 80px * 2);
     }
   }
 }

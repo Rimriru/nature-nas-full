@@ -46,12 +46,12 @@ const onSlideFormClose = () => {
         :prev-button="{
           color: 'blue',
           icon: 'i-heroicons-arrow-left-20-solid',
-          class: '-left-12 lg:-left-5 md:left-3'
+          class: '-left-12 lg:-left-5 md:left-3 ml-2'
         }"
         :next-button="{
           color: 'blue',
           icon: 'i-heroicons-arrow-right-20-solid',
-          class: '-right-12 lg:-right-5 md:right-3'
+          class: '-right-12 lg:-right-5 md:right-3 mr-2'
         }"
         arrows
       >
@@ -149,6 +149,13 @@ const onSlideFormClose = () => {
   border-radius: 60px;
   margin-bottom: 40px;
   width: 100%;
+
+  @media screen and (max-width: 1124px) {
+    & {
+      margin: 0 20px 30px;
+      width: calc(100% - 20px * 2);
+    }
+  }
 }
 
 .research {

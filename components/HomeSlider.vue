@@ -12,12 +12,12 @@ const emit = defineEmits(['editClick']);
     :prev-button="{
       color: 'gray',
       icon: 'i-heroicons-arrow-left-20-solid',
-      class: '-left-12'
+      class: '-left-12 ml-1'
     }"
     :next-button="{
       color: 'gray',
       icon: 'i-heroicons-arrow-right-20-solid',
-      class: '-right-12'
+      class: '-right-12 mr-1'
     }"
     arrows
     :indicators="indicatorsOn"

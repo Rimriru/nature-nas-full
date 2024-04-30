@@ -80,6 +80,7 @@ const image = IMAGE_LINK_REG_EXP.test(props.item.img)
   display: flex;
   gap: 30px;
   padding-block: 75px;
+  margin-left: 100px;
 
   &_reversed {
     flex-direction: row-reverse;
@@ -114,7 +115,7 @@ const image = IMAGE_LINK_REG_EXP.test(props.item.img)
 
 @media screen and (max-width: 1155px) {
   .home-slider__content-container {
-    padding: 0;
+    margin: 0;
     padding: 40px;
     text-indent: 30px;
   }
