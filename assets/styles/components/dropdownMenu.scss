@@ -17,6 +17,12 @@
     &:hover {
       background-color: $light-blue;
     }
+
+    @media screen and (max-width: 1330px) {
+      & {
+        padding-inline: 12px;
+      }
+    }
   }
 
   .dropdown-menu__sub-menu {
@@ -24,8 +30,8 @@
     top: 64px;
     background: rgba($gray, 0.5);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    backdrop-filter: blur(100px);
-    -webkit-backdrop-filter: blur(100px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
     width: clamp(100%, 18vw, 200%);

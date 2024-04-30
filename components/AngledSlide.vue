@@ -81,4 +81,11 @@ defineProps<{
     padding: 20px;
   }
 }
+
+@media screen and (max-width: 1155px) {
+  .home-slider__content {
+    padding: 40px;
+    text-indent: 30px;
+  }
+}
 </style>

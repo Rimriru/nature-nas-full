@@ -73,11 +73,6 @@ const emit = defineEmits(['editClick']);
       .home-slider__img {
         display: none;
       }
-
-      .home-slider__content {
-        padding: 40px;
-        text-indent: 30px;
-      }
     }
   }
 }

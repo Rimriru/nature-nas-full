@@ -65,7 +65,7 @@ const image = IMAGE_LINK_REG_EXP.test(props.item.img)
       background: rgb(255, 255, 255);
       background: linear-gradient(
         90deg,
-        rgba(255, 255, 255, 1) 0%,
+        rgba(255, 255, 255, 1) 10%,
         rgba(255, 255, 255, 1) 40%,
         rgba(255, 255, 255, 0) 100%
       );
@@ -100,6 +100,23 @@ const image = IMAGE_LINK_REG_EXP.test(props.item.img)
   .home-slider__content {
     position: relative;
     z-index: 4;
+    text-shadow: 0 0 lightgray;
+  }
+}
+
+@media screen and (max-width: 1250px) {
+  .home-slider__container {
+    &_img-as-bg {
+      background-size: auto 100%;
+    }
+  }
+}
+
+@media screen and (max-width: 1155px) {
+  .home-slider__content-container {
+    padding: 0;
+    padding: 40px;
+    text-indent: 30px;
   }
 }
 </style>

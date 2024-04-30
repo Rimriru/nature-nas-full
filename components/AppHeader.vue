@@ -77,7 +77,7 @@ const onAddLinkFormSubmit = async () => {
       <nav class="header__bottom">
         <ul class="header__bottom-links">
           <NuxtLink to="/" class="header__bottom-logo" aria-label="Link">
-            <NuxtImg src="/logo-white.png" alt="Логотип" width="60" />
+            <img src="/logo-white.png" alt="Логотип" width="62" height="53" />
           </NuxtLink>
           <li v-for="{ _id: id, title, group, to } of HEADER_LINK_GROUPS" :key="id">
             <DropdownMenu

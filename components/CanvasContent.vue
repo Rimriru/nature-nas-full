@@ -99,6 +99,7 @@ const config = useRuntimeConfig();
   margin-bottom: 20px;
   border-radius: 20px;
   display: grid;
+  padding: 30px;
 
   .canvas-article {
     display: flex;
