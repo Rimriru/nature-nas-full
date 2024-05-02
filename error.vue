@@ -29,10 +29,12 @@ const props = defineProps({
 <style lang="scss">
 .error-container {
   max-width: 800px;
+  height: 70vh;
   margin: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 
   .error__code {
     display: flex;
