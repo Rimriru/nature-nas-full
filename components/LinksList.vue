@@ -170,6 +170,7 @@ const onRemoveLinkPopupAgree = async () => {
 .links-list {
   display: grid;
   gap: 15px;
+  grid-template-columns: auto 600px;
   grid-template-areas:
     '1 column'
     '2 column'
@@ -205,6 +206,7 @@ const onRemoveLinkPopupAgree = async () => {
 
   .links-list__title {
     font-size: 20px;
+    font-weight: 600;
     display: flex;
     align-items: center;
     gap: 16px;
