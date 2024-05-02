@@ -23,6 +23,20 @@ export default defineEventHandler(async (evt) => {
         });
       }
 
+      if (deletedContent && deletedContent.personaTwo && deletedContent.personaTwo.photo) {
+        await $fetch(`/api/images/${deletedContent.personaTwo.photo}`, {
+          method: 'delete',
+          onResponse({ response }) {
+            if (!response.ok) {
+              throw createError({
+                status: response.status,
+                message: response.statusText
+              });
+            }
+          }
+        });
+      }
+
       if (deletedContent && deletedContent.photos && deletedContent.photos.length) {
         await $fetch('/api/images', {
           method: 'delete',

@@ -1,4 +1,4 @@
-import { users } from '../../models/index';
+import { users } from '~/server/models/index';
 
 interface RequestBody {
   username: string;
@@ -6,17 +6,14 @@ interface RequestBody {
 }
 
 export default defineEventHandler(async (evt) => {
-  console.log('POST /api/users');
   const { username, password } = await readBody<RequestBody>(evt);
   try {
-    console.log('Create user');
     const newUserData = await users.create({
       password,
       username
     });
     return newUserData;
   } catch (error: any) {
-    console.dir(error);
     throw createError({
       status: error.statusCode,
       message: error.message

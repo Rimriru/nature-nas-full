@@ -18,7 +18,8 @@ export default defineNuxtConfig({
       domen: process.env.DOMEN,
       process: process.env.NODE_ENV,
       tinymce: process.env.TINYMCE_API_KEY
-    }
+    },
+    apiSecret: process.env.NUXT_API_SECRET
   },
   routeRules: {
     '/api/**': {

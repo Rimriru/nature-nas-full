@@ -10,6 +10,10 @@ const handleMenuButtonClick = (pageId: string) => {
 useServerSeoMeta({
   robots: 'none noarchive nositelinkssearchbox'
 });
+
+definePageMeta({
+  middleware: 'auth'
+});
 </script>
 
 <template>

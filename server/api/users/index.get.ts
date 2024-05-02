@@ -1,13 +1,12 @@
-import { users } from '../../models/index';
-
 export default defineEventHandler(async (evt) => {
-  console.log('GET /api/users');
   try {
-    console.log('Find users');
-    const usersData = await users.find();
-    return usersData;
+    deleteCookie(evt, 'jwt', {
+      maxAge: 3600000 * 24,
+      httpOnly: true,
+      sameSite: true
+    });
+    return { message: 'Вы успешно вышли из системы!' };
   } catch (error: any) {
-    console.dir(error);
     throw createError({
       status: error.statusCode,
       message: error.message

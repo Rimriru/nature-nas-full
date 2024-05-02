@@ -1,18 +1,21 @@
 import mongoose from 'mongoose';
 import bcrypt from 'mongoose-bcrypt';
 
-const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: [true, 'Требуется имя пользователя'],
-    unique: true,
+const userSchema = new mongoose.Schema(
+  {
+    username: {
+      type: String,
+      required: [true, 'Требуется имя пользователя'],
+      unique: true
+    },
+    password: {
+      type: String,
+      required: [true, 'Требуется пароль'],
+      bcrypt: true
+    }
   },
-  password: {
-    type: String,
-    required: [true, 'Требуется пароль'],
-    bcrypt: true,
-  },
-}, { versionKey: false });
+  { versionKey: false }
+);
 
 userSchema.plugin(bcrypt);
 
