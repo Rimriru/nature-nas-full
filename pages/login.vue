@@ -12,6 +12,11 @@ const userData = reactive({
 const usernameInput = ref(null);
 const passwordInput = ref(null);
 const isPasswordTypePassword = ref(true);
+const isAlertShown = ref(false);
+const loginError = ref('');
+
+const router = useRouter();
+const loggedInState = useLoggedInState();
 
 const validate = (state: any): FormError[] => {
   const errors = [];
@@ -23,16 +28,25 @@ const validate = (state: any): FormError[] => {
 };
 
 const handleLoginFormSubmit = async () => {
+  isAlertShown.value = false;
+  loginError.value = '';
   const body = {
     username: userData.username,
     password: userData.password
   };
   try {
-    const { message } = await $fetch(`/api/users/${userData.username}`, {
+    await $fetch(`/api/users/${userData.username}`, {
       method: 'post',
       body
     });
-  } catch (error) {
+    isAlertShown.value = true;
+    loggedInState.value = true;
+    setTimeout(() => {
+      router.push('/admin');
+    }, 5000);
+  } catch (error: any) {
+    isAlertShown.value = true;
+    loginError.value = `${error.statusCode}: ${error.data.message}!`;
     console.error(error);
   }
 };
@@ -40,7 +54,19 @@ const handleLoginFormSubmit = async () => {
 
 <template>
   <UForm :state="userData" :validate="validate" class="login" @submit="handleLoginFormSubmit">
-    <h1>Вход в систему</h1>
+    <UAlert
+      :title="loginError ? 'Ошибка!' : 'Успех!'"
+      :description="loginError ? loginError : 'Вы будете перенаправлены на админскую панель.'"
+      :class="[
+        'login__alert',
+        {
+          login__alert_shown: isAlertShown
+        }
+      ]"
+      :color="loginError ? 'red' : 'green'"
+      variant="solid"
+    />
+    <h1 @click="isAlertShown = !isAlertShown">Вход в систему</h1>
     <UFormGroup name="username" class="login__input-group">
       <span
         :class="['login__title', { login__title_up: (usernameInput as any)?.input.value }]"
@@ -86,6 +112,20 @@ const handleLoginFormSubmit = async () => {
   flex-grow: 1;
   justify-content: center;
   gap: 50px;
+  position: relative;
+
+  .login__alert {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: all 0.5s ease;
+
+    &_shown {
+      top: 10%;
+      opacity: 1;
+    }
+  }
 
   h1 {
     font-size: 20px;
