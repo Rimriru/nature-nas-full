@@ -126,6 +126,12 @@ const currentYear = new Date().getFullYear();
     .footer__address {
       font-style: normal;
       max-width: 220px;
+
+      p {
+        &:not(:last-of-type) {
+          margin-bottom: 8px;
+        }
+      }
     }
 
     .footer__links {
