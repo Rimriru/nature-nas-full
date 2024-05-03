@@ -5,8 +5,6 @@ const isSubMenuVisible = ref(false);
 const props = defineProps(['title', 'group', 'to', 'linkGroups']);
 const emit = defineEmits(['onAddLink']);
 
-const isLoggedIn = useLoggedInState();
-
 const linksOfTheGroup = computed(() => {
   const group: LinkGroup = props.linkGroups.find((item: LinkGroup) => item.group === props.group);
   const links: Link[] = group.links;
@@ -30,7 +28,6 @@ const linksOfTheGroup = computed(() => {
         :is-in-site-map="false"
       />
       <AddLinkButton
-        v-if="isLoggedIn"
         :color="'dark-blue'"
         :size="'sm'"
         :rounded="true"

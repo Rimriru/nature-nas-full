@@ -6,10 +6,13 @@ defineProps<{
 }>();
 
 const emit = defineEmits(['onClick']);
+
+const isLoggedIn = useLoggedInState();
 </script>
 
 <template>
   <button
+    v-if="isLoggedIn"
     :class="[
       {
         'add-link-btn_color_dark-blue': color === 'dark-blue',
