@@ -381,7 +381,7 @@ onMounted(() => {
           <ClientOnly>
             <EditBtn
               :color="'gray'"
-              :appliedClass="'side-menu-edit-btn'"
+              class="side-menu-edit-btn"
               @click="handleEditGroupBtnClick(title, groupId)"
             />
           </ClientOnly>
@@ -396,7 +396,7 @@ onMounted(() => {
             <ClientOnly>
               <EditBtn
                 :color="'gray'"
-                :appliedClass="'side-menu-edit-btn'"
+                class="side-menu-edit-btn"
                 @click="handleEditLinkBtnClick(title, to, linkId, groupId)"
               />
             </ClientOnly>

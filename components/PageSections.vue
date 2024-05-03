@@ -15,6 +15,7 @@ const whatSectionShown = ref<SectionFromDb>({
 const isEditing = ref(false);
 const isSectionPopupOpened = useSectionPopupOpeningState();
 const isConfirmPopupOpened = ref(false);
+const isLoggedIn = useLoggedInState();
 const notifications = useToast();
 const removalError = '';
 
@@ -169,6 +170,7 @@ onMounted(() => {
         </li>
         <ClientOnly>
           <button
+            v-if="isLoggedIn"
             class="sections__add-btn button"
             @click="isSectionPopupOpened = true"
             type="button"

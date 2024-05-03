@@ -18,6 +18,8 @@ const secondHomeSliderItems = computed(() =>
   slidesState.value.filter((slide) => slide.placement === 'home-2')
 );
 
+const isLoggedIn = useLoggedInState();
+
 const onEditSlideBtnClick = (slideItem: Slide) => {
   isSlideFormOpen.value = true;
   slideItemOfInterest.value = slideItem;
@@ -31,8 +33,8 @@ const onSlideFormClose = () => {
 
 <template>
   <main class="home">
-    <p class="title">Ты на главной!</p>
-    <div class="links">
+    <div v-if="isLoggedIn" class="links">
+      <p class="title">Ты на главной!</p>
       <NuxtLink to="/admin">To admin</NuxtLink>
       <NuxtLink to="/look">To Canvas One</NuxtLink>
     </div>

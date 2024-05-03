@@ -27,7 +27,6 @@
         margin-bottom: 5px;
 
         .side-menu__group-title {
-          border-left: $mid-blue 2px solid;
           padding-block: 10px;
           width: 100%;
           transition: all 0.1s ease-in;
@@ -64,6 +63,7 @@
       .side-menu__link {
         display: flex;
         align-items: center;
+        justify-content: flex-end;
 
         &:first-of-type {
           a {
@@ -82,7 +82,7 @@
           display: flex;
           justify-content: center;
           transition: all 0.1s ease-in;
-          width: 90%;
+          width: 85%;
           border-inline: $mid-blue 1px solid;
 
           &.side-menu__link_active {

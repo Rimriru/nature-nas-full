@@ -1,18 +1,19 @@
 <script setup lang="ts">
 defineProps<{
   color: 'gray' | 'black';
-  appliedClass?: string;
 }>();
+
+const isLoggedIn = useLoggedInState();
 </script>
 
 <template>
   <button
+    v-if="isLoggedIn"
     :class="[
       { 'edit-btn_color_black': color === 'black' },
       { 'edit-btn_color_gray': color === 'gray' },
       'edit-btn',
-      'button',
-      appliedClass
+      'button'
     ]"
     type="button"
   />

@@ -13,9 +13,20 @@ const groupingLink = reactive({
   groupId: ''
 });
 const linkGroupsState = useLinkGroupsState();
+const loggedInState = useLoggedInState();
 const isAddLinkPopupOpened = ref(false);
 const addLinkError = ref('');
 const notifications = useToast();
+
+const onSignOutBtnClick = async () => {
+  try {
+    const { message } = await $fetch('/api/users');
+    loggedInState.value = false;
+    notifications.add({ id: 'sign-out', title: message });
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const onAddLinkButtonClick = (linkTitle: string, linkGroupId: string) => {
   isAddLinkPopupOpened.value = true;
@@ -72,6 +83,9 @@ const onAddLinkFormSubmit = async () => {
           <Icon :icon="mapIcon" />
         </NuxtLink>
       </nav>
+      <button v-if="loggedInState" class="sign-out-btn" type="button" @click="onSignOutBtnClick">
+        Выйти
+      </button>
     </div>
     <div class="header__bottom-bg">
       <nav class="header__bottom">

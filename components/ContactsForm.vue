@@ -85,7 +85,7 @@ const handleContactsFormSubmit = async () => {
       emit('close');
       notifications.add({ id: 'contacts', title: 'Контактные данные были изменены' });
     } catch (error: any) {
-      notifications.add({ id: 'contacts', title: error.status, description: error.message });
+      notifications.add({ id: 'contacts', title: error.status, description: error.data.message });
       console.error(error);
     }
   }

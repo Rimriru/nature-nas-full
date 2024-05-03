@@ -1,7 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const isLoggedIn = useLoggedInState();
+</script>
 
 <template>
-  <button type="button" class="remove-btn button" />
+  <button v-if="isLoggedIn" type="button" class="remove-btn button" />
 </template>
 
 <style lang="scss">

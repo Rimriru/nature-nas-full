@@ -6,6 +6,7 @@ const linkGroupsState = useLinkGroupsState();
 const photoState = useMainPhotoState();
 const newsState = useNewsState();
 const contactsState = useContactsState();
+const loggedInState = useLoggedInState();
 
 const routes = await useAllRoutes();
 const linkGroups = await useLinkGroups();
@@ -31,6 +32,12 @@ routes.forEach((route) => {
     }
   });
 });
+
+const token = useCookie('jwt');
+
+if (token.value !== undefined) {
+  loggedInState.value = true;
+}
 </script>
 
 <template>

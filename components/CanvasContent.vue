@@ -12,6 +12,7 @@ const emit = defineEmits<{
 const canvas = inject<CanvasOptions>('canvas');
 
 const config = useRuntimeConfig();
+const isLoggedIn = useLoggedInState();
 </script>
 
 <template>
@@ -84,7 +85,12 @@ const config = useRuntimeConfig();
       </UCarousel>
     </article>
     <LazyClientOnly>
-      <MenuButton class="canvas-content__edit-btn" :size="'middle'" @click="emit('editBtnClick')">
+      <MenuButton
+        v-if="isLoggedIn"
+        class="canvas-content__edit-btn"
+        :size="'middle'"
+        @click="emit('editBtnClick')"
+      >
         Редактировать
       </MenuButton>
     </LazyClientOnly>
