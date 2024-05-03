@@ -1,6 +1,7 @@
 import multer from 'multer';
 import { callNodeListener } from 'h3';
 import * as crypto from 'crypto';
+import { UNAUTHORIZED_ERROR_MESSAGE } from '~/utils/errorMessages';
 
 const allFileNames: string[] = [];
 
@@ -33,17 +34,25 @@ const upload = multer({
 });
 
 export default defineEventHandler(async (event) => {
+  const jwt = getCookie(event, 'jwt');
   try {
-    await callNodeListener(
-      // @ts-expect-error: Nuxt 3
-      upload.array('images', 8),
-      event.node.req,
-      event.node.res
-    );
-    const allFiles = allFileNames.slice();
-    allFileNames.length = 0;
+    if (jwt) {
+      await callNodeListener(
+        // @ts-expect-error: Nuxt 3
+        upload.array('images', 8),
+        event.node.req,
+        event.node.res
+      );
+      const allFiles = allFileNames.slice();
+      allFileNames.length = 0;
 
-    return allFiles;
+      return allFiles;
+    } else {
+      throw createError({
+        status: 401,
+        message: UNAUTHORIZED_ERROR_MESSAGE
+      });
+    }
   } catch (error: any) {
     return createError({
       status: error.statusCode,
