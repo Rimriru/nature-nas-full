@@ -18,7 +18,8 @@ const ADMIN_PAGES = [
   { id: 'page-creation', title: 'СОЗДАТЬ СТРАНИЦУ' },
   { id: 'pages-list', title: 'СПИСОК СТРАНИЦ' },
   { id: 'links-list', title: 'СПИСОК ССЫЛОК' },
-  { id: 'add-news', title: 'ДОБАВИТЬ НОВОСТЬ' }
+  { id: 'add-news', title: 'ДОБАВИТЬ НОВОСТЬ' },
+  { id: 'add-conf', title: 'ДОБАВИТЬ КОНФЕРЕНЦИЮ' }
 ];
 
 const HEADER_LINK_GROUPS = [

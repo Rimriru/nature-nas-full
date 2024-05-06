@@ -40,43 +40,6 @@
     text-overflow: ellipsis;
   }
 
-  .news-card__btn {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 3px 7px 3px 10px;
-    border-radius: 10px;
-    border: none;
-    overflow: hidden;
-    background: transparent;
-    color: $black;
-    align-self: end;
-    border: $mid-blue 1px solid;
-    cursor: pointer;
-
-    &:hover {
-      .news-card__btn-text {
-        transform: translateX(0px);
-      }
-
-      .news-card__btn-arrow {
-        transform: translateY(0px);
-      }
-    }
-
-    .news-card__btn-text {
-      transform: translateX(20px);
-      font-size: 1rem;
-      font-weight: 600;
-      transition-duration: 0.3s;
-    }
-
-    .news-card__btn-arrow {
-      transform: translateY(35px);
-      transition-duration: 0.3s;
-    }
-  }
-
   .news-card__management {
     position: absolute;
     top: 0;

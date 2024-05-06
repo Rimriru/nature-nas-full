@@ -2,10 +2,7 @@
 import type { NewsDataFromDb } from '~/types/NewsDataFromDb';
 
 const title = 'Новости';
-const pageTitleState = usePageTitle();
 const newsState = useNewsState();
-
-pageTitleState.value = title;
 
 const page = ref(1);
 const pageCount = ref(5);
@@ -81,7 +78,7 @@ const handleNewsItemRemove = async () => {
     });
     onConfirmPopupClose();
   } catch (error: any) {
-    removeRequestError.value = `${error.status}: ${error.message}`;
+    removeRequestError.value = `${error.statusCode}: ${error.data.message}`;
   }
 };
 </script>
