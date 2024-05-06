@@ -87,8 +87,8 @@ const handleFormSubmit = async () => {
     console.error(error);
     notifications.add({
       id: 'photo',
-      title: String(error.status),
-      description: error.statusText
+      title: String(error.statusCode),
+      description: error.data.message
     });
   }
 };

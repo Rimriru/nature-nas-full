@@ -161,7 +161,7 @@ const handleAddLinkGroup = async () => {
     handleGroupLinkFormClose();
     notifications.add({ id: 'link-group', title: `Группа ссылок ${data.title} была добавлена` });
   } catch (error: any) {
-    requestError.value = error.message;
+    requestError.value = error.data.message;
     console.error(error);
   }
 };
@@ -191,7 +191,7 @@ const handleEditLinkGroup = async () => {
         title: `Группа ссылок ${groupData.title} была изменена`
       });
     } catch (error: any) {
-      requestError.value = `Ошибка ${error.status}: ${error.message}`;
+      requestError.value = `Ошибка ${error.statusCode}: ${error.data.message}`;
       console.error(error);
     }
   }
@@ -219,7 +219,7 @@ const handleRemoveLinkGroup = async () => {
       title: data.message
     });
   } catch (error: any) {
-    requestError.value = `Ошибка ${error.status}: ${error.message}`;
+    requestError.value = `Ошибка ${error.statusCode}: ${error.data.message}`;
     console.error(error);
   }
 };
@@ -248,7 +248,7 @@ const handleAddLink = async () => {
     });
     await navigateTo(`/labs-and-centers${newLinkTyped.to}`);
   } catch (error: any) {
-    requestError.value = `Ошибка ${error.status}: ${error.message}`;
+    requestError.value = `Ошибка ${error.statusCode}: ${error.data.message}`;
     console.error(error);
   }
 };
@@ -285,7 +285,7 @@ const handleEditLink = async () => {
         title: `Ссылка "${body.title}" была изменена`
       });
     } catch (error: any) {
-      requestError.value = `Ошибка ${error.status}: ${error.message}`;
+      requestError.value = `Ошибка ${error.statusCode}: ${error.data.message}`;
       console.error(error);
     }
   }
@@ -335,7 +335,7 @@ const handleRemoveLink = async () => {
       title: data.message
     });
   } catch (error: any) {
-    requestError.value = `Ошибка ${error.status}: ${error.message}`;
+    requestError.value = `Ошибка ${error.statusCode}: ${error.data.message}`;
     console.error(error);
   }
 };
