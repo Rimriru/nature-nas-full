@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Form, FormError } from '#ui/types';
+import type { FormError } from '#ui/types';
 
 useServerSeoMeta({
   robots: 'none noarchive nositelinkssearchbox'

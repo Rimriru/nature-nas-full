@@ -33,11 +33,6 @@ const onSlideFormClose = () => {
 
 <template>
   <main class="home">
-    <div v-if="isLoggedIn" class="links">
-      <p class="title">Ты на главной!</p>
-      <NuxtLink to="/admin">To admin</NuxtLink>
-      <NuxtLink to="/look">To Canvas One</NuxtLink>
-    </div>
     <section class="main-news" aria-label="Новости">
       <h2 class="news-title">Новости</h2>
       <UCarousel
@@ -123,11 +118,6 @@ const onSlideFormClose = () => {
   font-size: 19px;
   text-align: center;
   margin-bottom: 5px;
-}
-.links {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
 }
 
 .main-news {

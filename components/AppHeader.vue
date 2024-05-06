@@ -83,9 +83,12 @@ const onAddLinkFormSubmit = async () => {
           <Icon :icon="mapIcon" />
         </NuxtLink>
       </nav>
-      <button v-if="loggedInState" class="sign-out-btn" type="button" @click="onSignOutBtnClick">
-        Выйти
-      </button>
+      <div v-if="loggedInState" class="header__container">
+        <NuxtLink to="/admin">Админ-панель</NuxtLink>
+        <button v-if="loggedInState" class="sign-out-btn" type="button" @click="onSignOutBtnClick">
+          Выйти
+        </button>
+      </div>
     </div>
     <div class="header__bottom-bg">
       <nav class="header__bottom">

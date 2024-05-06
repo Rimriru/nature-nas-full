@@ -10,6 +10,28 @@
   .header__top-bg {
     background-color: $dark-blue;
     position: relative;
+
+    .header__container {
+      position: absolute;
+      top: 5px;
+      right: 30px;
+
+      a {
+        margin-right: 10px;
+      }
+
+      .sign-out-btn {
+        background-color: rgba($color: azure, $alpha: 0.2);
+        border-radius: 5px;
+        padding-inline: 10px;
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+
+        &:hover {
+          background-color: transparent;
+        }
+      }
+    }
   }
 
   .header__top {
@@ -51,20 +73,5 @@
       justify-content: center;
       align-items: center;
     }
-  }
-}
-
-.sign-out-btn {
-  position: absolute;
-  top: 5px;
-  right: 30px;
-  background-color: rgba($color: azure, $alpha: 0.2);
-  border-radius: 5px;
-  padding-inline: 10px;
-  transition: background-color 0.3s ease;
-  cursor: pointer;
-
-  &:hover {
-    background-color: transparent;
   }
 }

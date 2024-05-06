@@ -94,7 +94,11 @@ const handleCreatePageFormSubmit = async () => {
           </div>
         </template>
       </URadioGroup>
-      <MenuButton :button-type="'submit'" :size="'middle'" :is-active="true"
+      <MenuButton
+        :button-type="'submit'"
+        :size="'middle'"
+        :is-active="true"
+        class="page-creation__submit-btn"
         >Создать страницу</MenuButton
       >
     </UForm>

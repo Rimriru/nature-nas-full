@@ -32,6 +32,7 @@ definePageMeta({
     <PagesList v-if="whatPageIsShown === 'pages-list'" />
     <LinksList v-if="whatPageIsShown === 'links-list'" :is-in-admin-page="true" />
     <NewsForm v-if="whatPageIsShown === 'add-news'" :is-in-popup="false" />
+    <ConferenceForm v-if="whatPageIsShown === 'add-conf'" :is-in-popup="false" />
   </main>
 </template>
 
