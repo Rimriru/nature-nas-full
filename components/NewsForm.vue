@@ -2,7 +2,7 @@
 import { IMAGE_LINK_REG_EXP } from '~/utils/regExp';
 import type { Form, FormError } from '#ui/types';
 import type { NewsDataFromDb } from '~/types/NewsDataFromDb';
-import type { DefineComponent, VNodeRef } from 'vue';
+import type { DefineComponent } from 'vue';
 
 const newsData = reactive<NewsDataFromDb>({
   _id: '',
@@ -200,7 +200,7 @@ const handleNewsItemCreationFormSubmit = async () => {
     handleResetFormFields();
     notifications.add({ id: 'news', title: 'Новость создана!' });
   } catch (error: any) {
-    submitError.value = `${error.status}: ${error.message}`;
+    submitError.value = `${error.status}: ${error.data.message}`;
     console.error(error);
   }
 };
@@ -290,7 +290,7 @@ const handleNewsItemEditFormSubmit = async () => {
       });
       emit('onClose');
     } catch (error: any) {
-      submitError.value = `${error.status}: ${error.message}`;
+      submitError.value = `${error.status}: ${error.data.message}`;
       console.log(error);
     }
   }
