@@ -9,7 +9,8 @@ const emit = defineEmits(['editClick', 'removeClick']);
 
 const coverAsSrc = computed(() => IMAGE_LINK_REG_EXP.test(props.confItem.cover));
 
-const date = (date: string) => new Date(date).toLocaleDateString();
+const date = (date: string) =>
+  new Date(date).toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' });
 </script>
 
 <template>
@@ -48,7 +49,7 @@ const date = (date: string) => new Date(date).toLocaleDateString();
 @use '~/assets/styles/variables.scss' as *;
 
 .conf-card {
-  max-width: 300px;
+  width: 300px;
   height: 400px;
   border-radius: 10px;
   overflow: hidden;
@@ -57,6 +58,7 @@ const date = (date: string) => new Date(date).toLocaleDateString();
 
   .conf-card__cover {
     width: 100%;
+    height: 200px;
   }
 
   .conf-card__main-block {
@@ -72,11 +74,10 @@ const date = (date: string) => new Date(date).toLocaleDateString();
     }
 
     .conf-card__description {
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 7;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-size: 15px;
+      height: 100px;
+      overflow-y: auto;
+      padding-right: 0;
     }
 
     .conf-card__link {
