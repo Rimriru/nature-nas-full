@@ -22,6 +22,7 @@ export default defineEventHandler(async (event) => {
     if (!isPasswordValid) {
       throw createError({
         status: 401,
+        statusText: 'Unauthorized',
         message: 'Вы ввели неверный логин или пароль'
       });
     } else {

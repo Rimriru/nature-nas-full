@@ -1,26 +1,20 @@
-import { groups } from '../../models/index';
-import { UNAUTHORIZED_ERROR_MESSAGE } from '~/utils/errorMessages';
+import { groups } from '~/server/models/index';
 import type { LinkGroup } from '~/types/LinkDataFromDb';
 
-export default defineEventHandler(async (evt) => {
-  const newGroupData = await readBody(evt);
-  const jwt = getCookie(evt, 'jwt');
+export default defineEventHandler({
+  onRequest: [auth],
+  handler: async (evt) => {
+    const newGroupData = await readBody(evt);
 
-  try {
-    if (jwt) {
+    try {
       const newGroup = await groups.create(newGroupData);
       setResponseStatus(evt, 201);
       return newGroup as unknown as LinkGroup;
-    } else {
+    } catch (error: any) {
       throw createError({
-        status: 401,
-        message: UNAUTHORIZED_ERROR_MESSAGE
+        status: error.statusCode,
+        message: error.message
       });
     }
-  } catch (error: any) {
-    throw createError({
-      status: error.statusCode,
-      message: error.message
-    });
   }
 });

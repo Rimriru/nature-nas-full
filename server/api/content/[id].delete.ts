@@ -1,14 +1,12 @@
 import mongoose from 'mongoose';
 import { contents } from '../../models/index';
-import { UNAUTHORIZED_ERROR_MESSAGE } from '~/utils/errorMessages';
 import type { ContentFromDb } from '~/types/ContentDataFromDb';
 
-export default defineEventHandler(async (evt) => {
-  const id = getRouterParam(evt, 'id');
-  const jwt = getCookie(evt, 'jwt');
-  const session = await mongoose.startSession();
-  try {
-    if (jwt) {
+export default defineEventHandler({
+  handler: async (evt) => {
+    const id = getRouterParam(evt, 'id');
+    const session = await mongoose.startSession();
+    try {
       const result: Promise<{ message: string }> = session.withTransaction(async () => {
         const deletedContent = (await contents.findOneAndDelete({ route: id })) as ContentFromDb;
         // если было фото у контакта
@@ -59,18 +57,13 @@ export default defineEventHandler(async (evt) => {
       });
 
       return result;
-    } else {
+    } catch (error: any) {
       throw createError({
-        status: 401,
-        message: UNAUTHORIZED_ERROR_MESSAGE
+        status: error.statusCode,
+        message: error.message
       });
+    } finally {
+      session.endSession();
     }
-  } catch (error: any) {
-    throw createError({
-      status: error.statusCode,
-      message: error.message
-    });
-  } finally {
-    session.endSession();
   }
 });

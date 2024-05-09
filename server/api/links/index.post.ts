@@ -1,16 +1,16 @@
 import mongoose from 'mongoose';
 import { links, routes } from '../../models/index';
-import { NOT_FOUND_ERROR_MESSAGE, UNAUTHORIZED_ERROR_MESSAGE } from '~/utils/errorMessages';
+import { NOT_FOUND_ERROR_MESSAGE } from '~/utils/errorMessages';
 import type { NewLinkRequestBody } from './types/links';
 import type { Link } from '~/types/LinkDataFromDb';
 
-export default defineEventHandler(async (evt) => {
-  const { title, to, groupId } = await readBody<NewLinkRequestBody>(evt);
-  const session = await mongoose.startSession();
-  const jwt = getCookie(evt, 'jwt');
+export default defineEventHandler({
+  onRequest: [auth],
+  handler: async (evt) => {
+    const { title, to, groupId } = await readBody<NewLinkRequestBody>(evt);
+    const session = await mongoose.startSession();
 
-  try {
-    if (jwt) {
+    try {
       const result = session.withTransaction(async () => {
         const route = await routes.findOne({ path: to });
         if (!route) {
@@ -42,18 +42,13 @@ export default defineEventHandler(async (evt) => {
       });
 
       return result;
-    } else {
+    } catch (error: any) {
       throw createError({
-        status: 401,
-        message: UNAUTHORIZED_ERROR_MESSAGE
+        status: error.statusCode,
+        message: error.message
       });
+    } finally {
+      session.endSession();
     }
-  } catch (error: any) {
-    throw createError({
-      status: error.statusCode,
-      message: error.message
-    });
-  } finally {
-    session.endSession();
   }
 });

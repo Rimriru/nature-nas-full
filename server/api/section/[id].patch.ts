@@ -1,33 +1,28 @@
 import { sections } from '../../models/index';
-import { BAD_REQUEST_ERROR_MESSAGE, UNAUTHORIZED_ERROR_MESSAGE } from '~/utils/errorMessages';
+import { BAD_REQUEST_ERROR_MESSAGE } from '~/utils/errorMessages';
 
-export default defineEventHandler(async (event) => {
-  const id = getRouterParam(event, 'id');
-  const sectionBody = await readBody(event);
-  const jwt = getCookie(event, 'jwt');
+export default defineEventHandler({
+  onRequest: [auth],
+  handler: async (event) => {
+    const id = getRouterParam(event, 'id');
+    const sectionBody = await readBody(event);
 
-  if (!id || !sectionBody) {
-    throw createError({
-      status: 400,
-      message: BAD_REQUEST_ERROR_MESSAGE
-    });
-  }
+    if (!id || !sectionBody) {
+      throw createError({
+        status: 400,
+        message: BAD_REQUEST_ERROR_MESSAGE
+      });
+    }
 
-  try {
-    if (jwt) {
+    try {
       const updatedSection = await sections.findByIdAndUpdate(id, sectionBody, { new: true });
       const message = `Раздел "${sectionBody.title}" был изменён`;
       return { message, updatedSection };
-    } else {
+    } catch (error: any) {
       throw createError({
-        status: 401,
-        message: UNAUTHORIZED_ERROR_MESSAGE
+        status: error.statusCode,
+        message: error.message
       });
     }
-  } catch (error: any) {
-    throw createError({
-      status: error.statusCode,
-      message: error.message
-    });
   }
 });

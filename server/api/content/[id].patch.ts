@@ -1,25 +1,19 @@
-import { contents } from '../../models/index';
-import { UNAUTHORIZED_ERROR_MESSAGE } from '~/utils/errorMessages';
+import { contents } from '~/server/models/index';
 
-export default defineEventHandler(async (evt) => {
-  const id = getRouterParam(evt, 'id');
-  const contentBody = await readBody(evt);
-  const jwt = getCookie(evt, 'jwt');
+export default defineEventHandler({
+  onRequest: [auth],
+  handler: async (evt) => {
+    const id = getRouterParam(evt, 'id');
+    const contentBody = await readBody(evt);
 
-  try {
-    if (jwt) {
+    try {
       const editedContent = await contents.findByIdAndUpdate(id, contentBody, { new: true });
       return editedContent;
-    } else {
+    } catch (error: any) {
       throw createError({
-        status: 401,
-        message: UNAUTHORIZED_ERROR_MESSAGE
+        status: error.statusCode,
+        message: error.message
       });
     }
-  } catch (error: any) {
-    throw createError({
-      status: error.statusCode,
-      message: error.message
-    });
   }
 });

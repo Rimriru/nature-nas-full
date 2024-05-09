@@ -1,15 +1,14 @@
 import mongoose from 'mongoose';
 import { links } from '../../models/index';
-import { UNAUTHORIZED_ERROR_MESSAGE } from '~/utils/errorMessages';
 
-export default defineEventHandler(async (evt) => {
-  const linkId = getRouterParam(evt, 'id');
-  const { groupId } = getQuery(evt);
-  const session = await mongoose.startSession();
-  const jwt = getCookie(evt, 'jwt');
+export default defineEventHandler({
+  onRequest: [auth],
+  handler: async (evt) => {
+    const linkId = getRouterParam(evt, 'id');
+    const { groupId } = getQuery(evt);
+    const session = await mongoose.startSession();
 
-  try {
-    if (jwt) {
+    try {
       const result = session.withTransaction(async () => {
         await links.findByIdAndDelete(linkId);
         await $fetch(`/api/groups/links/${groupId}`, {
@@ -23,18 +22,13 @@ export default defineEventHandler(async (evt) => {
       });
 
       return result;
-    } else {
+    } catch (error: any) {
       throw createError({
-        status: 401,
-        message: UNAUTHORIZED_ERROR_MESSAGE
+        status: error.statusCode,
+        message: error.message
       });
+    } finally {
+      session.endSession();
     }
-  } catch (error: any) {
-    throw createError({
-      status: error.statusCode,
-      message: error.message
-    });
-  } finally {
-    session.endSession();
   }
 });

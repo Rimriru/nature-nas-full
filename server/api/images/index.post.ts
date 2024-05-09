@@ -33,10 +33,10 @@ const upload = multer({
   }
 });
 
-export default defineEventHandler(async (event) => {
-  const jwt = getCookie(event, 'jwt');
-  try {
-    if (jwt) {
+export default defineEventHandler({
+  onRequest: [auth],
+  handler: async (event) => {
+    try {
       await callNodeListener(
         // @ts-expect-error: Nuxt 3
         upload.array('images', 8),
@@ -47,16 +47,11 @@ export default defineEventHandler(async (event) => {
       allFileNames.length = 0;
 
       return allFiles;
-    } else {
-      throw createError({
-        status: 401,
-        message: UNAUTHORIZED_ERROR_MESSAGE
+    } catch (error: any) {
+      return createError({
+        status: error.statusCode,
+        message: error.message
       });
     }
-  } catch (error: any) {
-    return createError({
-      status: error.statusCode,
-      message: error.message
-    });
   }
 });

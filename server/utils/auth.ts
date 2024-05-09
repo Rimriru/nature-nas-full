@@ -6,7 +6,8 @@ export default defineEventHandler((event) => {
   if (!jwt) {
     throw createError({
       status: 403,
-      message: FORBIDDEN_ERROR_MESSAGE
+      message: FORBIDDEN_ERROR_MESSAGE,
+      statusText: 'Forbidden'
     });
   }
 });

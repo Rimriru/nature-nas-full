@@ -1,16 +1,15 @@
 import mongoose from 'mongoose';
-import { links, routes } from '../../models/index';
-import { UNAUTHORIZED_ERROR_MESSAGE } from '~/utils/errorMessages';
+import { links, routes } from '~/server/models/index';
 import type { PatchLinkRequestBody } from './types/links';
 import type { Link } from '~/types/LinkDataFromDb';
 
-export default defineEventHandler(async (evt) => {
-  const id = getRouterParam(evt, 'id');
-  const { title, to } = await readBody<PatchLinkRequestBody>(evt);
-  const session = await mongoose.startSession();
-  const jwt = getCookie(evt, 'jwt');
-  try {
-    if (jwt) {
+export default defineEventHandler({
+  onRequest: [auth],
+  handler: async (evt) => {
+    const id = getRouterParam(evt, 'id');
+    const { title, to } = await readBody<PatchLinkRequestBody>(evt);
+    const session = await mongoose.startSession();
+    try {
       const result: Promise<Link | null> = session.withTransaction(async () => {
         const linkToEdit = (await links.findById(id)) as Link;
         if (linkToEdit && to === linkToEdit.to) {
@@ -34,18 +33,13 @@ export default defineEventHandler(async (evt) => {
       });
 
       return result;
-    } else {
+    } catch (error: any) {
       throw createError({
-        status: 401,
-        message: UNAUTHORIZED_ERROR_MESSAGE
+        status: error.statusCode,
+        message: error.message
       });
+    } finally {
+      session.endSession();
     }
-  } catch (error: any) {
-    throw createError({
-      status: error.statusCode,
-      message: error.message
-    });
-  } finally {
-    session.endSession();
   }
 });
