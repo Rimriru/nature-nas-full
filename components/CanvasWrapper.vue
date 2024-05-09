@@ -413,6 +413,7 @@ const handleCanvasFormSubmit = async () => {
         <UTextarea
           color="sky"
           size="xl"
+          resize
           v-model="contentValues.description"
           placeholder="Введите описание..."
         />

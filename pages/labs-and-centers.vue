@@ -10,6 +10,7 @@
 <style lang="scss">
 .labs-centers {
   display: flex;
-  gap: 100px;
+  gap: 30px;
+  justify-content: space-between;
 }
 </style>

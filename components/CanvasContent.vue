@@ -106,6 +106,7 @@ const isLoggedIn = useLoggedInState();
   border-radius: 20px;
   display: grid;
   padding: 30px;
+  margin-right: 40px;
 
   .canvas-article {
     display: flex;
@@ -119,6 +120,10 @@ const isLoggedIn = useLoggedInState();
       .canvas-article__edit-btn {
         order: -1;
       }
+    }
+
+    iframe {
+      width: 90%;
     }
 
     .canvas-article__container {

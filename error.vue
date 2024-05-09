@@ -4,6 +4,18 @@ import type { NuxtError } from '#app';
 const props = defineProps({
   error: Object as () => NuxtError
 });
+
+const routesState = useRoutesState();
+const linkGroupsState = useLinkGroupsState();
+if (!routesState.value.length) {
+  const routes = await useAllRoutes();
+  routesState.value = routes;
+}
+
+if (!linkGroupsState.value.length) {
+  const linkGroups = await useLinkGroups();
+  linkGroupsState.value = linkGroups;
+}
 </script>
 
 <template>

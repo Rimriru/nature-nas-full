@@ -244,7 +244,7 @@ onMounted(() => {
   .sections__content {
     border: 1px solid $mid-blue;
     border-radius: 40px;
-    padding: 40px 20px;
+    padding: 40px 30px;
     position: relative;
 
     .sections__content-management {

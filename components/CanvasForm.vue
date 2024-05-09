@@ -71,7 +71,7 @@ const onCancel = () => {
 
 <style lang="scss">
 .canvas-form {
-  margin: 0 auto;
+  margin-right: 40px;
   display: grid;
   gap: 30px;
 
