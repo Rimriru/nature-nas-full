@@ -74,7 +74,7 @@ const handleNewsItemRemove = async () => {
     );
     notifications.add({
       id: 'news',
-      title: `Новость ${(newsItemOfInterest.value as NewsDataFromDb).title} была удалена`
+      title: `Новость "${(newsItemOfInterest.value as NewsDataFromDb).title}" была удалена`
     });
     onConfirmPopupClose();
   } catch (error: any) {
@@ -112,15 +112,17 @@ const handleNewsItemRemove = async () => {
         color: 'gray'
       }"
     />
-    <LazyNewsFormPopup :is-open="isNewsFormPopupOpen" @on-close="onNewsFormClose" />
-    <LazyConfirmPopup
-      :is-open="isConfirmPopupOpen"
-      :what-is-removed="'newsItem'"
-      :removed-item-title="newsItemTitleForRemove"
-      :error="removeRequestError"
-      @on-close="onConfirmPopupClose"
-      @on-agree="handleNewsItemRemove"
-    />
+    <ClientOnly>
+      <LazyNewsFormPopup :is-open="isNewsFormPopupOpen" @on-close="onNewsFormClose" />
+      <LazyConfirmPopup
+        :is-open="isConfirmPopupOpen"
+        :what-is-removed="'newsItem'"
+        :removed-item-title="newsItemTitleForRemove"
+        :error="removeRequestError"
+        @on-close="onConfirmPopupClose"
+        @on-agree="handleNewsItemRemove"
+      />
+    </ClientOnly>
   </main>
 </template>
 

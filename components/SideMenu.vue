@@ -244,7 +244,7 @@ const handleAddLink = async () => {
     handleLinkFormClose();
     notifications.add({
       id: 'link',
-      title: `Ссылка ${body.title} создана!`
+      title: `Ссылка "${body.title}" создана!`
     });
     await navigateTo(`/labs-and-centers${newLinkTyped.to}`);
   } catch (error: any) {
