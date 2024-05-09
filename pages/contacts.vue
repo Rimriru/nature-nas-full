@@ -16,6 +16,15 @@ const onEditBtnClick = () => {
 const onContactsFormClose = () => {
   isContactsFormPopupOpen.value = false;
 };
+
+const title = 'Контакты';
+useSeoMeta({
+  title
+});
+
+definePageMeta({
+  title: 'Контакты'
+});
 </script>
 
 <template>
