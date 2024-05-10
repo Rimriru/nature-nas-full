@@ -1,0 +1,32 @@
+.list {
+  width: 100%;
+  margin-right: 60px;
+
+  .list__table {
+    width: 100%;
+
+    th {
+      border-bottom: 1px solid #ddd;
+    }
+
+    &,
+    th,
+    td {
+      text-align: center;
+      padding-block: 4px;
+    }
+
+    tr:not(:last-of-type) {
+      border-bottom: 1px solid #eeececb7;
+    }
+
+    tr td:last-of-type {
+      display: flex;
+      justify-content: center;
+    }
+
+    tbody tr:hover {
+      background-color: rgba(69, 138, 242, 0.243);
+    }
+  }
+}

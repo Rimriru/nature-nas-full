@@ -1,7 +1,6 @@
 import multer from 'multer';
 import { callNodeListener } from 'h3';
 import * as crypto from 'crypto';
-import { UNAUTHORIZED_ERROR_MESSAGE } from '~/utils/errorMessages';
 
 const allFileNames: string[] = [];
 

@@ -12,5 +12,6 @@ const isLoggedIn = useLoggedInState();
   width: 24px;
   height: 24px;
   background-size: 100%;
+  background-repeat: no-repeat;
 }
 </style>

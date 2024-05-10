@@ -56,9 +56,9 @@ const handleRouteRemove = async () => {
 </script>
 
 <template>
-  <div class="pages-list">
+  <div class="list">
     Список созданных вами страниц:
-    <table class="pages-list__table">
+    <table class="list__table">
       <thead>
         <tr>
           <th>№</th>
@@ -86,36 +86,5 @@ const handleRouteRemove = async () => {
 </template>
 
 <style lang="scss">
-.pages-list {
-  width: 100%;
-  margin-right: 60px;
-
-  .pages-list__table {
-    width: 100%;
-
-    th {
-      border-bottom: 1px solid #ddd;
-    }
-
-    &,
-    th,
-    td {
-      text-align: center;
-      padding-block: 4px;
-    }
-
-    tr:not(:last-of-type) {
-      border-bottom: 1px solid #eeececb7;
-    }
-
-    tr td:last-of-type {
-      display: flex;
-      justify-content: center;
-    }
-
-    tbody tr:hover {
-      background-color: rgba(69, 138, 242, 0.243);
-    }
-  }
-}
+@import url('~/assets/styles/components/list.scss');
 </style>
