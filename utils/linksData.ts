@@ -19,7 +19,9 @@ const ADMIN_PAGES = [
   { id: 'pages-list', title: 'СПИСОК СТРАНИЦ' },
   { id: 'links-list', title: 'СПИСОК ССЫЛОК' },
   { id: 'add-news', title: 'ДОБАВИТЬ НОВОСТЬ' },
-  { id: 'add-conf', title: 'ДОБАВИТЬ КОНФЕРЕНЦИЮ' }
+  { id: 'add-conf', title: 'ДОБАВИТЬ КОНФЕРЕНЦИЮ' },
+  { id: 'download-file', title: 'ЗАГРУЗИТЬ ФАЙЛ' },
+  { id: 'files-list', title: 'СПИСОК ФАЙЛОВ' }
 ];
 
 const HEADER_LINK_GROUPS = [

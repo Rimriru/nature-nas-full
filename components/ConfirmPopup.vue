@@ -26,7 +26,8 @@ const message = {
   route: () => `${COMMON_CONFIRM_MESSAGE} страницу "${props.removedItemTitle}"?`,
   section: () => `${COMMON_CONFIRM_MESSAGE} раздел "${props.removedItemTitle}"?`,
   newsItem: () => `${COMMON_CONFIRM_MESSAGE} новость "${props.removedItemTitle}"?`,
-  confItem: () => `${COMMON_CONFIRM_MESSAGE} данную конференцию?`
+  confItem: () => `${COMMON_CONFIRM_MESSAGE} данную конференцию?`,
+  file: () => `${COMMON_CONFIRM_MESSAGE} файл "${props.removedItemTitle}"?`
 };
 </script>
 

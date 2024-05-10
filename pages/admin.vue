@@ -32,7 +32,9 @@ definePageMeta({
     <PagesList v-if="whatPageIsShown === 'pages-list'" />
     <LinksList v-if="whatPageIsShown === 'links-list'" :is-in-admin-page="true" />
     <NewsForm v-if="whatPageIsShown === 'add-news'" :is-in-popup="false" />
-    <ConferenceForm v-if="whatPageIsShown === 'add-conf'" :is-in-popup="false" />
+    <ConfForm v-if="whatPageIsShown === 'add-conf'" :is-in-popup="false" />
+    <FileLoadForm v-if="whatPageIsShown === 'download-file'" />
+    <FilesList v-if="whatPageIsShown === 'files-list'" />
   </main>
 </template>
 
@@ -45,8 +47,12 @@ definePageMeta({
   gap: 50px;
   padding-block: 40px 60px;
 
-  .admin__menu li:not(:last-of-type) {
-    margin-bottom: 10px;
+  .admin__menu {
+    margin-left: 20px;
+
+    li:not(:last-of-type) {
+      margin-bottom: 10px;
+    }
   }
 }
 </style>
