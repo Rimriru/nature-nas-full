@@ -48,15 +48,15 @@ const currentYear = new Date().getFullYear();
             <p>Адрес: {{ contactsState?.address }}</p>
             <p>
               Телефон:
-              <a href="tel:+375172152632">{{ contactsState?.telNumber }}</a>
+              <a :href="`tel:${contactsState?.telNumber}`">{{ contactsState?.telNumber }}</a>
             </p>
             <p>
               Факс:
-              <a href="tel:+375172152413">{{ contactsState?.faxNumber }}</a>
+              <a :href="`tel:${contactsState?.faxNumber}`">{{ contactsState?.faxNumber }}</a>
             </p>
             <p>
               Почта:
-              <a href="mailto:info@nature-nas.by">{{ contactsState?.email }}</a>
+              <a :href="`mailto:${contactsState?.email}`">{{ contactsState?.email }}</a>
             </p>
           </div>
         </address>
