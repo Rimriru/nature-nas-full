@@ -10,3 +10,4 @@ export { default as conferences } from './conference';
 export { default as slides } from './slide';
 export { default as contacts } from './contact';
 export { default as files } from './file';
+export { default as journal } from './journal';
