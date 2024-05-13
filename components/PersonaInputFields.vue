@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { fileSizeError } from '~/utils/errorMessages';
 import type { ModelRef } from 'vue';
 import type PersonaData from '~/types/PersonasDataFromDb';
 
@@ -15,8 +16,7 @@ const onPhotoChange = (event: Event) => {
   const fileInputData = event.target as HTMLInputElement;
   if (fileInputData.files && fileInputData.files.length) {
     const file = fileInputData.files[0];
-    if (file.size > 5000000)
-      return (photoError.value = 'Размер загружаемого файла превышает 5 мб!');
+    if (file.size > 5000000) return (photoError.value = fileSizeError('5'));
     emit('onPhotoChange', file);
     photoForPreview.value = URL.createObjectURL(file);
   } else {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import defaultImg from '~/assets/images/slide-preview-default.jpg';
 import {
-  FILE_SIZE_ERROR_BEYOND_2_MB,
+  fileSizeError,
   NEWS_COVER_REQUIRED_ERROR,
   LINK_VALIDATION_ERROR
 } from '~/utils/errorMessages';
@@ -268,7 +268,7 @@ const handleSlideFormSubmit = async () => {
               @on-click="($refs.imgInput as HTMLInputElement).click()"
             />
             <span v-if="imgErrorVisibility.fileSizeError" class="error">{{
-              FILE_SIZE_ERROR_BEYOND_2_MB
+              fileSizeError('2')
             }}</span>
           </div>
           <UDivider label="или" class="mb-5" />

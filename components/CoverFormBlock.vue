@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import defaultNewsCover from '~/assets/images/news-preview-default.jpg';
 import {
-  FILE_SIZE_ERROR_BEYOND_2_MB,
+  fileSizeError,
   NEWS_COVER_REQUIRED_ERROR,
   LINK_VALIDATION_ERROR
 } from '~/utils/errorMessages';
@@ -56,7 +56,7 @@ defineExpose({
           @on-click="($refs.coverImageInput as HTMLInputElement).click()"
         />
         <span v-if="coverErrorVisibility.fileSizeError" class="error">{{
-          FILE_SIZE_ERROR_BEYOND_2_MB
+          fileSizeError('2')
         }}</span>
       </div>
       <UDivider label="или" class="mb-5" />

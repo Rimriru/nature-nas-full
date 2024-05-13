@@ -6,7 +6,7 @@ const BAD_REQUEST_ERROR_MESSAGE =
 const UNAUTHORIZED_ERROR_MESSAGE = 'Ошибка 401: недостаточно прав для проведения данной операции';
 const FORBIDDEN_ERROR_MESSAGE = 'Ошибка 403: недостаточно прав для проведения данной операции';
 
-const FILE_SIZE_ERROR_BEYOND_2_MB = 'Размер загружаемого файла превышает 2,5 мб!';
+const fileSizeError = (size: string) => `Размер загружаемого файла превышает ${size} мб!`;
 const NEWS_COVER_REQUIRED_ERROR = 'Необходимо загрузить или вставить ссылку на обложку';
 const LINK_VALIDATION_ERROR =
   'Ссылка на изображение должна начинаться с http или https и оканчиваться форматом (".png"/".jpg"/".jpeg")';
@@ -17,7 +17,7 @@ export {
   BAD_REQUEST_ERROR_MESSAGE,
   UNAUTHORIZED_ERROR_MESSAGE,
   FORBIDDEN_ERROR_MESSAGE,
-  FILE_SIZE_ERROR_BEYOND_2_MB,
+  fileSizeError,
   NEWS_COVER_REQUIRED_ERROR,
   LINK_VALIDATION_ERROR
 };

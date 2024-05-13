@@ -16,7 +16,7 @@ const onPhotosChange = (event: Event) => {
     let errorPresent = false;
     filesArray.forEach((file) => {
       if (file.size > 5242880) {
-        photosError.value = 'Размер одного из загружаемых файлов превышает 5 мб!';
+        photosError.value = fileSizeError('5');
         errorPresent = true;
       }
     });
