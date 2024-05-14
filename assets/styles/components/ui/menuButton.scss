@@ -6,6 +6,7 @@
   width: clamp(200px, 18vw, 320px);
   border-radius: 15px;
   padding-block: 12px;
+  padding-inline: 10px;
   font-size: clamp(14px, 1.6vw, 16px);
 
   &_active {
