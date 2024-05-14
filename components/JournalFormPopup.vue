@@ -19,13 +19,6 @@ const journalData = reactive({
     name: '',
     file: ''
   },
-  publications: [
-    {
-      _id: '',
-      name: '',
-      file: ''
-    }
-  ],
   contacts: {
     address: '',
     telNumber: '',
@@ -45,38 +38,107 @@ const emit = defineEmits(['close']);
 const journalState = useJournalState();
 const filesState = useFilesState();
 const config = useRuntimeConfig();
+const notifications = useToast();
 
 const selectedAuthorRules = ref(filesState.value[0]);
 const selectedEditorialPolicy = ref(filesState.value[0]);
+
+let originalJournalData = {
+  description: '',
+  cover: '',
+  editChief: '',
+  editBoard: '',
+  editInternatBoard: '',
+  authorRules: {
+    _id: '',
+    name: '',
+    file: ''
+  },
+  editorialPolicy: {
+    _id: '',
+    name: '',
+    file: ''
+  },
+  contacts: {
+    address: '',
+    telNumber: '',
+    email: ''
+  }
+};
 
 watch(
   () => props.isOpen,
   (newValue) => {
     if (newValue && journalState.value) {
       journalForm.value?.clear();
-      journalData.description = journalState.value.description;
-      journalData.editChief = journalState.value.editChief;
-      journalData.editBoard = journalState.value.editBoard;
-      journalData.editInternatBoard = journalState.value.editInternatBoard;
-      journalData.authorRules = journalState.value.authorRules;
-      selectedAuthorRules.value = journalState.value.authorRules;
+      const {
+        description,
+        cover,
+        editChief,
+        editBoard,
+        editInternatBoard,
+        authorRules,
+        editorialPolicy,
+        contacts: { address, telNumber, email }
+      } = journalState.value;
+      journalData.description = description;
+      journalData.editChief = editChief;
+      journalData.editBoard = editBoard;
+      journalData.editInternatBoard = editInternatBoard;
+      journalData.authorRules = authorRules;
+      selectedAuthorRules.value = authorRules;
 
-      journalData.editorialPolicy = journalState.value.editorialPolicy;
-      selectedEditorialPolicy.value = journalState.value.editorialPolicy;
-      journalData.publications = journalState.value.publications;
+      journalData.editorialPolicy = editorialPolicy;
+      selectedEditorialPolicy.value = editorialPolicy;
 
-      journalData.contacts.address = journalState.value.contacts.address;
-      journalData.contacts.telNumber = journalState.value.contacts.telNumber;
-      journalData.contacts.email = journalState.value.contacts.email;
+      journalData.contacts.address = address;
+      journalData.contacts.telNumber = telNumber;
+      journalData.contacts.email = email;
 
-      journalData.cover = journalState.value.cover;
-      journalCoverForPreview.value = `${config.public.domen}/image/${journalState.value.cover}`;
-      console.log(journalData);
+      journalData.cover = cover;
+      journalCoverForPreview.value = `${config.public.domen}/image/${cover}`;
+
+      originalJournalData = {
+        description,
+        cover,
+        editChief,
+        editBoard,
+        editInternatBoard,
+        authorRules,
+        editorialPolicy,
+        contacts: {
+          address,
+          telNumber,
+          email
+        }
+      };
     } else {
       if (journalCoverInput.value) {
         journalCoverInput.value.value = '';
       }
       journalCoverError.value = '';
+      originalJournalData = {
+        description: '',
+        cover: '',
+        editChief: '',
+        editBoard: '',
+        editInternatBoard: '',
+        authorRules: {
+          _id: '',
+          name: '',
+          file: ''
+        },
+        editorialPolicy: {
+          _id: '',
+          name: '',
+          file: ''
+        },
+        contacts: {
+          address: '',
+          telNumber: '',
+          email: ''
+        }
+      };
     }
   }
 );
@@ -116,11 +178,90 @@ const onJournalCoverInputChange = (event: Event) => {
     journalCoverOnUpload.value = '';
   }
 };
+
+const onJournalFormSubmit = async () => {
+  if (journalCoverOnUpload.value) {
+    const body = new FormData();
+    body.append('images', journalCoverOnUpload.value);
+    await $fetch('/api/images', {
+      method: 'post',
+      body,
+      async onResponse({ response }) {
+        if (response.ok) {
+          const previousCover = journalData.cover;
+          journalData.cover = response._data[0];
+          journalCoverOnUpload.value = '';
+
+          if (previousCover) {
+            await $fetch(`/api/images/${previousCover}`, {
+              method: 'delete',
+              onResponse({ response }) {
+                if (!response.ok) {
+                  notifications.add({
+                    id: 'journal',
+                    title: String(response.status),
+                    description: response.statusText
+                  });
+                  return;
+                }
+              }
+            });
+          }
+        } else {
+          notifications.add({
+            id: 'journal',
+            title: String(response.status),
+            description: response.statusText
+          });
+          return;
+        }
+      }
+    });
+  }
+
+  if (JSON.stringify(journalData.authorRules) !== JSON.stringify(selectedAuthorRules.value)) {
+    journalData.authorRules = selectedAuthorRules.value;
+    console.log('here');
+  }
+
+  if (
+    JSON.stringify(journalData.editorialPolicy) !== JSON.stringify(selectedEditorialPolicy.value)
+  ) {
+    journalData.editorialPolicy = selectedEditorialPolicy.value;
+    console.log('here');
+  }
+
+  if (JSON.stringify(originalJournalData) === JSON.stringify(journalData)) {
+    emit('close');
+  } else {
+    const journalId = journalState.value?._id;
+
+    try {
+      const editedJournalData = await $fetch(`/api/journal/${journalId}`, {
+        method: 'patch',
+        body: journalData
+      });
+      console.log(editedJournalData);
+      journalState.value = editedJournalData;
+      notifications.add({ id: 'journal', title: 'Данные журнала были изменены!' });
+      emit('close');
+    } catch (error: any) {
+      notifications.add({ id: 'journal', title: error.status, description: error.data.message });
+      console.error(error);
+    }
+  }
+};
 </script>
 
 <template>
   <AppPopup :is-opened="isOpen" @on-close="emit('close')">
-    <UForm :state="journalData" :validate="validate" class="journal-form" ref="journalForm">
+    <UForm
+      :state="journalData"
+      :validate="validate"
+      class="journal-form"
+      ref="journalForm"
+      @submit="onJournalFormSubmit"
+    >
       <h5 class="journal-form__title">Редактировать журнал "Природопользование"</h5>
       <ClientOnly>
         <UFormGroup name="description">
@@ -257,7 +398,9 @@ const onJournalCoverInputChange = (event: Event) => {
         <UInput v-model="journalData.contacts.email" />
       </UFormGroup>
       <div class="journal-form__btn-container">
-        <MenuButton :size="'middle'" :button-type="'submit'">Отмена</MenuButton>
+        <MenuButton :size="'middle'" :button-type="'submit'" @click="emit('close')"
+          >Отмена</MenuButton
+        >
         <MenuButton :is-active="true" :size="'middle'" :button-type="'submit'"
           >Сохранить</MenuButton
         >

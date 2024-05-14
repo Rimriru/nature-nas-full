@@ -31,6 +31,20 @@ export default defineNuxtConfig({
           crossOriginResourcePolicy: 'cross-origin'
         }
       }
+    },
+    '/api/files/upload': {
+      security: {
+        requestSizeLimiter: {
+          maxUploadFileRequestInBytes: 136314880
+        }
+      }
+    },
+    '/api/images': {
+      security: {
+        requestSizeLimiter: {
+          maxUploadFileRequestInBytes: 5242880
+        }
+      }
     }
   },
   security: {

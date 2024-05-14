@@ -10,10 +10,24 @@ const fileForUpload = ref<File | ''>('');
 const fileUpload = ref< HTMLInputElement | null >(null);
 const fileError = ref('');
 
+const props = defineProps<{
+  isUploadingJournalIssue?: boolean,
+  isPopupOpen?: boolean
+}>();
+
+const emit = defineEmits(['close']);
+
 const filesState = useFilesState();
 const notifications = useToast();
 const isLoaderVisible = useLoaderVisibilityState();
 
+if (props.isUploadingJournalIssue && props.isPopupOpen) {
+  watch(() => props.isPopupOpen, (newValue) => {
+    if (!newValue) {
+      resetFormFields();
+    }
+  });
+}
 
 const validate = (state: any): FormError[] => {
   const errors = [];
@@ -40,6 +54,7 @@ const resetFormFields = () => {
   uploadedFile.title = '';
   uploadedFile.file = '';
   fileForUpload.value = '';
+  console.log('resets?');
 }
 
 const onFileFormSubmit = async () => {
@@ -67,7 +82,8 @@ const onFileFormSubmit = async () => {
 
     const newFileBody = {
       name: uploadedFile.title,
-      file: uploadedFile.file
+      file: uploadedFile.file,
+      category: props.isUploadingJournalIssue ? 'nature-journal' : ''
     }
 
     try {
@@ -79,6 +95,7 @@ const onFileFormSubmit = async () => {
       notifications.add({ id: 'file', title: `Файл "${newFileBody.name}" загружен!` });
       resetFormFields();
       isLoaderVisible.value = false;
+      emit('close');
     } catch (error: any) {
       isLoaderVisible.value = false;
       notifications.add({ id: 'file', title: `${error.statusCode}: ${error.data.message}` });
@@ -120,13 +137,17 @@ const onFileFormSubmit = async () => {
       </p>
       <span class="error">{{ fileError }}</span>
     </label>
-    <MenuButton :button-type="'submit'" :is-active="true" :size="'middle'" class="file-form__submit-btn">Загрузить</MenuButton>
+    <div class="file-form__btn-container">
+      <slot />
+      <MenuButton :button-type="'submit'" :is-active="true" :size="isUploadingJournalIssue ? 'small' : 'middle'">Загрузить</MenuButton>
+    </div>
   </UForm>
 </template>
 
 <style lang="scss">
 .file-form {
-  width: 30%;
+  max-width: 400px;
+  width: 100%;
   margin: auto;
   display: flex;
   flex-direction: column;
@@ -145,8 +166,10 @@ const onFileFormSubmit = async () => {
     margin: 10px auto;
   }
 
-  .file-form__submit-btn {
+  .file-form__btn-container {
     margin: 0 auto;
+    display: flex;
+    gap: 20px;
   }
 }
 </style>

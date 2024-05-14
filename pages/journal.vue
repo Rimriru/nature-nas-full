@@ -12,22 +12,34 @@ const journalState = useJournalState();
 const journal = await useJournal();
 journalState.value = journal;
 
+const filesState = useFilesState();
+
 const config = useRuntimeConfig();
 const isLoggedIn = useLoggedInState();
 
 const isJournalFormPopupOpen = ref(false);
+const isFileLoadFormPopupOpen = ref(false);
 
 const publications = computed(() => {
-  const menuItems = journalState.value?.publications?.map((item) => {
-    return {
-      label: item.name,
-      to: `${config.public.domen}/file/${item.file}`,
-      external: true,
-      target: '_blank',
-      labelClass: 'journal__menu-item'
-    };
-  });
+  const menuItems = filesState.value
+    .filter((file) => file.category && file.category === 'nature-journal')
+    .map((item) => {
+      return {
+        label: item.name,
+        to: `${config.public.domen}/file/${item.file}`,
+        external: true,
+        target: '_blank',
+        labelClass: 'journal__menu-item'
+      };
+    });
+
   return [menuItems];
+});
+
+const open = ref(false);
+
+defineShortcuts({
+  o: () => (open.value = !open.value)
 });
 
 const onEditBtnClick = () => {
@@ -36,6 +48,14 @@ const onEditBtnClick = () => {
 
 const onJournalFormPopupClose = () => {
   isJournalFormPopupOpen.value = false;
+};
+
+const onLoadIssueBtnClick = () => {
+  isFileLoadFormPopupOpen.value = true;
+};
+
+const onFileLoadFormPopupClose = () => {
+  isFileLoadFormPopupOpen.value = false;
 };
 </script>
 
@@ -62,14 +82,20 @@ const onJournalFormPopupClose = () => {
         >
         <UDropdown
           :items="publications"
-          :popper="{ placement: 'auto', scroll: true, adaptive: true }"
+          :popper="{ placement: 'right', scroll: true, adaptive: true, resize: true, arrow: true }"
+          :ui="{
+            width: 'w-auto',
+            height: 'max-h-60'
+          }"
+          v-model:open="open"
         >
           <UButton
             color="white"
             trailing-icon="i-heroicons-chevron-down-20-solid"
-            class="button-border"
-            >Публикации</UButton
+            :class="['button-border', 'button', { 'button-active': open }]"
           >
+            Публикации
+          </UButton>
         </UDropdown>
       </div>
       <div>
@@ -93,12 +119,12 @@ const onJournalFormPopupClose = () => {
       </div>
       <div class="journal__btn-container">
         <MenuButton v-if="isLoggedIn" @click="onEditBtnClick">Редактировать</MenuButton>
-        <MenuButton v-if="isLoggedIn" @click="onEditBtnClick">Загрузить выпуск</MenuButton>
+        <MenuButton v-if="isLoggedIn" @click="onLoadIssueBtnClick">Загрузить выпуск</MenuButton>
       </div>
     </aside>
     <section class="journal__text-block">
       <article class="shadow-border journal__description">
-        <div v-html="journalState?.description"></div>
+        <div class="content" v-html="journalState?.description"></div>
       </article>
       <div class="journal__people">
         <div class="journal__inst-people">
@@ -118,6 +144,7 @@ const onJournalFormPopupClose = () => {
       </div>
     </section>
     <LazyJournalFormPopup :is-open="isJournalFormPopupOpen" @close="onJournalFormPopupClose" />
+    <LazyFileLoadFormPopup :is-open="isFileLoadFormPopupOpen" @close="onFileLoadFormPopupClose" />
   </section>
 </template>
 
