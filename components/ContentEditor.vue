@@ -8,6 +8,20 @@ const props = defineProps({
   }
 });
 
+const init = {
+  language: 'ru',
+  plugins: 'lists image link table charmap fullscreen preview anchor insertdatetime media autosave',
+  toolbar_mode: 'sliding',
+  toolbar:
+    'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | charmap | fullscreen  preview | image media link anchor',
+  statusbar: false,
+  resize: true,
+  min_height: 500,
+  placeholder: props.placeholder,
+  referrer_policy: 'origin',
+  resize_img_proportional: true
+};
+
 const contentModel = defineModel();
 </script>
 
@@ -15,20 +29,7 @@ const contentModel = defineModel();
   <div>
     <Editor
       :api-key="$config.public.tinymce"
-      :init="{
-        plugins:
-          'lists link image table code help wordcount autolink autosave media preview autoresize',
-        toolbar_mode: 'sliding',
-        toolbar:
-          'undo redo styles bold italic alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
-        language: 'ru',
-        statusbar: false,
-        resize: true,
-        min_height: 500,
-        placeholder: props.placeholder,
-        referrer_policy: 'origin',
-        resize_img_proportional: true
-      }"
+      :init="init"
       model-events="change keydown focus paste undo redo"
       output-format="html"
       v-model="contentModel"
