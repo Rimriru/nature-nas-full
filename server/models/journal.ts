@@ -29,13 +29,6 @@ const journalSchema: any = new mongoose.Schema(
       ref: 'file',
       required: [true, 'Необходимо указать редакционную политику журнала']
     },
-    publications: [
-      {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: 'file',
-        required: [true, 'Необходимо указать редакционную политику журнала']
-      }
-    ],
     contacts: {
       address: {
         type: String

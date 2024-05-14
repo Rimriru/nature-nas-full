@@ -15,7 +15,6 @@ interface Journal {
   editInternatBoard: string;
   authorRules: FileDataFromDb;
   editorialPolicy: FileDataFromDb;
-  publications: FileDataFromDb[];
   contacts: Contacts;
 }
 
