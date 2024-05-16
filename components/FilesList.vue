@@ -1,15 +1,83 @@
 <script setup lang="ts">
 import type FileDataFromDb from '~/types/FilesDataFromDb';
 
+interface TableRow extends FileDataFromDb {
+  number: number;
+  link: string;
+}
+
 const isFileEditFormPopupOpen = ref(false);
 const isConfirmPopupOpen = ref(false);
 const fileOfInterest = ref<FileDataFromDb | ''>('');
 const removeFileError = ref('');
 const filesState = useFilesState();
 const notifications = useToast();
+const config = useRuntimeConfig();
 
-const onEditBtnClick = (fileData: FileDataFromDb) => {
-  fileOfInterest.value = fileData;
+const query = ref('');
+const page = ref(1);
+const pageCount = 10;
+
+const columns = [
+  {
+    key: 'number',
+    label: '#'
+  },
+  {
+    key: 'name',
+    label: 'Название',
+    sortable: true
+  },
+  {
+    key: 'link',
+    label: 'Ссылка',
+    sortable: true
+  },
+  {
+    key: 'actions',
+    label: 'Действия'
+  }
+];
+
+const files = computed(() => {
+  const f = filesState.value
+    .map((file, index) => {
+      return {
+        _id: file._id,
+        name: file.name,
+        file: file.file,
+        number: index + 1,
+        link: `${config.public.domen}/file/${file.file}`
+      };
+    })
+    .reverse() as TableRow[];
+
+  if (!query.value) {
+    return f.slice((page.value - 1) * pageCount, page.value * pageCount);
+  }
+
+  return f.filter((file) => {
+    return file.name.toLowerCase().includes(query.value.toLowerCase());
+  });
+});
+
+const actions = (row: any) => [
+  [
+    {
+      label: 'Редактировать',
+      icon: 'i-heroicons-pencil-square-20-solid',
+      click: () => onEditBtnClick(row)
+    },
+    {
+      label: 'Удалить',
+      icon: 'i-heroicons-trash-20-solid',
+      click: () => onRemoveBtnClick(row)
+    }
+  ]
+];
+
+const onEditBtnClick = (fileData: TableRow) => {
+  fileOfInterest.value = { _id: fileData._id, name: fileData.name, file: fileData.file };
   isFileEditFormPopupOpen.value = true;
 };
 
@@ -22,8 +90,8 @@ const closeEditFormPopup = () => {
   resetFileOfInterest();
 };
 
-const onRemoveBtnClick = (fileData: FileDataFromDb) => {
-  fileOfInterest.value = fileData;
+const onRemoveBtnClick = (fileData: TableRow) => {
+  fileOfInterest.value = { _id: fileData._id, name: fileData.name, file: fileData.file };
   isConfirmPopupOpen.value = true;
 };
 
@@ -36,7 +104,8 @@ const handleFileRemove = async () => {
   try {
     if (fileOfInterest.value) {
       const fileId = fileOfInterest.value._id;
-      const { message }: { message: string } = await $fetch(`/api/files/${fileId}`, {
+      // @ts-ignore
+      const { message } = await $fetch(`/api/files/${fileId}`, {
         method: 'delete'
       });
 
@@ -62,27 +131,54 @@ const fileOfInterestName = computed(() => {
 <template>
   <div class="list">
     Список загруженных вами файлов:
-    <table class="list__table">
-      <thead>
-        <tr>
-          <th>№</th>
-          <th>Имя</th>
-          <th>Ссылка</th>
-          <th>Действия</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="({ _id, name, file }, index) of filesState" :key="_id">
-          <td>{{ index + 1 }}</td>
-          <td>{{ name }}</td>
-          <td>{{ `${$config.public.domen}/file/${file}` }}</td>
-          <td>
-            <EditBtn :color="'black'" @click="onEditBtnClick({ _id, name, file })" />
-            <RemoveBtn @click="onRemoveBtnClick({ _id, name, file })" />
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div>
+      <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
+        <UInput
+          v-model="query"
+          placeholder="Найти файл по имени..."
+          class="basis-1/2"
+          icon="i-heroicons-magnifying-glass-20-solid"
+        />
+      </div>
+      <UTable
+        :columns="columns"
+        :rows="files"
+        :sort-button="{
+          color: 'blue',
+          variant: 'outline',
+          size: '2xs',
+          square: false,
+          ui: { rounded: 'rounded-full' }
+        }"
+        :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'Не найдено' }"
+        :ui="{
+          td: {
+            color: 'text-black',
+            padding: 'px-2 py-2'
+          }
+        }"
+        class="w-full"
+      >
+        <template #actions-data="{ row }">
+          <UDropdown :items="actions(row)">
+            <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
+          </UDropdown>
+        </template>
+      </UTable>
+      <div
+        v-if="!query"
+        class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700"
+      >
+        <UPagination
+          v-model="page"
+          :max="7"
+          :page-count="pageCount"
+          :total="filesState.length"
+          show-last
+          show-first
+        />
+      </div>
+    </div>
     <LazyFileNameEditFormPopup
       :is-open="isFileEditFormPopupOpen"
       :file-data="fileOfInterest"
