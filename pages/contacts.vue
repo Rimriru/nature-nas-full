@@ -28,11 +28,10 @@ definePageMeta({
 </script>
 
 <template>
-  <main class="main">
+  <main>
     <section class="shadow-border contacts" aria-label="Контакты">
       <iframe
         title="Интерактивная карта"
-        width="560"
         height="400"
         frameborder="1"
         allowfullscreen="true"
@@ -73,16 +72,20 @@ definePageMeta({
 
 .contacts {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 30px;
+  grid-template-columns: minmax(400px, 560px) minmax(200px, 350px);
+  column-gap: 5%;
   padding: 30px;
-  max-width: 1140px;
-  margin: 0 auto;
+  max-width: 1400px;
+  width: calc(100% - 90px * 2);
+  margin: 40px auto;
   position: relative;
+  justify-content: center;
 
   .contacts__map {
     border: 1px solid black;
     border-radius: 10px;
+    max-width: 560px;
+    width: 100%;
   }
 
   .contacts__title {
