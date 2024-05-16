@@ -17,6 +17,7 @@ const loggedInState = useLoggedInState();
 const isAddLinkPopupOpened = ref(false);
 const addLinkError = ref('');
 const notifications = useToast();
+const { width } = useWindowSize();
 
 const onSignOutBtnClick = async () => {
   try {
@@ -59,10 +60,12 @@ const onAddLinkFormSubmit = async () => {
       method: 'post',
       body: newLinkBody
     });
-    const index = linkGroupsState.value.findIndex(
-      (group: LinkGroup) => group._id === updatedGroup._id
-    );
-    linkGroupsState.value[index] = updatedGroup;
+    if (updatedGroup) {
+      const index = linkGroupsState.value.findIndex(
+        (group: LinkGroup) => group._id === updatedGroup?._id
+      );
+      linkGroupsState.value[index] = updatedGroup;
+    }
     notifications.add({ id: 'link-create', title: `Ссылка "${newLinkBody.title}" создана!` });
     onCloseLinkForm();
   } catch (err: any) {
@@ -93,6 +96,7 @@ const onAddLinkFormSubmit = async () => {
     <div class="header__bottom-bg">
       <nav class="header__bottom">
         <ul class="header__bottom-links">
+          <BurgerButton v-if="width <= 900" />
           <NuxtLink to="/" class="header__bottom-logo" aria-label="Link">
             <img src="/logo-white.png" alt="Логотип" width="62" height="53" />
           </NuxtLink>
