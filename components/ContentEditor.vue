@@ -13,7 +13,7 @@ const init = {
   plugins: 'lists image link table charmap fullscreen preview anchor insertdatetime media autosave',
   toolbar_mode: 'sliding',
   toolbar:
-    'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | charmap | fullscreen  preview | image media link anchor',
+    'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | charmap  preview | image media link anchor',
   statusbar: false,
   resize: true,
   min_height: 500,
