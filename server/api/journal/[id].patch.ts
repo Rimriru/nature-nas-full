@@ -5,7 +5,9 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event);
 
   try {
-    const editedJournal = await journal.findByIdAndUpdate(id, body, { new: true });
+    const editedJournal = await journal
+      .findByIdAndUpdate(id, body, { new: true })
+      .populate(['authorRules', 'editorialPolicy']);
     return editedJournal;
   } catch (error: any) {
     return createError({
