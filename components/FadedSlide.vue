@@ -13,8 +13,6 @@ const config = useRuntimeConfig();
 const image = IMAGE_LINK_REG_EXP.test(props.item.img)
   ? props.item.img
   : `${config.public.domen}/image/${props.item.img}`;
-
-// ограничить ширину контента, изменить размер фона
 </script>
 
 <template>
@@ -28,7 +26,11 @@ const image = IMAGE_LINK_REG_EXP.test(props.item.img)
         { 'home-slider__content-container_reversed': index === 1 }
       ]"
     >
-      <img :class="['home-slider__img', { 'home-slider__img_none': index === 1 }]" :src="image" />
+      <img
+        :class="['home-slider__img', { 'home-slider__img_none': index === 1 }]"
+        :src="image"
+        alt="Обложка слайда"
+      />
       <div
         :class="[
           'content home-slider__content',
