@@ -33,10 +33,10 @@ const handleRouteRemove = async () => {
     const { message, links } = await $fetch(`/api/routes/${routeDataForRemove.id}`, {
       method: 'delete'
     });
+    router.removeRoute(routeDataForRemove.name);
     routesFromDb.value = routesFromDb.value.filter(
       (route: RouteDataFromDb) => route._id !== routeDataForRemove.id
     );
-    router.removeRoute(routeDataForRemove.name);
 
     if (links && links.length) {
       linkGroups.value = linkGroups.value.map((group) => {
