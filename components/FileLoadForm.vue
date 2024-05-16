@@ -10,6 +10,9 @@ const fileForUpload = ref<File | ''>('');
 const fileUpload = ref< HTMLInputElement | null >(null);
 const fileError = ref('');
 
+const options = ['Общий', 'Выпуск журнала'];
+const selectedOption = ref('');
+
 const props = defineProps<{
   isUploadingJournalIssue?: boolean,
   isPopupOpen?: boolean
@@ -22,6 +25,8 @@ const notifications = useToast();
 const isLoaderVisible = useLoaderVisibilityState();
 
 if (props.isUploadingJournalIssue && props.isPopupOpen) {
+  selectedOption.value = 'Выпуск журнала';
+
   watch(() => props.isPopupOpen, (newValue) => {
     if (!newValue) {
       resetFormFields();
@@ -54,7 +59,7 @@ const resetFormFields = () => {
   uploadedFile.title = '';
   uploadedFile.file = '';
   fileForUpload.value = '';
-  console.log('resets?');
+  selectedOption.value = ''
 }
 
 const onFileFormSubmit = async () => {
@@ -83,7 +88,7 @@ const onFileFormSubmit = async () => {
     const newFileBody = {
       name: uploadedFile.title,
       file: uploadedFile.file,
-      category: props.isUploadingJournalIssue ? 'nature-journal' : ''
+      category: props.isUploadingJournalIssue || selectedOption.value === 'Выпуск журнала' ? 'nature-journal' : ''
     }
 
     try {
@@ -110,7 +115,7 @@ const onFileFormSubmit = async () => {
     <UFormGroup name="title">
       Название 
       <span class="required">*</span>
-      <UInput v-model="uploadedFile.title" />
+      <UInput v-model="uploadedFile.title" placeholder="Начните печатать название..." />
     </UFormGroup>
     <label>
       <span class="file-form__label">
@@ -137,6 +142,10 @@ const onFileFormSubmit = async () => {
       </p>
       <span class="error">{{ fileError }}</span>
     </label>
+    <UFormGroup>
+      <USelect placeholder="Выберите..." :options="options" v-model="selectedOption" />
+      <span class="file-form__message">* Если выбрана опция "Выпуск журнала", ссылка на файл будет отображена в списке публикаций</span>
+    </UFormGroup>
     <div class="file-form__btn-container">
       <slot />
       <MenuButton :button-type="'submit'" :is-active="true" :size="isUploadingJournalIssue ? 'small' : 'middle'">Загрузить</MenuButton>
@@ -164,6 +173,13 @@ const onFileFormSubmit = async () => {
   .file-form__file-btn {
     display: block;
     margin: 10px auto;
+  }
+
+  .file-form__message {
+    font-size: 14px;
+    color: gray;
+    margin-top: 10px;
+    display: block;
   }
 
   .file-form__btn-container {
