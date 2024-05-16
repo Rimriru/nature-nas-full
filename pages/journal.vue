@@ -31,7 +31,8 @@ const publications = computed(() => {
         target: '_blank',
         labelClass: 'journal__menu-item'
       };
-    });
+    })
+    .sort((a, b) => b.label.localeCompare(a.label));
 
   return [menuItems];
 });
@@ -68,24 +69,28 @@ const onFileLoadFormPopupClose = () => {
           class="journal__cover"
           alt="Обложка журнала"
         />
-        <NuxtLink
-          :to="`${$config.public.domen}/file/${journalState?.authorRules.file}`"
-          :external="true"
-          class="button-border"
-          >Правила для авторов</NuxtLink
-        >
-        <NuxtLink
-          :to="`${$config.public.domen}/file/${journalState?.editorialPolicy.file}`"
-          :external="true"
-          class="button-border"
-          >Редакционная политика</NuxtLink
-        >
+        <ClientOnly>
+          <NuxtLink
+            :to="`${$config.public.domen}/file/${journalState?.authorRules.file}`"
+            :external="true"
+            class="button-border"
+            target="_blank"
+            >Правила для авторов</NuxtLink
+          >
+          <NuxtLink
+            :to="`${$config.public.domen}/file/${journalState?.editorialPolicy.file}`"
+            :external="true"
+            class="button-border"
+            target="_blank"
+            >Редакционная политика</NuxtLink
+          >
+        </ClientOnly>
         <UDropdown
           :items="publications"
           :popper="{ placement: 'right', scroll: true, adaptive: true, resize: true, arrow: true }"
           :ui="{
             width: 'w-auto',
-            height: 'max-h-60'
+            height: 'max-h-96'
           }"
           v-model:open="open"
         >
