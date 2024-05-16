@@ -131,6 +131,7 @@ const handleFormSubmit = async () => {
   width: 100%;
   height: 227px;
   position: relative;
+  overflow: hidden;
 
   &_main {
     height: 380px;
@@ -154,11 +155,7 @@ const handleFormSubmit = async () => {
     background-repeat: no-repeat;
     z-index: 1;
     background-size: cover;
-    background-position-y: 70%;
-
-    &_main {
-      background-size: 100% 100%;
-    }
+    background-position: center center;
   }
 
   .heading-image__edit-btn {
@@ -174,19 +171,6 @@ const handleFormSubmit = async () => {
     justify-content: center;
     align-items: center;
     cursor: pointer;
-  }
-}
-
-@media screen and (max-width: 1124px) {
-  .heading-image {
-    &_main {
-      height: clamp(227px, 40vw, 380px);
-    }
-
-    .heading-image__img_main {
-      background-size: cover;
-      background-position-x: 50%;
-    }
   }
 }
 </style>

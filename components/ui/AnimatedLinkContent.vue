@@ -51,12 +51,12 @@ defineProps<{
   align-items: center;
   gap: 10px;
   padding: 3px 7px 3px 10px;
-  border-radius: 10px;
+  border-radius: 13px;
   overflow: hidden;
   background: transparent;
   color: $black;
-  align-self: end;
-  border: $mid-blue 1px solid;
+  //align-self: end;
+  border: $gray-text 1px solid;
   cursor: pointer;
 
   &_left {
@@ -87,7 +87,7 @@ defineProps<{
     }
 
     .link__text {
-      transform: translateX(20px);
+      transform: translateX(15px);
     }
   }
 

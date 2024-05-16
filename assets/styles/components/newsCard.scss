@@ -3,7 +3,7 @@
 .news-card {
   max-width: 1110px;
   display: grid;
-  grid-template-columns: 310px auto 150px;
+  grid-template-columns: minmax(200px, 310px) minmax(200px, 390px);
   grid-template-rows: 200px;
   column-gap: 30px;
   overflow-y: hidden;
@@ -11,7 +11,7 @@
   position: relative;
 
   .news-card__cover {
-    width: 308px;
+    width: 100%;
     height: 200px;
     object-fit: cover;
     object-position: center;
@@ -46,5 +46,29 @@
     right: 0;
     display: flex;
     gap: 10px;
+  }
+
+  .news-card__more-btn {
+    position: absolute;
+    right: 0;
+    bottom: 50px;
+  }
+}
+
+@media screen and (max-width: 1350px) {
+  .news-card {
+    grid-template-columns: 1fr;
+    row-gap: 10px;
+
+    .news-card__management {
+      top: 220px;
+    }
+
+    .news-card__more-btn {
+      bottom: 10px;
+      left: 50%;
+      max-width: 140px;
+      transform: translateX(-50%);
+    }
   }
 }

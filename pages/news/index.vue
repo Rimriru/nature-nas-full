@@ -129,7 +129,6 @@ const handleNewsItemRemove = async () => {
 <style lang="scss">
 .news {
   display: grid;
-  grid-template-columns: 1fr;
   row-gap: 50px;
   padding: 40px 40px 0;
 
