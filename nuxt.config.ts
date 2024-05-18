@@ -52,6 +52,7 @@ export default defineNuxtConfig({
       crossOriginEmbedderPolicy: 'unsafe-none',
       crossOriginResourcePolicy: 'cross-origin',
       contentSecurityPolicy: {
+        'base-uri': ['none', "'self'"],
         'script-src': [
           "'self'",
           "'unsafe-inline'",
