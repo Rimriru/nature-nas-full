@@ -45,7 +45,6 @@ const onUpButtonClick = () => {
     box-shadow: 0px 0px 0px 4px rgba($gray, 0.5);
 
     .svgIcon {
-      /* width: 20px; */
       transition-duration: 0.3s;
       transform: translateY(-200%);
     }
@@ -54,7 +53,6 @@ const onUpButtonClick = () => {
       font-size: 13px;
       opacity: 1;
       bottom: unset;
-      /* transform: translateY(-30px); */
       transition-duration: 0.3s;
     }
   }
@@ -64,7 +62,6 @@ const onUpButtonClick = () => {
     bottom: -20px;
     content: 'Наверх';
     color: white;
-    /* transition-duration: .3s; */
     font-size: 0px;
     z-index: 300;
   }
