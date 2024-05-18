@@ -4,21 +4,27 @@ import type Slide from '~/types/SlideDataFromDb';
 const isSlideFormOpen = ref(false);
 const slideItemOfInterest = ref<Slide | ''>('');
 
+const isHomeInfoFormOpen = ref(false);
+
 const news = useNewsState();
-const reversedNews = computed(() => news.value.slice(0, 15).reverse());
+const reversedNews = computed(() => (news.value ? news.value.slice(0, 15).reverse() : news.value));
 
 const slides = await useHomeSlides();
 const slidesState = useHomeSlidesState();
-
 slidesState.value = slides;
+
+const { width } = useWindowSize();
+
+const homeInfoFromDb = await useHomeInfo();
+const homeInfoState = useHomeInfoState();
+homeInfoState.value = homeInfoFromDb;
+
 const firstHomeSliderItems = computed(() =>
   slidesState.value.filter((slide) => slide.placement === 'home-1')
 );
 const secondHomeSliderItems = computed(() =>
   slidesState.value.filter((slide) => slide.placement === 'home-2')
 );
-
-const isLoggedIn = useLoggedInState();
 
 const onEditSlideBtnClick = (slideItem: Slide) => {
   isSlideFormOpen.value = true;
@@ -29,81 +35,71 @@ const onSlideFormClose = () => {
   isSlideFormOpen.value = false;
   slideItemOfInterest.value = '';
 };
+
+const onEditHomeInfoBtnClick = () => {
+  isHomeInfoFormOpen.value = true;
+};
+
+const onHomeInfoFormClose = () => {
+  isHomeInfoFormOpen.value = false;
+};
 </script>
 
 <template>
   <main class="home">
     <section class="main-news" aria-label="Новости">
       <h2 class="news-title">Новости</h2>
-      <UCarousel
-        v-slot="{ item }"
-        class="main-news__carousel"
-        :items="reversedNews"
-        :ui="{ item: 'basis-full md:basis-1/2 lg:basis-1/3 justify-evenly' }"
-        :prev-button="{
-          color: 'blue',
-          icon: 'i-heroicons-arrow-left-20-solid',
-          class: '-left-12 lg:-left-5 md:left-3 ml-2'
-        }"
-        :next-button="{
-          color: 'blue',
-          icon: 'i-heroicons-arrow-right-20-solid',
-          class: '-right-12 lg:-right-5 md:right-3 mr-2'
-        }"
-        arrows
-      >
-        <NewsCardSmall :news-item="item" :draggable="false" />
-      </UCarousel>
-      <div class="research">
-        <h1 class="research__title">Институт выполняет исследования по следующим направлениям:</h1>
-        <ul class="research__list">
-          <li>разработка научных основ природопользования и охраны окружающей среды;</li>
-          <li>
-            оценка, прогнозирование и оптимизация антропогенных воздействий на природные комплексы;
-          </li>
-          <li>
-            научное обоснование создания ресурсосберегающих технологий добычи, переработки и
-            использования твердых горючих ископаемых;
-          </li>
-          <li>
-            изучение условий формирования и оценка состояния пресных питьевых и минеральных вод;
-          </li>
-          <li>
-            изучение геодинамики земной коры и современных геологических процессов на территории
-            Беларуси;
-          </li>
-          <li>
-            геоэкологическое обоснование проектирования и размещения особо ответственных сооружений
-            и экологоопасных объектов (АЭС, ГЭС, подземных хранилищ газа, мест захоронения
-            высокотоксичных отходов и др.);
-          </li>
-          <li>
-            диагностика состояния природной среды на основе использования современных
-            аэрокосмических, наземных, телекоммуникационных и информационно-измерительных средств;
-          </li>
-          <li>
-            изучение глобального и регионального климата и его изменений под влиянием естественных и
-            антропогенных факторов; прогнозирование изменений климата и их последствий.
-          </li>
-        </ul>
-      </div>
+      <ClientOnly>
+        <UCarousel
+          v-slot="{ item }"
+          class="main-news__carousel"
+          :items="reversedNews"
+          :ui="{
+            item: 'basis-full md:basis-1/2 lg:basis-1/3 justify-evenly',
+            indicators: {
+              wrapper: 'top-[110%]'
+            }
+          }"
+          :prev-button="{
+            color: 'blue',
+            icon: 'i-heroicons-arrow-left-20-solid',
+            class: '-left-12 lg:-left-5 md:left-3 ml-2'
+          }"
+          :next-button="{
+            color: 'blue',
+            icon: 'i-heroicons-arrow-right-20-solid',
+            class: '-right-12 lg:-right-5 md:right-3 mr-2'
+          }"
+          :arrows="width >= 800"
+          :indicators="width < 800"
+        >
+          <NewsCardSmall :news-item="item" :draggable="false" />
+        </UCarousel>
+      </ClientOnly>
+      <article class="research">
+        <div class="research__content content" v-html="homeInfoState?.content"></div>
+        <EditBtn :color="'black'" class="research__edit-btn" @click="onEditHomeInfoBtnClick" />
+      </article>
     </section>
-    <HomeSlider
-      :items="firstHomeSliderItems"
-      :indicators-on="true"
-      :with-angled-img="true"
-      @edit-click="onEditSlideBtnClick"
-    />
-    <HomeSlider
-      :items="secondHomeSliderItems"
-      :indicators-on="false"
-      @edit-click="onEditSlideBtnClick"
-    />
+    <ClientOnly>
+      <HomeSlider
+        :items="firstHomeSliderItems"
+        :indicators-on="true"
+        :with-angled-img="true"
+        @edit-click="onEditSlideBtnClick"
+      />
+      <HomeSlider
+        :items="secondHomeSliderItems"
+        :indicators-on="false"
+        @edit-click="onEditSlideBtnClick"
+      />
+    </ClientOnly>
     <LazySlideForm
       :is-open="isSlideFormOpen"
       :slide-data="slideItemOfInterest"
       @on-close="onSlideFormClose"
     />
+    <LazyHomeInfoFormPopup :is-open="isHomeInfoFormOpen" @close="onHomeInfoFormClose" />
   </main>
 </template>
 
@@ -151,21 +147,18 @@ const onSlideFormClose = () => {
 }
 
 .research {
-  margin-bottom: 60px;
+  position: relative;
   width: calc(100% - 40px * 2);
   margin: 0 40px 60px;
 
-  .research__title {
-    color: $mid-blue;
-    font-size: 18px;
-    line-height: 1.1;
-    font-weight: 500;
-    margin-bottom: 12px;
+  .research__content {
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
   }
 
-  .research__list {
-    list-style: disc;
-    font-size: clamp(0.9rem, 1.5vw, 1rem);
+  .research__edit-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
   }
 }
 </style>
