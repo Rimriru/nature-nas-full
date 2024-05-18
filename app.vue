@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { canvases } from '~/utils/canvasesData';
 
+const loggedInState = useLoggedInState();
+const token = useCookie('jwt');
+
+if (token.value !== undefined) {
+  loggedInState.value = true;
+}
+
 const routesState = useRoutesState();
 const linkGroupsState = useLinkGroupsState();
 const photoState = useMainPhotoState();
@@ -8,7 +15,6 @@ const newsState = useNewsState();
 const contactsState = useContactsState();
 const conferenceState = useConfsState();
 const filesState = useFilesState();
-const loggedInState = useLoggedInState();
 
 if (!routesState.value.length) {
   const routes = await useAllRoutes();
@@ -43,12 +49,6 @@ routesState.value.forEach((route) => {
     }
   });
 });
-
-const token = useCookie('jwt');
-
-if (token.value !== undefined) {
-  loggedInState.value = true;
-}
 </script>
 
 <template>
