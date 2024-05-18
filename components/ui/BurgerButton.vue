@@ -1,6 +1,9 @@
 <script setup lang="ts">
-// 900px
-const isActive = ref(false);
+const props = defineProps<{
+  isActive: boolean;
+}>();
+
+const emit = defineEmits(['click']);
 </script>
 
 <template>
@@ -9,7 +12,7 @@ const isActive = ref(false);
     type="button"
     aria-label="Menu"
     aria-controls="navigation"
-    @click="isActive = !isActive"
+    @click="emit('click')"
   >
     <span class="menu-btn__block">
       <span class="menu-btn__inner"></span>
@@ -70,8 +73,8 @@ const isActive = ref(false);
 .menu-btn__block {
   display: inline-block;
   position: relative;
-  width: 25px;
-  height: 25px;
+  width: 35px;
+  height: 35px;
 }
 
 .menu-btn__inner {
@@ -83,7 +86,7 @@ const isActive = ref(false);
   &::before,
   &::after {
     position: absolute;
-    width: 25px;
+    width: 35px;
     height: 2.5px;
     transition-property: transform;
     transition-duration: 0.15s;
