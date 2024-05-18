@@ -1,5 +1,16 @@
 @use '~/assets/styles/variables.scss' as *;
 
+@keyframes scale-up-bottom {
+  0% {
+    transform: scale(0.5);
+    transform-origin: center top;
+  }
+  100% {
+    transform: scale(1);
+    transform-origin: center top;
+  }
+}
+
 .header {
   color: #fff;
   position: sticky;
@@ -10,6 +21,7 @@
   .header__top-bg {
     background-color: $dark-blue;
     position: relative;
+    z-index: 302;
 
     .header__container {
       position: absolute;
@@ -61,10 +73,31 @@
 
   .header__bottom-bg {
     background-color: $mid-blue;
+    position: relative;
+
+    .header__bottom {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+
+      @media screen and (max-width: 900px) {
+        justify-content: space-between;
+        padding-block: 10px;
+      }
+    }
 
     .header__bottom-logo {
+      position: relative;
+      z-index: 3;
+
       @media screen and (max-width: 1090px) {
         display: none;
+      }
+
+      @media screen and (max-width: 900px) {
+        display: block;
+        margin-left: 25px;
       }
     }
 
@@ -72,6 +105,36 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
+      flex-direction: row;
+
+      @media screen and (max-width: 900px) {
+        & {
+          position: fixed;
+          top: 109px;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          z-index: 2;
+
+          display: none;
+        }
+
+        &_open {
+          display: flex;
+          flex-direction: column;
+          align-content: center;
+          align-items: flex-start;
+          justify-content: flex-start;
+          background-color: $mid-blue;
+          animation: scale-up-bottom 0.4s;
+        }
+      }
+    }
+
+    .header__burger-btn {
+      margin-right: 25px;
+      z-index: 3;
     }
   }
 }

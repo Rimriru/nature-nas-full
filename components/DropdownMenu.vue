@@ -2,14 +2,35 @@
 import type { Link, LinkGroup } from '~/types/LinkDataFromDb';
 
 const isSubMenuVisible = ref(false);
-const props = defineProps(['title', 'group', 'to', 'linkGroups']);
-const emit = defineEmits(['onAddLink']);
+const props = defineProps(['title', 'group', 'to', 'id', 'linkGroups', 'openedDropdownMenu']);
+const emit = defineEmits(['onAddLink', 'onMenuChange']);
+const { width } = useWindowSize();
+const linkGroupsState = useLinkGroupsState();
 
 const linksOfTheGroup = computed(() => {
-  const group: LinkGroup = props.linkGroups.find((item: LinkGroup) => item.group === props.group);
-  const links: Link[] = group.links;
+  const group: LinkGroup | undefined = linkGroupsState.value.find(
+    (item: LinkGroup) => item.group === props.group
+  );
+  const links: Link[] | undefined = group?.links;
   return { group, links };
 });
+
+const toggleDropdown = () => {
+  if (props.openedDropdownMenu === props.id) {
+    isSubMenuVisible.value = false;
+  } else {
+    emit('onMenuChange', props.id);
+    isSubMenuVisible.value = true;
+  }
+};
+
+const handlePointerDownOnMenu = computed(() => {
+  return width.value <= 900 ? toggleDropdown : undefined;
+});
+
+const handleAddLinkBtnClick = (title: string) => {
+  emit('onAddLink', title, linksOfTheGroup.value.group?._id);
+};
 </script>
 
 <template>
@@ -18,9 +39,25 @@ const linksOfTheGroup = computed(() => {
     @mouseover="isSubMenuVisible = true"
     @mouseleave="isSubMenuVisible = false"
   >
-    <a v-if="!to" class="dropdown-menu__main-link">{{ title }}</a>
+    <a
+      v-if="!to"
+      :class="[
+        'dropdown-menu__main-link',
+        {
+          'dropdown-menu__main-link_active':
+            width <= 900 && isSubMenuVisible && props.openedDropdownMenu === props.id
+        }
+      ]"
+      @pointerdown="handlePointerDownOnMenu"
+      >{{ title }}</a
+    >
     <NuxtLink v-else :to="to" class="dropdown-menu__main-link">{{ title }}</NuxtLink>
-    <ul v-if="isSubMenuVisible && group" class="dropdown-menu__sub-menu">
+    <ul
+      v-if="
+        isSubMenuVisible && group && (width <= 900 ? props.openedDropdownMenu === props.id : true)
+      "
+      class="dropdown-menu__sub-menu"
+    >
       <LinksMenuItem
         v-for="link of linksOfTheGroup.links"
         :link="link"
@@ -31,7 +68,7 @@ const linksOfTheGroup = computed(() => {
         :color="'dark-blue'"
         :size="'sm'"
         :rounded="true"
-        @on-click="emit('onAddLink', title, linksOfTheGroup.group._id)"
+        @on-click="handleAddLinkBtnClick(title)"
       />
     </ul>
   </div>

@@ -18,7 +18,7 @@
       background-color: $light-blue;
     }
 
-    @media screen and (max-width: 1330px) {
+    @media screen and (max-width: 1360px) {
       & {
         padding-inline: 12px;
       }
@@ -34,7 +34,7 @@
     -webkit-backdrop-filter: blur(40px);
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
-    width: clamp(100%, 18vw, 200%);
+    width: clamp(100%, 22vw, 200%);
     display: flex;
     flex-direction: column;
     z-index: 101;
@@ -49,6 +49,33 @@
       a {
         display: flex;
       }
+    }
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .dropdown-menu {
+    margin-left: 50px;
+
+    .dropdown-menu__main-link {
+      font-size: 18px;
+      padding-block: 10px;
+
+      &:hover {
+        background-color: transparent;
+      }
+
+      &_active {
+        text-decoration: underline;
+        text-underline-offset: 5px;
+        text-decoration-thickness: 2px;
+      }
+    }
+
+    .dropdown-menu__sub-menu {
+      position: static;
+      border-radius: 8px;
+      margin: 15px 25px 15px 150px;
     }
   }
 }

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { HEADER_LINK_GROUPS } from '~/utils/linksData';
 import homeIcon from '~/assets/images/home-icon.svg';
 import mapIcon from '~/assets/images/map-icon.svg';
 import type { LinkGroup } from '~/types/LinkDataFromDb';
@@ -13,11 +12,24 @@ const groupingLink = reactive({
   groupId: ''
 });
 const linkGroupsState = useLinkGroupsState();
+const isNavMenuOpen = ref(false);
 const loggedInState = useLoggedInState();
 const isAddLinkPopupOpened = ref(false);
 const addLinkError = ref('');
 const notifications = useToast();
 const { width } = useWindowSize();
+const route = useRoute();
+
+watch(
+  () => route.path,
+  () => {
+    isNavMenuOpen.value = false;
+  }
+);
+
+const onBurgerButtonClick = () => {
+  isNavMenuOpen.value = !isNavMenuOpen.value;
+};
 
 const onSignOutBtnClick = async () => {
   try {
@@ -54,6 +66,8 @@ const onAddLinkFormSubmit = async () => {
     to: linkValue.to,
     groupId: groupingLink.groupId
   };
+
+  console.log(groupingLink.groupId);
 
   try {
     const { updatedGroup, newLinkTyped } = await $fetch('/api/links', {
@@ -95,21 +109,16 @@ const onAddLinkFormSubmit = async () => {
     </div>
     <div class="header__bottom-bg">
       <nav class="header__bottom">
-        <ul class="header__bottom-links">
-          <BurgerButton v-if="width <= 900" />
-          <NuxtLink to="/" class="header__bottom-logo" aria-label="Link">
-            <img src="/logo-white.png" alt="Логотип" width="62" height="53" />
-          </NuxtLink>
-          <li v-for="{ _id: id, title, group, to } of HEADER_LINK_GROUPS" :key="id">
-            <DropdownMenu
-              :title="title.toUpperCase()"
-              :group="group"
-              :link-groups="linkGroupsState"
-              :to="to"
-              @on-add-link="onAddLinkButtonClick"
-            />
-          </li>
-        </ul>
+        <NuxtLink to="/" class="header__bottom-logo" aria-label="Home">
+          <img src="/logo-white.png" alt="Логотип" width="62" height="53" />
+        </NuxtLink>
+        <HeaderLinks :is-open="isNavMenuOpen" @add-link="onAddLinkButtonClick" />
+        <BurgerButton
+          v-show="width <= 900"
+          :is-active="isNavMenuOpen"
+          class="header__burger-btn"
+          @click="onBurgerButtonClick"
+        />
       </nav>
     </div>
     <LazyLinkForm
