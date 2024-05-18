@@ -18,7 +18,8 @@ definePageMeta({
 
 <style lang="scss">
 .site-map {
-  max-width: 1260px;
+  max-width: 1100px;
+  width: calc(100% - 30px * 2);
   margin: 0 auto;
   padding-block: 40px;
 }

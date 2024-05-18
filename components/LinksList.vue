@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { HEADER_LINK_GROUPS } from '~/utils/linksData';
 import type { Link } from '~/types/LinkDataFromDb';
-import type { Form } from '#ui/types';
 
 const linkData = reactive({
   title: '',
@@ -170,7 +169,7 @@ const onRemoveLinkPopupAgree = async () => {
 .links-list {
   display: grid;
   gap: 15px;
-  grid-template-columns: auto 600px;
+  grid-template-columns: auto minmax(50%, 600px);
   grid-template-areas:
     '1 column'
     '2 column'
@@ -179,6 +178,13 @@ const onRemoveLinkPopupAgree = async () => {
     '5 column'
     '6 column'
     '7 column';
+
+  @media screen and (max-width: 600px) {
+    & {
+      display: block;
+    }
+  }
+
   li:nth-of-type(1) {
     grid-area: 1;
   }
