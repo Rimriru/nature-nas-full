@@ -122,4 +122,10 @@ const image = IMAGE_LINK_REG_EXP.test(props.item.img)
     text-indent: 30px;
   }
 }
+
+@media screen and (max-width: 800px) {
+  .home-slider__content-container {
+    padding: 15px;
+  }
+}
 </style>

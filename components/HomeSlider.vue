@@ -2,6 +2,8 @@
 defineProps(['items', 'indicatorsOn', 'withAngledImg']);
 
 const emit = defineEmits(['editClick']);
+
+const { width } = useWindowSize();
 </script>
 
 <template>
@@ -19,8 +21,8 @@ const emit = defineEmits(['editClick']);
       icon: 'i-heroicons-arrow-right-20-solid',
       class: '-right-12 mr-2'
     }"
-    arrows
-    :indicators="indicatorsOn"
+    :arrows="width >= 800"
+    indicators
   >
     <template #default="{ item, index }">
       <AngledSlide v-if="withAngledImg" :index="index" :item="item">
