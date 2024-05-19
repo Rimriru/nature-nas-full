@@ -11,7 +11,11 @@ definePageMeta({
   title: 'Конференции'
 });
 
-const conferenceState = useConfsState();
+const conferencesState = useConfsState();
+
+const reversedConferences = computed(() => {
+  return conferencesState.value ? conferencesState.value.slice().reverse() : conferencesState.value;
+});
 
 const isConfFormPopupOpen = ref(false);
 const isConfirmPopupOpen = ref(false);
@@ -52,7 +56,7 @@ const onConfirmPopupSubmit = async () => {
       method: 'delete'
     });
 
-    conferenceState.value = conferenceState.value.filter((item) => item._id !== confId);
+    conferencesState.value = conferencesState.value.filter((item) => item._id !== confId);
 
     notifications.add({
       id: 'news',
@@ -69,7 +73,7 @@ const onConfirmPopupSubmit = async () => {
 <template>
   <main class="main">
     <ul class="confs">
-      <li v-for="conf of conferenceState" :key="conf._id">
+      <li v-for="conf of reversedConferences" :key="conf._id">
         <ConfCard :conf-item="conf" @edit-click="onEditBtnClick" @remove-click="onRemoveBtnClick" />
       </li>
     </ul>
