@@ -14,13 +14,18 @@ const onPhotosChange = (event: Event) => {
     const files = filesInputData.files;
     const filesArray = Array.from(files);
     let errorPresent = false;
+    if (filesArray.length > 7) {
+      photosError.value = 'Количество выбранных фото превышает рекомендуемое число!';
+      errorPresent = true;
+    }
+    if (errorPresent) return;
+
     filesArray.forEach((file) => {
       if (file.size > 5242880) {
         photosError.value = fileSizeError('5');
         errorPresent = true;
       }
     });
-
     if (errorPresent) return;
 
     photosForUpload.value = files;
@@ -96,6 +101,9 @@ onMounted(() => {
       />
       <LoadButton @on-click="($refs.fileInput as HTMLInputElement).click()" />
     </label>
+    <span class="text-gray-500 text-sm block"
+      >Обратите внимание: одновременно можно загрузить лишь до 8 фото</span
+    >
     <div class="photos-input__preview">
       <span class="photos-input__preview-text">Предпросмотр:</span>
       <UCarousel

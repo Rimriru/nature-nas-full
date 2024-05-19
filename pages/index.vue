@@ -52,6 +52,7 @@ const onHomeInfoFormClose = () => {
       <ClientOnly>
         <UCarousel
           v-slot="{ item }"
+          v-if="reversedNews.length"
           class="main-news__carousel"
           :items="reversedNews"
           :ui="{
