@@ -5,8 +5,9 @@ export default defineNuxtPlugin(() => {
   const logger = winston.createLogger({
     level: 'info',
     format: winston.format.combine(
+      winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
       winston.format.printf((event) => {
-        return `${JSON.stringify({ ...event, timestamp: new Date().toISOString() }, null, 4)}\n`;
+        return `${JSON.stringify({ ...event }, null, 4)}\n`;
       })
     ),
     defaultMeta: { service: 'nature-nas' },
