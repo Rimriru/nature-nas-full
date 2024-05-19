@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import homeIcon from '~/assets/images/home-icon.svg';
-import mapIcon from '~/assets/images/map-icon.svg';
 import type { LinkGroup } from '~/types/LinkDataFromDb';
 
 const linkValue = reactive({
@@ -93,11 +91,11 @@ const onAddLinkFormSubmit = async () => {
     <div class="header__top-bg">
       <nav class="header__top">
         <span class="header__name">Институт природопользования НАН Беларуси</span>
-        <NuxtLink to="/" aria-label="Home">
-          <Icon :icon="homeIcon" />
+        <NuxtLink to="/" aria-label="Home" class="header__top-link">
+          <UIcon name="i-material-symbols-house-outline-rounded" class="icon" />
         </NuxtLink>
-        <NuxtLink to="/site-map" aria-label="Site-map">
-          <Icon :icon="mapIcon" />
+        <NuxtLink to="/site-map" aria-label="Site-map" class="header__top-link">
+          <UIcon name="i-material-symbols-account-tree-outline-rounded" class="icon" />
         </NuxtLink>
       </nav>
       <div v-if="loggedInState" class="header__container">

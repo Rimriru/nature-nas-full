@@ -134,7 +134,7 @@ const onRemoveLinkPopupAgree = async () => {
     <ul class="links-list">
       <li v-for="group of HEADER_LINK_GROUPS" :key="group._id" class="links-list__item">
         <a :href="group.to" class="links-list__title">
-          <Icon :icon="group.icon" />
+          <UIcon :name="group.icon" class="icon" />
           <span>
             {{ group.title }}
           </span>

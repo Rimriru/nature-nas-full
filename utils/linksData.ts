@@ -1,12 +1,3 @@
-import fillHomeIcon from '~/assets/images/fill-home-icon.svg';
-import structureIcon from '~/assets/images/structure-icon.svg';
-import newsIcon from '~/assets/images/news-icon.svg';
-import publicationsIcon from '~/assets/images/publications-icon.svg';
-import researchIcon from '~/assets/images/research-icon.svg';
-import serviceIcon from '~/assets/images/service-icon.svg';
-import contactsIcon from '~/assets/images/contacts-icon.svg';
-import siteMapIcon from '~/assets/images/fill-map-icon.svg';
-
 import nanLogo from '/logo-nan.jpg';
 import presidentLogo from '/logo-president.jpg';
 import governmentLogo from '/logo-government.jpg';
@@ -29,49 +20,49 @@ const HEADER_LINK_GROUPS = [
     _id: 1,
     title: 'Об институте',
     group: 'about',
-    icon: fillHomeIcon
+    icon: 'i-material-symbols-house-rounded'
   },
   {
     _id: 2,
     title: 'Структура',
     group: 'structure',
-    icon: structureIcon
+    icon: 'i-material-symbols-schema-rounded'
   },
   {
     _id: 3,
     title: 'Новости',
     group: 'news',
-    icon: newsIcon
+    icon: 'i-material-symbols-newspaper-rounded'
   },
   {
     _id: 4,
     title: 'Научные издания',
     group: 'publications',
-    icon: publicationsIcon
+    icon: 'i-material-symbols-menu-book-outline-rounded'
   },
   {
     _id: 5,
     title: 'Исследования и разработки',
     group: 'research',
-    icon: researchIcon
+    icon: 'i-material-symbols-labs-rounded'
   },
   {
     _id: 6,
     title: 'Услуги',
     group: 'service',
-    icon: serviceIcon
+    icon: 'i-material-symbols-partner-exchange-rounded'
   },
   {
     _id: 7,
     title: 'Контакты',
     to: '/contacts',
-    icon: contactsIcon
+    icon: 'i-material-symbols-contact-phone-rounded'
   },
   {
     _id: 8,
     title: 'Карта сайта',
     to: '/site-map',
-    icon: siteMapIcon
+    icon: 'i-material-symbols-account-tree-rounded'
   }
 ];
 

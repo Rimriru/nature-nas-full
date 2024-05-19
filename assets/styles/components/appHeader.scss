@@ -56,18 +56,9 @@
       font-weight: 500;
     }
 
-    .header__icon {
-      width: 24px;
-      height: 24px;
-      background-size: 100%;
-
-      &.header__icon_home {
-        background-image: url('~/assets/images/home-icon.svg');
-      }
-
-      &.header__icon_map {
-        background-image: url('~/assets/images/map-icon.svg');
-      }
+    .header__top-link {
+      display: flex;
+      align-items: center;
     }
   }
 
