@@ -17,6 +17,9 @@ const contactSchema: any = new mongoose.Schema(
     email: {
       type: String,
       required: [true, 'Необходимо ввести адре электронной почты']
+    },
+    content: {
+      type: String
     }
   },
   { versionKey: false }

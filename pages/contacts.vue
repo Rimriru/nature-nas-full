@@ -1,11 +1,6 @@
 <script setup lang="ts">
 const contactsState = useContactsState();
-const contacts = computed(() => {
-  if (contactsState.value) {
-    const { address, telNumber, faxNumber, email } = contactsState.value;
-    return { address, telNumber, faxNumber, email };
-  }
-});
+console.log(contactsState.value);
 
 const isContactsFormPopupOpen = ref(false);
 
@@ -16,6 +11,8 @@ const onEditBtnClick = () => {
 const onContactsFormClose = () => {
   isContactsFormPopupOpen.value = false;
 };
+
+console.log(contactsState.value?.content);
 
 const title = 'Контакты';
 useSeoMeta({
@@ -28,7 +25,7 @@ definePageMeta({
 </script>
 
 <template>
-  <main>
+  <main class="main">
     <section class="shadow-border contacts" aria-label="Контакты">
       <iframe
         title="Интерактивная карта"
@@ -43,19 +40,19 @@ definePageMeta({
         <ul class="contacts__list">
           <li>
             <UIcon class="w-6 h-6 self-center" name="i-material-symbols-location-on-outline" />
-            Почтовый адрес: {{ contacts?.address }}
+            Почтовый адрес: {{ contactsState?.address }}
           </li>
           <li>
             <UIcon class="w-6 h-6 self-center" name="i-material-symbols-phone-enabled-outline" />
-            Тел.: {{ contacts?.telNumber }}
+            Тел.: {{ contactsState?.telNumber }}
           </li>
           <li>
             <UIcon class="w-6 h-6 self-center" name="i-material-symbols-fax-outline" />
-            Тел./факс: {{ contacts?.faxNumber }}
+            Тел./факс: {{ contactsState?.faxNumber }}
           </li>
           <li>
             <UIcon class="w-6 h-6 self-center" name="i-material-symbols-mail-outline" />
-            Email: {{ contacts?.email }}
+            Email: {{ contactsState?.email }}
           </li>
         </ul>
       </div>
@@ -63,7 +60,10 @@ definePageMeta({
         <EditBtn :color="'black'" class="contacts__edit-btn" @click="onEditBtnClick" />
       </ClientOnly>
     </section>
-    <LazyContactsForm :is-open="isContactsFormPopupOpen" @close="onContactsFormClose" />
+    <div class="content contacts__content" v-html="contactsState?.content"></div>
+    <ClientOnly>
+      <LazyContactsForm :is-open="isContactsFormPopupOpen" @close="onContactsFormClose" />
+    </ClientOnly>
   </main>
 </template>
 
@@ -77,7 +77,7 @@ definePageMeta({
   padding: 30px;
   max-width: 1400px;
   width: calc(100% - 90px * 2);
-  margin: 40px auto;
+  margin: 40px auto 0;
   position: relative;
   justify-content: center;
 
@@ -113,5 +113,11 @@ definePageMeta({
     top: 20px;
     right: 20px;
   }
+}
+
+.contacts__content {
+  max-width: 1400px;
+  width: calc(100% - 90px * 2);
+  margin: 40px auto 0;
 }
 </style>

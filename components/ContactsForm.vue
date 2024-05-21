@@ -11,7 +11,8 @@ const contactsFormState = reactive({
   address: '',
   telNumber: '',
   faxNumber: '',
-  email: ''
+  email: '',
+  content: ''
 });
 const form = ref<Form<string> | null>(null);
 const contactsState = useContactsState();
@@ -21,7 +22,8 @@ let originalContactsData = {
   address: '',
   telNumber: '',
   faxNumber: '',
-  email: ''
+  email: '',
+  content: ''
 };
 
 watch(
@@ -33,23 +35,27 @@ watch(
       contactsFormState.telNumber = contactsState.value.telNumber;
       contactsFormState.faxNumber = contactsState.value.faxNumber;
       contactsFormState.email = contactsState.value.email;
+      contactsFormState.content = contactsState.value.content;
 
       originalContactsData.address = contactsState.value.address;
       originalContactsData.telNumber = contactsState.value.telNumber;
       originalContactsData.faxNumber = contactsState.value.faxNumber;
       originalContactsData.email = contactsState.value.email;
+      originalContactsData.content = contactsState.value.content;
     } else {
       contactsFormState._id = '';
       contactsFormState.address = '';
       contactsFormState.telNumber = '';
       contactsFormState.faxNumber = '';
       contactsFormState.email = '';
+      contactsFormState.content = '';
       form.value?.clear();
       originalContactsData = {
         address: '',
         telNumber: '',
         faxNumber: '',
-        email: ''
+        email: '',
+        content: ''
       };
     }
   }
@@ -69,8 +75,8 @@ const validate = (state: any): FormError[] => {
 
 const handleContactsFormSubmit = async () => {
   const initialContactsData = JSON.stringify(originalContactsData);
-  const { address, telNumber, faxNumber, email } = contactsFormState;
-  const contactsBody = { address, telNumber, faxNumber, email };
+  const { address, telNumber, faxNumber, email, content } = contactsFormState;
+  const contactsBody = { address, telNumber, faxNumber, email, content };
   const contactsId = contactsFormState._id;
 
   if (initialContactsData === JSON.stringify(contactsBody)) {
@@ -109,7 +115,7 @@ const handleContactsFormSubmit = async () => {
       <UFormGroup name="address">
         Адрес
         <span class="required">*</span>
-        <UTextarea v-model="contactsFormState.address" placeholder="Введите адрес..." />
+        <UInput v-model="contactsFormState.address" placeholder="Введите адрес..." />
       </UFormGroup>
       <UFormGroup name="tel">
         Номер телефона
@@ -129,6 +135,9 @@ const handleContactsFormSubmit = async () => {
           placeholder="Введите адрес электронной почты..."
         />
       </UFormGroup>
+      <ClientOnly>
+        <ContentEditor v-model="contactsFormState.content" />
+      </ClientOnly>
       <div class="contacts-form__btn-container">
         <MenuButton :size="'small'" @click="emit('close')">Отмена</MenuButton>
         <MenuButton :size="'small'" :button-type="'submit'" :is-active="true">Сохранить</MenuButton>
@@ -141,7 +150,7 @@ const handleContactsFormSubmit = async () => {
 .contacts-form {
   display: grid;
   row-gap: 15px;
-  max-width: 330px;
+  max-width: 900px;
   width: 100%;
 
   .contacts-form__title {
@@ -151,6 +160,7 @@ const handleContactsFormSubmit = async () => {
   .contacts-form__btn-container {
     display: flex;
     gap: 20px;
+    margin: 0 auto;
   }
 }
 </style>

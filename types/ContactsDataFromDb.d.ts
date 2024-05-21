@@ -3,6 +3,7 @@ interface Contacts {
   telNumber: string;
   faxNumber: string;
   email: string;
+  content: string;
 }
 
 interface ContactsDataFromDb extends Contacts {
