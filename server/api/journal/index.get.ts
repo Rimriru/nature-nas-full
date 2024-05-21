@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
     const natureJournal = await journal.findOne().populate(['authorRules', 'editorialPolicy']);
     return natureJournal;
   } catch (error: any) {
-    return createError({
+    throw createError({
       status: error.statusCode,
       message: error.message
     });

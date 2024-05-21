@@ -12,7 +12,7 @@ export default defineEventHandler({
       }
       return { message: 'Images are removed' };
     } catch (error: any) {
-      return createError({
+      throw createError({
         status: error.statusCode,
         message: error.message
       });

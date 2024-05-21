@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     const editedFile = await files.findByIdAndUpdate(id, body, { new: true });
     return editedFile;
   } catch (error: any) {
-    return createError({
+    throw createError({
       status: error.statusCode,
       message: error.message
     });

@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
     const newFile = await files.create(body);
     return newFile;
   } catch (error: any) {
-    return createError({
+    throw createError({
       status: error.statusCode,
       message: error.message
     });

@@ -10,7 +10,7 @@ export default defineEventHandler({
       const editedNewsItem = await news.findByIdAndUpdate(id, body, { new: true });
       return editedNewsItem;
     } catch (error: any) {
-      return createError({
+      throw createError({
         status: error.statusCode,
         message: error.message
       });

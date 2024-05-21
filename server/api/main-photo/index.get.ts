@@ -5,7 +5,7 @@ export default defineEventHandler(async () => {
     const photo: any = await mainPhoto.find({});
     return photo;
   } catch (error: any) {
-    return createError({
+    throw createError({
       status: error.statusCode,
       message: error.message
     });

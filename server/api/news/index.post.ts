@@ -10,7 +10,7 @@ export default defineEventHandler({
       setResponseStatus(event, 201);
       return createdNewsItem;
     } catch (error: any) {
-      return createError({
+      throw createError({
         status: error.statusCode,
         message: error.message
       });

@@ -17,7 +17,7 @@ export default defineEventHandler({
       await conferences.findByIdAndDelete(id);
       return { message: 'Конференция удалена' };
     } catch (error: any) {
-      return createError({
+      throw createError({
         status: error.statusCode,
         message: error.message
       });

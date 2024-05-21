@@ -47,7 +47,7 @@ export default defineEventHandler({
 
       return allFiles;
     } catch (error: any) {
-      return createError({
+      throw createError({
         status: error.statusCode,
         message: error.message
       });

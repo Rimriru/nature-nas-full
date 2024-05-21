@@ -1,4 +1,4 @@
-import type PersonaData from './PersonasDataFromDb';
+import type { PersonaData } from './PersonasDataFromDb';
 import type { SectionFromDb } from './SectionDataFromDb';
 
 interface ContentFromDb {

@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
     const info = await homeInfo.findOne();
     return info;
   } catch (error: any) {
-    return createError({
+    throw createError({
       status: error.statusCode,
       message: error.message
     });

@@ -7,7 +7,7 @@ export default defineEventHandler({
     try {
       await fs.unlink(`public/assets/images/${name}`);
     } catch (error: any) {
-      return createError({
+      throw createError({
         status: error.statusCode,
         message: error.message
       });

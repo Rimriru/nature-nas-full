@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
     const allFiles = await files.find();
     return allFiles;
   } catch (error: any) {
-    return createError({
+    throw createError({
       status: error.statusCode,
       message: error.message
     });

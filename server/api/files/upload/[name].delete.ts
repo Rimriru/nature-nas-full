@@ -8,7 +8,7 @@ export default defineEventHandler({
       await fs.unlink(`public/docs/${name}`);
       return { message: 'File is removed' };
     } catch (error: any) {
-      return createError({
+      throw createError({
         status: error.statusCode,
         message: error.message
       });

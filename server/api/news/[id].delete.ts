@@ -17,7 +17,7 @@ export default defineEventHandler({
       await news.findByIdAndDelete(id);
       return { message: 'Новость удалена' };
     } catch (error: any) {
-      return createError({
+      throw createError({
         status: error.statusCode,
         message: error.message
       });
