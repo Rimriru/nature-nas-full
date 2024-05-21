@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { CanvasOptions } from '~/types/ContentDataFromDb';
 
-defineProps<{
+const props = defineProps<{
   contentValues: any;
 }>();
 
@@ -16,7 +16,17 @@ const isLoggedIn = useLoggedInState();
 </script>
 
 <template>
-  <section class="shadow-border canvas-content">
+  <section
+    :class="[
+      'canvas-content',
+      {
+        'shadow-border':
+          contentValues.text ||
+          contentValues.description ||
+          (contentValues.photos && contentValues.photos.length)
+      }
+    ]"
+  >
     <article
       :class="[
         'canvas-article',
@@ -107,6 +117,11 @@ const isLoggedIn = useLoggedInState();
   display: grid;
   padding: 30px;
   margin-right: 40px;
+
+  &_empty {
+    padding: 0;
+    box-shadow: none;
+  }
 
   .canvas-article {
     display: flex;

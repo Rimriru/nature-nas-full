@@ -1,7 +1,10 @@
 <script setup lang="ts">
-const props = defineProps(['personaData', 'isReversed']);
+const props = defineProps(['personaData', 'isReversed', 'isAlone']);
+
+const emit = defineEmits(['edit-click', 'remove-click']);
 
 const config = useRuntimeConfig();
+const loggedInState = useLoggedInState();
 </script>
 
 <template>
@@ -9,7 +12,10 @@ const config = useRuntimeConfig();
     <div
       :class="[
         'persona-card__main-block',
-        { 'persona-card__main-block_reversed': props.isReversed }
+        {
+          'persona-card__main-block_reversed': props.isReversed,
+          'persona-card__main-block_alone': props.isAlone
+        }
       ]"
     >
       <NuxtImg
@@ -20,15 +26,15 @@ const config = useRuntimeConfig();
         <h2>{{ props.personaData.position }}</h2>
         <h3>{{ props.personaData.name }}</h3>
         <p>{{ props.personaData.phd }}</p>
-        <p v-if="props.personaData.telNumber">
+        <p v-if="props.personaData.telNumber" class="info-data">
           <UIcon name="i-material-symbols-phone-enabled-outline" />
           Тел.: {{ props.personaData.telNumber }}
         </p>
-        <p v-if="props.personaData.faxNumber">
+        <p v-if="props.personaData.faxNumber" class="info-data">
           <UIcon name="i-material-symbols-fax-outline" />
           Тел./факс: {{ props.personaData.faxNumber }}
         </p>
-        <p v-if="props.personaData.email">
+        <p v-if="props.personaData.email" class="info-data">
           <UIcon name="i-material-symbols-mail-outline" />
           Email:
           <a class="persona-card__email-link" :href="`mailto:${props.personaData.email}`">{{
@@ -40,6 +46,12 @@ const config = useRuntimeConfig();
     <p v-if="props.personaData.description" class="persona-card__description">
       {{ props.personaData.description }}
     </p>
+    <ClientOnly>
+      <div v-if="isAlone && loggedInState" class="persona-card__management">
+        <EditBtn :color="'black'" @click="emit('edit-click', personaData)" />
+        <RemoveBtn @click="emit('remove-click', personaData)" />
+      </div>
+    </ClientOnly>
   </div>
 </template>
 

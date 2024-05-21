@@ -15,6 +15,7 @@ const newsState = useNewsState();
 const contactsState = useContactsState();
 const conferenceState = useConfsState();
 const filesState = useFilesState();
+const personasState = usePersonasState();
 
 if (!routesState.value.length) {
   const routes = await useAllRoutes();
@@ -31,6 +32,7 @@ const photoFromDb = await useMainPhotoRequest();
 const news = await useNewsRequest();
 const contacts = await useContacts();
 const conferencesFromDb = await useConfs();
+const personas = await usePersonas();
 
 const router = useRouter();
 photoState.value = photoFromDb;
@@ -38,6 +40,7 @@ newsState.value = news;
 contactsState.value = contacts;
 conferenceState.value = conferencesFromDb;
 filesState.value = filesFromDb;
+personasState.value = personas;
 
 routesState.value.forEach((route) => {
   router.addRoute({

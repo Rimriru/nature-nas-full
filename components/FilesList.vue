@@ -153,6 +153,7 @@ const fileOfInterestName = computed(() => {
         :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'Не найдено' }"
         :ui="{
           td: {
+            base: 'whitespace-normal',
             color: 'text-black',
             padding: 'px-2 py-2'
           }

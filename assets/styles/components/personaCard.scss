@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   gap: 25px;
+  position: relative;
 
   .persona-card__main-block {
     display: flex;
@@ -15,16 +16,18 @@
     }
 
     img {
-      width: 200px;
+      width: 210px;
       height: 250px;
       border-radius: 10px;
     }
 
     .persona-card__info {
+      flex-grow: 1;
       h2 {
         font-size: 20px;
         margin-bottom: 10px;
         font-weight: 600;
+        color: $mid-blue;
       }
 
       h3 {
@@ -35,10 +38,7 @@
 
       p {
         font-size: 17px;
-
-        &:not(:last-child) {
-          margin-bottom: 8px;
-        }
+        white-space: pre-wrap;
 
         .persona-card__email-link {
           color: $light-blue;
@@ -48,6 +48,27 @@
           }
         }
       }
+
+      .info-data {
+        display: flex;
+        align-items: center;
+
+        &:not(:last-child) {
+          margin-bottom: 8px;
+        }
+      }
     }
+  }
+
+  .persona-card__description {
+    white-space: pre-wrap;
+  }
+
+  .persona-card__management {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    gap: 10px;
   }
 }

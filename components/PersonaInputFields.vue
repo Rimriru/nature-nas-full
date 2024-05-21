@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { fileSizeError } from '~/utils/errorMessages';
 import type { ModelRef } from 'vue';
-import type PersonaData from '~/types/PersonasDataFromDb';
+import type { PersonaData } from '~/types/PersonasDataFromDb';
 
 const model: ModelRef<PersonaData | undefined, string> = defineModel('personaData');
 const emit = defineEmits(['onPhotoChange']);
@@ -84,7 +84,12 @@ onMounted(() => {
     </div>
     <UFormGroup class="persona-fieldset__description" name="description">
       Описание
-      <UTextarea v-model="model!.description" placeholder="Начните вводить описание контакта..." />
+      <UTextarea
+        v-model="model!.description"
+        :rows="5"
+        resize
+        placeholder="Начните вводить описание контакта..."
+      />
     </UFormGroup>
   </fieldset>
 </template>

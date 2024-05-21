@@ -6,6 +6,7 @@ type RemovedItem =
   | 'newsItem'
   | 'confItem'
   | 'file'
+  | 'persona'
   | '';
 
 export default RemovedItem;

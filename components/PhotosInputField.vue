@@ -14,11 +14,15 @@ const onPhotosChange = (event: Event) => {
     const files = filesInputData.files;
     const filesArray = Array.from(files);
     let errorPresent = false;
+
     if (filesArray.length > 7) {
       photosError.value = 'Количество выбранных фото превышает рекомендуемое число!';
       errorPresent = true;
     }
-    if (errorPresent) return;
+    if (errorPresent) {
+      filesInputData.value = '';
+      return;
+    }
 
     filesArray.forEach((file) => {
       if (file.size > 5242880) {
@@ -26,7 +30,10 @@ const onPhotosChange = (event: Event) => {
         errorPresent = true;
       }
     });
-    if (errorPresent) return;
+    if (errorPresent) {
+      filesInputData.value = '';
+      return;
+    }
 
     photosForUpload.value = files;
 

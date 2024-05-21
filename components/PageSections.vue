@@ -163,6 +163,7 @@ onMounted(() => {
         <li v-for="section in sections" :key="section._id">
           <MenuButton
             :is-active="section._id === whatSectionShown._id"
+            :size="'middle'"
             @click="whatSectionShown = section"
           >
             {{ section.title }}
@@ -246,6 +247,7 @@ onMounted(() => {
     border-radius: 40px;
     padding: 40px 30px;
     position: relative;
+    margin-right: 40px;
 
     .sections__content-management {
       position: absolute;

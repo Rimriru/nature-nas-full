@@ -27,7 +27,8 @@ const message = {
   section: () => `${COMMON_CONFIRM_MESSAGE} раздел "${props.removedItemTitle}"?`,
   newsItem: () => `${COMMON_CONFIRM_MESSAGE} новость "${props.removedItemTitle}"?`,
   confItem: () => `${COMMON_CONFIRM_MESSAGE} данную конференцию?`,
-  file: () => `${COMMON_CONFIRM_MESSAGE} файл "${props.removedItemTitle}"?`
+  file: () => `${COMMON_CONFIRM_MESSAGE} файл "${props.removedItemTitle}"?`,
+  persona: () => `${COMMON_CONFIRM_MESSAGE} данный контакт?`
 };
 </script>
 
