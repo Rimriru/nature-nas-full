@@ -1,4 +1,3 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
   app: {
@@ -61,7 +60,8 @@ export default defineNuxtConfig({
           '*.tiny.cloud',
           'https://cdn.tiny.cloud',
           'http://www.localhost:3000',
-          'http://www.localhost:4000'
+          'http://nature-nas.by',
+          'https://nature-nas.by'
         ],
         'script-src-attr': ["'self'"],
         'connect-src': [
@@ -78,15 +78,16 @@ export default defineNuxtConfig({
           'data:',
           'https:',
           'blob:',
-          'http://www.localhost:3000',
-          'http://www.localhost:4000'
+          'http://www.localhost:3000'
         ],
         'style-src': [
           "'self'",
           "'unsafe-inline'",
           '*.tinymce.com',
           '*.tiny.cloud',
-          'https://cdn.tiny.cloud'
+          'https://cdn.tiny.cloud',
+          'http://nature-nas.by',
+          'https://nature-nas.by'
         ],
         'font-src': ["'self'", '*.tinymce.com', '*.tiny.cloud']
       }
