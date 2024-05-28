@@ -93,6 +93,11 @@ export default defineNuxtConfig({
       }
     }
   },
+  router: {
+    options: {
+      scrollBehaviorType: 'smooth'
+    }
+  },
   css: ['~/assets/styles/base.css', '~/assets/styles/main.scss'],
   modules: ['@nuxt/image', '@nuxt/ui', '@vueuse/nuxt', 'nuxt-security'],
   nitro: {
