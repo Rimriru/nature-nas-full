@@ -52,6 +52,7 @@
       .info-data {
         display: flex;
         align-items: center;
+        gap: 5px;
 
         &:not(:last-child) {
           margin-bottom: 8px;

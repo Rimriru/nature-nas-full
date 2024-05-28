@@ -146,6 +146,7 @@ const handleFormSubmit = async () => {
     font-size: 24px;
     font-weight: 600;
     text-shadow: 6px 1px 6px rgba(0, 0, 0, 0.6);
+    margin-right: 20px;
   }
 
   .heading-image__img {
