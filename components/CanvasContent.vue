@@ -47,11 +47,13 @@ const isLoggedIn = useLoggedInState();
         <PersonaCard
           v-if="contentValues.personaOne && ['one', 'two', 'three', 'four'].includes(canvas!)"
           :persona-data="contentValues.personaOne"
+          class="shrink-0"
         />
         <PersonaCard
           v-if="contentValues.personaTwo && (canvas === 'three' || canvas === 'four')"
           :persona-data="contentValues.personaTwo"
           :is-reversed="true"
+          class="shrink-0"
         />
         <p
           v-if="contentValues.description && (canvas === 'one' || canvas === 'two')"
@@ -160,9 +162,10 @@ const isLoggedIn = useLoggedInState();
       }
 
       .canvas-article__description {
-        flex-basis: 50%;
+        flex-basis: 45%;
         text-indent: 50px;
         text-align: justify;
+        white-space: pre-wrap;
       }
     }
 
