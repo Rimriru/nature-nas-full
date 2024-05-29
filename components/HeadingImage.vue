@@ -125,53 +125,5 @@ const handleFormSubmit = async () => {
 </template>
 
 <style lang="scss">
-@use '~/assets/styles/variables.scss' as *;
-
-.heading-image {
-  width: 100%;
-  height: 227px;
-  position: relative;
-  overflow: hidden;
-
-  &_main {
-    height: 380px;
-  }
-
-  .heading-image__title {
-    color: #fff;
-    top: 95px;
-    left: 13vw;
-    position: absolute;
-    z-index: 80;
-    font-size: 24px;
-    font-weight: 600;
-    text-shadow: 6px 1px 6px rgba(0, 0, 0, 0.6);
-    margin-right: 20px;
-  }
-
-  .heading-image__img {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background-repeat: no-repeat;
-    z-index: 1;
-    background-size: cover;
-    background-position: center center;
-  }
-
-  .heading-image__edit-btn {
-    background-color: $light-blue;
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    width: 50px;
-    height: 50px;
-    z-index: 2;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-  }
-}
+@import url('~/assets/styles/components/headingImage.scss');
 </style>

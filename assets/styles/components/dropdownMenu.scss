@@ -58,7 +58,7 @@
     margin-left: 50px;
 
     .dropdown-menu__main-link {
-      font-size: 18px;
+      font-size: clamp(15px, 2.5vw, 18px);
       padding-block: 10px;
 
       &:hover {
@@ -76,6 +76,16 @@
       position: static;
       border-radius: 8px;
       margin: 15px 25px 15px 150px;
+      width: clamp(200px, 50vw, 400px);
+      font-size: clamp(15px, 2vw, 16px);
+    }
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .dropdown-menu {
+    .dropdown-menu__main-link {
+      font-size: 14px;
     }
   }
 }

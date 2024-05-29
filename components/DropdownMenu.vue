@@ -18,6 +18,7 @@ const linksOfTheGroup = computed(() => {
 const toggleDropdown = () => {
   if (props.openedDropdownMenu === props.id) {
     isSubMenuVisible.value = false;
+    emit('onMenuChange', '');
   } else {
     emit('onMenuChange', props.id);
     isSubMenuVisible.value = true;

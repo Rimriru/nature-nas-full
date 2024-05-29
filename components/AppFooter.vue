@@ -62,7 +62,12 @@ const currentYear = new Date().getFullYear();
         </address>
         <div>
           <NuxtLink to="/">
-            <NuxtImg src="/logo-green.png" alt="Логотип" width="177" />
+            <NuxtImg
+              src="/logo-green.png"
+              alt="Логотип"
+              width="177"
+              sizes="100vw sm:50vw md:512px"
+            />
           </NuxtLink>
         </div>
       </section>
@@ -88,94 +93,5 @@ const currentYear = new Date().getFullYear();
 </template>
 
 <style scoped lang="scss">
-@use '~/assets/styles/variables.scss' as *;
-
-.heading {
-  font-weight: 600;
-  margin-bottom: 15px;
-}
-
-.inside-text {
-  color: $gray-text;
-  font-size: 15px;
-}
-
-.footer {
-  background-color: $black;
-  color: #fff;
-  padding-block: 45px 10px;
-
-  .footer__container {
-    margin: 0 auto;
-    max-width: 1200px;
-
-    .footer__info {
-      display: flex;
-      gap: 40px;
-      margin-bottom: 85px;
-
-      .footer__about {
-        flex-basis: 470px;
-        h5 {
-          text-transform: uppercase;
-          text-align: center;
-        }
-      }
-    }
-
-    .footer__address {
-      font-style: normal;
-      max-width: 220px;
-
-      p {
-        &:not(:last-of-type) {
-          margin-bottom: 8px;
-        }
-      }
-    }
-
-    .footer__links {
-      margin-bottom: 55px;
-
-      ul {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-
-        a {
-          display: block;
-          padding: 5px 10px;
-
-          &:hover {
-            box-shadow: 0px 0px 10px 0px $light-blue;
-          }
-
-          .footer__img {
-            width: 100px;
-            height: 45px;
-          }
-        }
-      }
-    }
-
-    .footer__copyright {
-      span,
-      time {
-        margin-right: 5px;
-      }
-
-      p {
-        display: inline;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 1320px) {
-  .footer {
-    .footer__container {
-      width: calc(100% - 80px * 2);
-    }
-  }
-}
+@import url('~/assets/styles/components/appFooter.scss');
 </style>

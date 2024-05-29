@@ -73,3 +73,12 @@
     gap: 10px;
   }
 }
+
+@media screen and (max-width: 570px) {
+  .persona-card {
+    .persona-card__main-block {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+}

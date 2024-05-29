@@ -10,7 +10,12 @@ const { width } = useWindowSize();
   <UCarousel
     :class="['home-slider', { 'home-slider_first': withAngledImg }]"
     :items="items"
-    :ui="{ item: 'basis-full' }"
+    :ui="{
+      item: 'basis-full overflow-y-auto max-h-[500px]',
+      indicators: {
+        wrapper: 'bottom-[-2px]'
+      }
+    }"
     :prev-button="{
       color: 'gray',
       icon: 'i-heroicons-arrow-left-20-solid',
@@ -36,46 +41,5 @@ const { width } = useWindowSize();
 </template>
 
 <style lang="scss">
-.home-slider {
-  width: 90%;
-  margin: 0 auto;
-  padding-block: 20px;
-  height: 470px;
-
-  &_first {
-    margin-bottom: 30px;
-  }
-
-  .home-slider__container {
-    display: flex;
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-    position: relative;
-
-    &_reversed {
-      flex-direction: row-reverse;
-    }
-
-    .home-slider__edit-btn {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      z-index: 15;
-      background-color: #f8f7f0;
-      border-radius: 100%;
-      mix-blend-mode: hard-light;
-    }
-  }
-}
-
-@media screen and (max-width: 1155px) {
-  .home-slider {
-    .home-slider__container {
-      .home-slider__img {
-        display: none;
-      }
-    }
-  }
-}
+@import url('~/assets/styles/components/homeSlider.scss');
 </style>

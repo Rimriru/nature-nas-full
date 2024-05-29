@@ -47,13 +47,13 @@ const isLoggedIn = useLoggedInState();
         <PersonaCard
           v-if="contentValues.personaOne && ['one', 'two', 'three', 'four'].includes(canvas!)"
           :persona-data="contentValues.personaOne"
-          class="shrink-0"
+          class="canvas-article__persona"
         />
         <PersonaCard
           v-if="contentValues.personaTwo && (canvas === 'three' || canvas === 'four')"
           :persona-data="contentValues.personaTwo"
           :is-reversed="true"
-          class="shrink-0"
+          class="canvas-article__persona"
         />
         <p
           v-if="contentValues.description && (canvas === 'one' || canvas === 'two')"
@@ -113,12 +113,11 @@ const isLoggedIn = useLoggedInState();
 @use '~/assets/styles/variables.scss' as *;
 
 .canvas-content {
-  max-width: 1400px;
+  width: 100%;
   margin-bottom: 20px;
   border-radius: 20px;
   display: grid;
   padding: 30px;
-  margin-right: 40px;
 
   &_empty {
     padding: 0;
@@ -170,7 +169,7 @@ const isLoggedIn = useLoggedInState();
     }
 
     .canvas-article__plain-text {
-      margin-bottom: 50px;
+      margin-bottom: 20px;
       padding-left: 25px;
       position: relative;
       flex-basis: 100%;
@@ -203,6 +202,22 @@ const isLoggedIn = useLoggedInState();
   .canvas-content__edit-btn {
     margin-top: 50px;
     margin-inline: auto;
+  }
+}
+
+@media screen and (max-width: 1180px) {
+  .canvas-content {
+    .canvas-article {
+      .canvas-article__container {
+        flex-direction: column;
+        justify-content: flex-start;
+
+        .canvas-article__persona {
+          //flex-shrink: 1;
+          flex-basis: auto;
+        }
+      }
+    }
   }
 }
 </style>

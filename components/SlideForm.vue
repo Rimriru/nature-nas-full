@@ -312,56 +312,5 @@ const handleSlideFormSubmit = async () => {
 </template>
 
 <style lang="scss">
-@use '~/assets/styles/variables.scss' as *;
-
-.slide-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-
-  .slide-form__title {
-    font-size: 18px;
-    text-align: center;
-  }
-
-  .slide-form__img-block {
-    max-width: 670px;
-    margin: 0 auto;
-    padding: 10px;
-
-    &_required {
-      border: $required 1px solid;
-      border-radius: 0.375rem;
-    }
-
-    .slide-form__img-perview {
-      width: clamp(200px, 40vw, 700px);
-      height: 400px;
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center;
-      margin: 0 auto;
-      border-radius: 10px;
-    }
-
-    .slide-form__img-file {
-      padding-bottom: 30px;
-      display: grid;
-      position: relative;
-      width: 100%;
-
-      span.error {
-        position: absolute;
-        text-align: left;
-        top: 33px;
-        margin-block: 0;
-      }
-    }
-  }
-  .slide-form__btn-container {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-  }
-}
+@import url('~/assets/styles/components/slideForm.scss');
 </style>

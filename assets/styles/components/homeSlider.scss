@@ -1,0 +1,43 @@
+.home-slider {
+  width: 90%;
+  margin: 0 auto;
+  padding-block: 20px;
+  height: 470px;
+  margin-bottom: 30px;
+
+  &_first {
+    margin-bottom: 30px;
+  }
+
+  .home-slider__container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+
+    &_reversed {
+      flex-direction: row-reverse;
+    }
+
+    .home-slider__edit-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      z-index: 15;
+      background-color: #f8f7f0;
+      border-radius: 100%;
+      mix-blend-mode: hard-light;
+    }
+  }
+}
+
+@media screen and (max-width: 1155px) {
+  .home-slider {
+    .home-slider__container {
+      .home-slider__img {
+        display: none;
+      }
+    }
+  }
+}

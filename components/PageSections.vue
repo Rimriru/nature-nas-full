@@ -191,20 +191,24 @@ onMounted(() => {
         </ClientOnly>
       </div>
     </div>
-    <LazySectionForm
-      v-model:section-values="sectionValues"
-      :is-editing="isEditing"
-      @close="onClose"
-      @submit="handleSectionsSubmit"
-    />
-    <LazyConfirmPopup
-      :is-open="isConfirmPopupOpened"
-      :what-is-removed="'section'"
-      :removed-item-title="whatSectionShown.title"
-      :error="removalError"
-      @on-close="onConfirmPopupClose"
-      @on-agree="handleSectionRemoval"
-    />
+    <ClientOnly>
+      <LazySectionForm
+        v-if="isLoggedIn"
+        v-model:section-values="sectionValues"
+        :is-editing="isEditing"
+        @close="onClose"
+        @submit="handleSectionsSubmit"
+      />
+      <LazyConfirmPopup
+        v-if="isLoggedIn"
+        :is-open="isConfirmPopupOpened"
+        :what-is-removed="'section'"
+        :removed-item-title="whatSectionShown.title"
+        :error="removalError"
+        @on-close="onConfirmPopupClose"
+        @on-agree="handleSectionRemoval"
+      />
+    </ClientOnly>
   </div>
 </template>
 
@@ -247,7 +251,7 @@ onMounted(() => {
     border-radius: 40px;
     padding: 40px 30px;
     position: relative;
-    margin-right: 40px;
+    font-size: clamp(14px, 2vw, 16px);
 
     .sections__content-management {
       position: absolute;
@@ -259,10 +263,10 @@ onMounted(() => {
   }
 
   .sections__add-btn {
-    background-image: url('../assets/images/add-btn-stretch.svg');
+    background-image: url('~/assets/images/add-btn-stretch.svg');
     background-size: 100%;
     background-repeat: no-repeat;
-    width: clamp(100px, 15vw, 150px);
+    width: clamp(100px, 25vw, 150px);
     height: 35px;
   }
 }

@@ -43,6 +43,7 @@ const groupLinkShowed = ref('');
 const route = useRoute();
 const router = useRouter();
 const notifications = useToast();
+const isLoggedIn = useLoggedInState();
 
 const labsCentersLinkGroups = computed(() => {
   return allGroupLinks.value.filter((group) => group.group === 'labs-and-centers');
@@ -239,8 +240,10 @@ const handleAddLink = async () => {
       method: 'post',
       body: newLinkBody
     });
-    const groupIndex = allGroupLinks.value.findIndex((group) => group._id === updatedGroup._id);
-    allGroupLinks.value[groupIndex].links.push(newLinkTyped);
+    if (updatedGroup) {
+      const groupIndex = allGroupLinks.value.findIndex((group) => group._id === updatedGroup._id);
+      allGroupLinks.value[groupIndex].links.push(newLinkTyped);
+    }
     handleLinkFormClose();
     notifications.add({
       id: 'link',
@@ -407,47 +410,53 @@ onMounted(() => {
               {{ title }}
             </NuxtLink>
           </li>
-          <AddLinkButton
-            :color="'mid-blue'"
-            :size="'md'"
-            @on-click="handleAddLinkBtnClick(title, groupId)"
-          />
+          <ClientOnly>
+            <AddLinkButton
+              :color="'mid-blue'"
+              :size="'md'"
+              @on-click="handleAddLinkBtnClick(title, groupId)"
+            />
+          </ClientOnly>
         </ul>
       </li>
     </ul>
-    <AddLinkButton :color="'white'" :size="'md'" @on-click="handleAddGroupBtnClick" />
-    <LazyLinkGroupForm
-      v-model="groupData"
-      :is-open="isGroupPopupOpen"
-      :is-editing="isEditing"
-      :error="requestError"
-      @on-close="handleGroupLinkFormClose"
-      @on-add="handleAddLinkGroup"
-      @on-edit="handleEditLinkGroup"
-      @on-remove="handleRemoveLinkGroupBtnClick"
-    />
-    <LazyLinkForm
-      :link-value="linkValues"
-      :is-opened="isLinkPopupOpen"
-      :grouping-link-title="groupDataForAddingOrEditingLink.title"
-      :error="requestError"
-      @on-submit="addOrEditHandlersForLinkFormSubmit"
-      @on-close="handleLinkFormClose"
-    >
-      <div v-if="isEditing">
-        <UDivider label="ИЛИ" class="divider" />
-        <UButton block color="red" variant="soft" @click="handleRemoveLinkBtnClick"
-          >Удалить</UButton
-        >
-      </div>
-    </LazyLinkForm>
-    <LazyConfirmPopup
-      :is-open="isConfirmPopupOpen"
-      :what-is-removed="instanceBeingRemoved"
-      :removedItemTitle="removedInstanceData.title"
-      @on-close="handleConfirmPopupClose"
-      @on-agree="removedInstanceData.handler"
-    />
+    <ClientOnly>
+      <AddLinkButton :color="'white'" :size="'md'" @on-click="handleAddGroupBtnClick" />
+      <LazyLinkGroupForm
+        v-if="isLoggedIn"
+        v-model="groupData"
+        :is-open="isGroupPopupOpen"
+        :is-editing="isEditing"
+        :error="requestError"
+        @on-close="handleGroupLinkFormClose"
+        @on-add="handleAddLinkGroup"
+        @on-edit="handleEditLinkGroup"
+        @on-remove="handleRemoveLinkGroupBtnClick"
+      />
+      <LazyLinkForm
+        v-if="isLoggedIn"
+        :link-value="linkValues"
+        :is-opened="isLinkPopupOpen"
+        :grouping-link-title="groupDataForAddingOrEditingLink.title"
+        :error="requestError"
+        @on-submit="addOrEditHandlersForLinkFormSubmit"
+        @on-close="handleLinkFormClose"
+      >
+        <div v-if="isEditing">
+          <UDivider label="ИЛИ" class="divider" />
+          <UButton block color="red" variant="soft" @click="handleRemoveLinkBtnClick"
+            >Удалить</UButton
+          >
+        </div>
+      </LazyLinkForm>
+      <LazyConfirmPopup
+        :is-open="isConfirmPopupOpen"
+        :what-is-removed="instanceBeingRemoved"
+        :removedItemTitle="removedInstanceData.title"
+        @on-close="handleConfirmPopupClose"
+        @on-agree="removedInstanceData.handler"
+      />
+    </ClientOnly>
   </aside>
 </template>
 

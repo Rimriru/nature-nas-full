@@ -19,6 +19,8 @@ const homeInfoFromDb = await useHomeInfo();
 const homeInfoState = useHomeInfoState();
 homeInfoState.value = homeInfoFromDb;
 
+const isLoggedIn = useLoggedInState();
+
 const firstHomeSliderItems = computed(() =>
   slidesState.value.filter((slide) => slide.placement === 'home-1')
 );
@@ -94,13 +96,18 @@ const onHomeInfoFormClose = () => {
         :indicators-on="false"
         @edit-click="onEditSlideBtnClick"
       />
+      <LazySlideForm
+        v-if="isLoggedIn"
+        :is-open="isSlideFormOpen"
+        :slide-data="slideItemOfInterest"
+        @on-close="onSlideFormClose"
+      />
+      <LazyHomeInfoFormPopup
+        v-if="isLoggedIn"
+        :is-open="isHomeInfoFormOpen"
+        @close="onHomeInfoFormClose"
+      />
     </ClientOnly>
-    <LazySlideForm
-      :is-open="isSlideFormOpen"
-      :slide-data="slideItemOfInterest"
-      @on-close="onSlideFormClose"
-    />
-    <LazyHomeInfoFormPopup :is-open="isHomeInfoFormOpen" @close="onHomeInfoFormClose" />
   </main>
 </template>
 
