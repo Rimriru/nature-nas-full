@@ -10,7 +10,8 @@ const newsItem = computed(() => newsState.value.find((item) => item._id === news
 item.value = newsItem.value as NewsDataFromDb;
 
 useSeoMeta({
-  title: () => String(item.value?.title)
+  title: () => String(item.value?.title),
+  description: () => String(item.value?.description)
 });
 
 definePageMeta({
@@ -21,19 +22,21 @@ definePageMeta({
 <template>
   <main class="main">
     <div class="news-item">
-      <h2 class="news-item__title">{{ item?.title }}</h2>
-      <p class="news-item__date">{{ item?.date }}</p>
-      <div class="news-item__content content" v-if="item?.content" v-html="item?.content"></div>
       <AnimatedLinkContent
         :to="'/news'"
         :text="'Назад'"
         :direction="'left'"
         class="news-item__back-link"
       />
+      <div>
+        <h2 class="news-item__title">{{ item?.title }}</h2>
+        <p class="news-item__date">{{ item?.date }}</p>
+        <div class="news-item__content content" v-if="item?.content" v-html="item?.content"></div>
+      </div>
     </div>
   </main>
 </template>
 
 <style lang="scss">
-@import url('~/assets/styles/components/newsItem.scss');
+@import url('~/assets/styles/pages/newsItem.scss');
 </style>

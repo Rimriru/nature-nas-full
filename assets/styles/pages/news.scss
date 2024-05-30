@@ -1,0 +1,36 @@
+.news {
+  max-width: 1000px;
+  width: calc(100% - 80px * 2);
+  margin: 0 auto;
+  margin-block: 40px;
+
+  .news__list {
+    display: grid;
+    row-gap: 50px;
+    padding: 40px 40px 0;
+
+    .news__item {
+      &:not(:last-child) {
+        border-bottom: rgba(122, 119, 119, 0.4) 1px solid;
+      }
+    }
+  }
+
+  .pagination {
+    margin-top: 30px;
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .news {
+    max-width: 500px;
+    width: calc(100% - 25px * 2);
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .news {
+    width: calc(100% - 10px * 2);
+  }
+}

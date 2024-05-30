@@ -51,17 +51,19 @@ export default defineNuxtConfig({
       crossOriginEmbedderPolicy: 'unsafe-none',
       crossOriginResourcePolicy: 'cross-origin',
       contentSecurityPolicy: {
-        'base-uri': ['none', "'self'"],
+        'base-uri': ["'self'"],
         'script-src': [
           "'self'",
-          "'unsafe-inline'",
-          'https:',
           '*.tinymce.com',
           '*.tiny.cloud',
           'https://cdn.tiny.cloud',
           'http://www.localhost:3000',
           'http://nature-nas.by',
-          'https://nature-nas.by'
+          'https://nature-nas.by',
+          "'unsafe-inline'",
+          "'strict-dynamic'",
+          "'nonce-{{nonce}}'",
+          "'unsafe-eval'"
         ],
         'script-src-attr': ["'self'"],
         'connect-src': [

@@ -34,7 +34,7 @@
   margin: 0 auto;
   display: flex;
   gap: 30px;
-  padding-block: 75px;
+  padding-block: 45px;
   margin-left: 100px;
   height: 400px;
 
@@ -81,10 +81,13 @@
 @media screen and (max-width: 800px) {
   .home-slider__content-container {
     padding: 15px;
-    overflow: scroll;
+  }
+}
 
+@media screen and (max-width: 590px) {
+  .home-slider__content-container {
     .home-slider__content {
-      overflow: scroll;
+      overflow-y: scroll;
     }
   }
 }

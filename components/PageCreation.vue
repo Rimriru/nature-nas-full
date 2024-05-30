@@ -106,5 +106,5 @@ const handleCreatePageFormSubmit = async () => {
 </template>
 
 <style lang="scss">
-@import url('../assets/styles/components/pageCreation.scss');
+@import url('~/assets/styles/components/pageCreation.scss');
 </style>

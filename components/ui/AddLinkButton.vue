@@ -35,55 +35,5 @@ const isLoggedIn = useLoggedInState();
 </template>
 
 <style lang="scss">
-@use '~/assets/styles/variables.scss' as *;
-
-.add-link-btn {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: opacity 0.3s ease-in-out;
-
-  &:hover {
-    opacity: 0.7;
-  }
-
-  &_color_dark-blue {
-    background-color: $dark-blue;
-  }
-
-  &_color_mid-blue {
-    background-color: $mid-blue;
-  }
-
-  &_color_white {
-    border: $mid-blue 1px solid;
-  }
-
-  &_size_small {
-    height: 40px;
-  }
-
-  &_size_normal {
-    height: 48px;
-  }
-
-  &_rounded {
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-  }
-
-  .add-link-btn__plus {
-    background-image: url('~/assets/images/plus-icon-light.svg');
-    width: 20px;
-    height: 20px;
-    background-size: 100%;
-    background-repeat: no-repeat;
-
-    &_color_dark {
-      background-image: url('~/assets/images/plus-icon-dark.svg');
-    }
-  }
-}
+@import url('~/assets/styles/components/ui/addLinkButton.scss');
 </style>

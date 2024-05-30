@@ -63,46 +63,5 @@ if (props.isInSiteMap && props.link?.to === '/labs-and-centers') {
 </template>
 
 <style scoped lang="scss">
-.links-menu-item_admin {
-  position: relative;
-  display: flex;
-  gap: 25px;
-  align-items: center;
-  margin-bottom: 10px;
-  .links-menu-item__btn-container {
-    display: inline-flex;
-    gap: 5px;
-  }
-}
-
-.links-menu-item__link {
-  padding: 8px;
-}
-
-.links-menu-item__link_in-list {
-  padding: 0;
-  font-size: 18px;
-}
-
-.links-menu-item__group {
-  margin: 0 0 20px 30px;
-  list-style: circle;
-
-  &:first-of-type {
-    margin-top: 10px;
-  }
-
-  .links-menu-item__group-title {
-    margin-bottom: 8px;
-    font-weight: 500;
-  }
-
-  .links-menu-item__group-links {
-    list-style: square;
-    margin-left: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-}
+@import url('~/assets/styles/components/linksMenuItem.scss');
 </style>

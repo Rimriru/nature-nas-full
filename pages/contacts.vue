@@ -1,7 +1,5 @@
 <script setup lang="ts">
 const contactsState = useContactsState();
-console.log(contactsState.value);
-
 const isContactsFormPopupOpen = ref(false);
 
 const onEditBtnClick = () => {
@@ -11,8 +9,6 @@ const onEditBtnClick = () => {
 const onContactsFormClose = () => {
   isContactsFormPopupOpen.value = false;
 };
-
-console.log(contactsState.value?.content);
 
 const title = 'Контакты';
 useSeoMeta({
@@ -76,7 +72,6 @@ definePageMeta({
   column-gap: 5%;
   padding: 30px;
   max-width: 1400px;
-  width: calc(100% - 90px * 2);
   margin: 40px auto 0;
   position: relative;
   justify-content: center;
@@ -89,7 +84,7 @@ definePageMeta({
   }
 
   .contacts__title {
-    font-size: 22px;
+    font-size: clamp(18px, 2.5vw, 22px);
     text-align: center;
     font-weight: 500;
     color: $mid-blue;
@@ -105,6 +100,7 @@ definePageMeta({
       display: grid;
       grid-template-columns: auto 1fr;
       column-gap: 15px;
+      font-size: clamp(14px, 2.5vw, 16px);
     }
   }
 
@@ -117,7 +113,36 @@ definePageMeta({
 
 .contacts__content {
   max-width: 1400px;
-  width: calc(100% - 90px * 2);
+  width: calc(100% - 100px * 2);
   margin: 40px auto 0;
+  font-size: clamp(14px, 2.5vw, 16px);
+}
+
+@media screen and (max-width: 960px) {
+  .contacts {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    row-gap: 20px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .contacts {
+    width: calc(100% - 20px * 2);
+  }
+
+  .contacts__content {
+    width: calc(100% - 40px * 2);
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .contacts {
+    width: calc(100% - 10px * 2);
+  }
+
+  .contacts__content {
+    width: calc(100% - 20px * 2);
+  }
 }
 </style>

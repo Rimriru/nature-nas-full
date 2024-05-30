@@ -1,0 +1,60 @@
+@use '~/assets/styles/variables.scss' as *;
+
+.personas {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  max-width: 1300px;
+  width: calc(100% - 80px * 2);
+  margin: 0 auto;
+  padding-block: 40px;
+
+  .personas-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    flex-shrink: 1;
+
+    .personas-list__item {
+      .persona-card {
+        .persona-card__main-block_alone {
+          .persona-card__info {
+            flex-grow: 0;
+          }
+        }
+      }
+
+      &:nth-child(2n) {
+        .persona-card {
+          .persona-card__main-block_alone {
+            background: linear-gradient(90deg, #ffffff 0%, #e2ecf1 100%);
+          }
+        }
+      }
+    }
+  }
+  .personas__btn {
+    margin: 0 auto;
+  }
+}
+
+@media screen and (max-width: 1220px) {
+  .personas {
+    .personas-list {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .personas {
+    max-width: fit-content;
+    width: calc(100% - 30px * 2);
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .personas {
+    width: calc(100% - 10px * 2);
+  }
+}

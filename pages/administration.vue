@@ -2,7 +2,8 @@
 const title = 'Администрация';
 
 useSeoMeta({
-  title
+  title,
+  description: 'Администрация Института природопользования НАН Беларуси'
 });
 
 definePageMeta({
@@ -17,9 +18,7 @@ const administrationPersonas = computed(() => {
 </script>
 
 <template>
-  <main class="main">
-    <PersonasList :placement="'admins'" :personas="administrationPersonas" />
-  </main>
+  <PersonasList :placement="'admins'" :personas="administrationPersonas" />
 </template>
 
 <style lang="scss"></style>

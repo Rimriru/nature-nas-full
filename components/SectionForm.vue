@@ -62,31 +62,5 @@ const validate = (state: any): FormError[] => {
 </template>
 
 <style lang="scss">
-.section-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  .section-form__heading {
-    text-align: center;
-    font-size: 1.2rem;
-  }
-
-  .section-form__label {
-    input {
-      border-radius: 10px;
-      border: #f6f6f6 1px solid;
-      outline: none;
-      padding: 8px;
-      font-size: 15px;
-      width: 100%;
-    }
-  }
-
-  .section-form__btns {
-    display: flex;
-    gap: 15px;
-    margin: 0 auto;
-  }
-}
+@import url('~/assets/styles/components/sectionForm.scss');
 </style>

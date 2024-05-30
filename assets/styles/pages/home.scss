@@ -1,0 +1,57 @@
+@use '~/assets/styles/variables.scss' as *;
+
+.home {
+  padding-block: 40px 80px;
+}
+
+.title {
+  font-size: 19px;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.main-news {
+  max-width: 1100px;
+  margin: 0 auto;
+
+  .main-news__carousel {
+    max-width: 1000px;
+    margin: 0 auto;
+    margin-bottom: 30px;
+  }
+}
+
+.news-title {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.8;
+  text-align: center;
+  color: #fff;
+  background-color: $mid-blue;
+  border-radius: 60px;
+  margin-bottom: 40px;
+  width: 100%;
+
+  @media screen and (max-width: 1124px) {
+    & {
+      margin: 0 20px 30px;
+      width: calc(100% - 20px * 2);
+    }
+  }
+}
+
+.research {
+  position: relative;
+  width: calc(100% - 40px * 2);
+  margin: 0 40px 60px;
+
+  .research__content {
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
+  }
+
+  .research__edit-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}

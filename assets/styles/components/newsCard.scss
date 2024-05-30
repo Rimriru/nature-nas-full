@@ -30,6 +30,7 @@
   .news-card__date {
     color: $mid-blue;
     margin-bottom: 15px;
+    font-size: clamp(14px, 2.5vw, 16px);
   }
 
   .news-card__description {
@@ -39,6 +40,7 @@
     -webkit-line-clamp: 4;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: clamp(14px, 2.5vw, 16px);
   }
 
   .news-card__management {
@@ -66,10 +68,18 @@
     }
 
     .news-card__more-btn {
-      bottom: 10px;
-      left: 50%;
       max-width: 140px;
+    }
+  }
+}
+
+@media screen and (max-width: 930px) {
+  .news-card {
+    .news-card__more-btn {
+      left: 50%;
+      bottom: 10px;
       transform: translateX(-50%);
+      overflow: none;
     }
   }
 }

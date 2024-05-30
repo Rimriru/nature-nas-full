@@ -1,0 +1,32 @@
+@use '~/assets/styles/variables.scss' as *;
+
+.news-item {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  gap: 20px;
+  align-items: baseline;
+
+  .news-item__title {
+    font-weight: 400;
+    line-height: 1.1;
+    margin-bottom: 15px;
+    font-size: clamp(20px, 2.5vw, 24px);
+  }
+
+  .news-item__date {
+    color: $mid-blue;
+    margin-bottom: 30px;
+    font-size: clamp(14px, 2.5vw, 16px);
+  }
+
+  .news-item__back-link {
+    flex-shrink: 0;
+  }
+
+  .news-item__content {
+    flex-grow: 1;
+    max-width: 800px;
+    width: 100%;
+  }
+}

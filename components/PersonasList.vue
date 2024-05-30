@@ -76,12 +76,13 @@ const onPersonaRemove = async () => {
 </script>
 
 <template>
-  <div class="personas">
+  <main class="personas">
     <ul class="personas-list">
-      <li class="personas-list__item" v-for="persona of personas" :key="persona._id">
+      <li class="personas-list__item" v-for="(persona, index) of personas" :key="persona._id">
         <PersonaCard
           :persona-data="persona"
           :is-alone="true"
+          :is-reversed="index % 2 !== 0"
           @edit-click="onEditPersonaCardBtnClick"
           @remove-click="onRemovePersonaCardBtnClick"
         />
@@ -106,32 +107,9 @@ const onPersonaRemove = async () => {
         @on-agree="onPersonaRemove"
       />
     </ClientOnly>
-  </div>
+  </main>
 </template>
 
 <style lang="scss">
-.personas {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-
-  .personas-list {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-
-    .personas-list__item {
-      &:nth-child(2n) {
-        .persona-card {
-          .persona-card__main-block_alone {
-            flex-direction: row-reverse;
-          }
-        }
-      }
-    }
-  }
-  .personas__btn {
-    margin: 0 auto;
-  }
-}
+@import url('~/assets/styles/components/personasList.scss');
 </style>

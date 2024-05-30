@@ -84,8 +84,8 @@ const handleNewsItemRemove = async () => {
 </script>
 
 <template>
-  <main class="main">
-    <ul class="shadow-border news">
+  <main class="news">
+    <ul class="shadow-border news__list">
       <li v-for="item of newsItemsPerPage" :key="item._id" class="news__item">
         <NewsCard
           :news-item="item"
@@ -127,20 +127,5 @@ const handleNewsItemRemove = async () => {
 </template>
 
 <style lang="scss">
-.news {
-  display: grid;
-  row-gap: 50px;
-  padding: 40px 40px 0;
-
-  .news__item {
-    &:not(:last-child) {
-      border-bottom: rgba(122, 119, 119, 0.4) 1px solid;
-    }
-  }
-}
-
-.pagination {
-  margin-top: 30px;
-  justify-content: center;
-}
+@import url('~/assets/styles/pages/news.scss');
 </style>

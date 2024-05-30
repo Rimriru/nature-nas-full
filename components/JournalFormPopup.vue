@@ -173,7 +173,6 @@ const onJournalCoverInputChange = (event: Event) => {
     if (file.size > 5000000) return (journalCoverError.value = fileSizeError('5'));
     journalCoverOnUpload.value = file;
     journalCoverForPreview.value = URL.createObjectURL(file);
-    console.log(journalCoverOnUpload.value);
   } else {
     journalCoverOnUpload.value = '';
   }
@@ -221,14 +220,12 @@ const onJournalFormSubmit = async () => {
 
   if (JSON.stringify(journalData.authorRules) !== JSON.stringify(selectedAuthorRules.value)) {
     journalData.authorRules = selectedAuthorRules.value;
-    console.log('here');
   }
 
   if (
     JSON.stringify(journalData.editorialPolicy) !== JSON.stringify(selectedEditorialPolicy.value)
   ) {
     journalData.editorialPolicy = selectedEditorialPolicy.value;
-    console.log('here');
   }
 
   if (JSON.stringify(originalJournalData) === JSON.stringify(journalData)) {
@@ -241,7 +238,6 @@ const onJournalFormSubmit = async () => {
         method: 'patch',
         body: journalData
       });
-      console.log(editedJournalData);
       journalState.value = editedJournalData;
       notifications.add({ id: 'journal', title: 'Данные журнала были изменены!' });
       emit('close');
@@ -410,55 +406,5 @@ const onJournalFormSubmit = async () => {
 </template>
 
 <style lang="scss">
-.journal-form {
-  display: grid;
-  gap: 20px;
-
-  .journal-form__title {
-    text-align: center;
-    font-size: 18px;
-  }
-
-  .journal-form__cover {
-    display: flex;
-    gap: 30px;
-
-    .journal-form__cover-preview {
-      width: 300px;
-      height: 400px;
-      margin-bottom: 10px;
-      background-size: 100% 100%;
-      border-radius: 10px;
-    }
-
-    .journal-form__cover-input {
-      display: grid;
-      align-content: center;
-    }
-  }
-
-  .journal-form__files {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-
-    .journal-form__files-title {
-      font-size: 17px;
-    }
-
-    .journal-form__file-current {
-      text-decoration: underline;
-    }
-
-    .journal-form__file-data {
-      display: block;
-    }
-  }
-
-  .journal-form__btn-container {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-  }
-}
+@import url('~/assets/styles/components/journalFormPopup.scss');
 </style>

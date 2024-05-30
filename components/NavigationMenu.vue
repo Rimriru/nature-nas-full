@@ -5,7 +5,10 @@ defineProps<{
 </script>
 
 <template>
-  <HeaderLinks :class="['header__bottom-links_menu', { 'header__bottom-links_open': isOpen }]" />
+  <HeaderLinks
+    :is-open="isOpen"
+    :class="['header__bottom-links_menu', { 'header__bottom-links_open': isOpen }]"
+  />
 </template>
 
 <style lang="scss"></style>

@@ -24,7 +24,12 @@ const coverAsSrc = computed(() => IMAGE_LINK_REG_EXP.test(props.newsItem.cover))
         {{ newsItem.description }}
       </p>
     </div>
-    <AnimatedLinkContent :to="`/news/${newsItem._id}`" :text="'Подробнее'" :direction="'right'" class="news-card__more-btn" />
+    <AnimatedLinkContent
+      :to="`/news/${newsItem._id}`"
+      :text="'Подробнее'"
+      :direction="'right'"
+      class="news-card__more-btn"
+    />
     <ClientOnly>
       <div class="news-card__management">
         <EditBtn :color="'black'" @click="emit('editClick', newsItem)" />

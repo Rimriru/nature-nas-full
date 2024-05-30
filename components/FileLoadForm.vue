@@ -154,38 +154,5 @@ const onFileFormSubmit = async () => {
 </template>
 
 <style lang="scss">
-.file-form {
-  max-width: 400px;
-  width: 100%;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-
-  .file-form__label {
-    display: block;
-  }
-
-  .file-form__notes {
-    opacity: .7;
-  }
-
-  .file-form__file-btn {
-    display: block;
-    margin: 10px auto;
-  }
-
-  .file-form__message {
-    font-size: 14px;
-    color: gray;
-    margin-top: 10px;
-    display: block;
-  }
-
-  .file-form__btn-container {
-    margin: 0 auto;
-    display: flex;
-    gap: 20px;
-  }
-}
+@import url('~/assets/styles/components/fileLoadForm.scss');
 </style>

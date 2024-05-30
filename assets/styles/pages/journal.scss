@@ -2,7 +2,7 @@
 
 .button-border {
   padding: 5px 5px;
-  width: clamp(150px, 20vw, 250px);
+  width: 100%;
   border: $mid-blue 2px solid;
   border-radius: 5px;
   text-align: center;
@@ -43,23 +43,33 @@
     flex-direction: column;
     gap: 30px;
     justify-items: center;
+    flex-shrink: 0;
 
     .journal__info {
-      display: grid;
+      display: flex;
+      flex-direction: column;
       gap: 10px;
-      justify-items: center;
+      align-items: center;
 
       .journal__cover {
         width: 300px;
         height: 400px;
-        //object-fit: cover;
         border-radius: 10px;
       }
 
-      .journal__menu-item {
-        font-size: 17px;
-        color: black;
-        font-weight: 500;
+      .journal__info-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        flex-shrink: 0;
+        width: 80%;
+        align-items: center;
+
+        .journal__menu-item {
+          font-size: 17px;
+          color: black;
+          font-weight: 500;
+        }
       }
     }
 
@@ -80,6 +90,7 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
+      align-items: center;
     }
   }
 
@@ -103,6 +114,68 @@
       .journal__inst-people {
         display: grid;
         row-gap: 20px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1080px) {
+  .journal {
+    flex-direction: column;
+
+    .journal__aside {
+      .journal__info {
+        flex-direction: row;
+        justify-content: space-around;
+
+        .journal__info-container {
+          width: 40%;
+        }
+      }
+
+      .journal__contacts-text {
+        text-align: center;
+        justify-content: center;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .journal {
+    .journal__text-block {
+      .journal__people {
+        gap: 25px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 620px) {
+  .people-title {
+    font-size: 20px;
+  }
+
+  .journal {
+    width: calc(100% - 20px * 2);
+
+    .journal__aside {
+      .journal__info {
+        flex-direction: column;
+        .journal__info-container {
+          width: 80%;
+        }
+      }
+    }
+    .journal__text-block {
+      width: 100%;
+
+      .journal__description {
+        width: 100%;
+      }
+      .journal__people {
+        flex-direction: column;
+        width: 100%;
       }
     }
   }

@@ -145,7 +145,6 @@ const handlePersonaFormSubmit = async () => {
 
   if (!props.isEditing) {
     newPersonasBody.placement = props.placement;
-    console.log(newPersonasBody);
     try {
       const newPersona = await $fetch('/api/personas', {
         method: 'post',

@@ -20,6 +20,8 @@ const isLoggedIn = useLoggedInState();
 const isJournalFormPopupOpen = ref(false);
 const isFileLoadFormPopupOpen = ref(false);
 
+const { width } = useWindowSize();
+
 const publications = computed(() => {
   const menuItems = filesState.value
     .filter((file) => file.category && file.category === 'nature-journal')
@@ -61,7 +63,7 @@ const onFileLoadFormPopupClose = () => {
 </script>
 
 <template>
-  <section class="journal">
+  <main class="journal">
     <aside class="journal__aside">
       <div class="journal__info">
         <img
@@ -69,39 +71,48 @@ const onFileLoadFormPopupClose = () => {
           class="journal__cover"
           alt="Обложка журнала"
         />
-        <ClientOnly>
-          <NuxtLink
-            :to="`${$config.public.domen}/file/${journalState?.authorRules.file}`"
-            :external="true"
-            class="button-border"
-            target="_blank"
-            >Правила для авторов</NuxtLink
+        <div class="journal__info-container">
+          <ClientOnly>
+            <NuxtLink
+              :to="`${$config.public.domen}/file/${journalState?.authorRules.file}`"
+              :external="true"
+              class="button-border"
+              target="_blank"
+              >Правила для авторов</NuxtLink
+            >
+            <NuxtLink
+              :to="`${$config.public.domen}/file/${journalState?.editorialPolicy.file}`"
+              :external="true"
+              class="button-border"
+              target="_blank"
+              >Редакционная политика</NuxtLink
+            >
+          </ClientOnly>
+          <UDropdown
+            :items="publications"
+            mode="hover"
+            :popper="{
+              placement: `${width < 800 ? 'bottom-start' : 'right-start'}`,
+              scroll: true,
+              adaptive: true,
+              resize: true
+            }"
+            :ui="{
+              width: 'w-auto',
+              height: 'max-h-96',
+              wrapper: 'w-full'
+            }"
+            v-model:open="open"
           >
-          <NuxtLink
-            :to="`${$config.public.domen}/file/${journalState?.editorialPolicy.file}`"
-            :external="true"
-            class="button-border"
-            target="_blank"
-            >Редакционная политика</NuxtLink
-          >
-        </ClientOnly>
-        <UDropdown
-          :items="publications"
-          :popper="{ placement: 'right', scroll: true, adaptive: true, resize: true, arrow: true }"
-          :ui="{
-            width: 'w-auto',
-            height: 'max-h-96'
-          }"
-          v-model:open="open"
-        >
-          <UButton
-            color="white"
-            trailing-icon="i-heroicons-chevron-down-20-solid"
-            :class="['button-border', 'button', { 'button-active': open }]"
-          >
-            Публикации
-          </UButton>
-        </UDropdown>
+            <UButton
+              color="white"
+              trailing-icon="i-heroicons-chevron-down-20-solid"
+              :class="['button-border', 'button', { 'button-active': open }]"
+            >
+              Публикации
+            </UButton>
+          </UDropdown>
+        </div>
       </div>
       <div>
         <p class="journal__contacts-title">Контакты редакции:</p>
@@ -150,9 +161,9 @@ const onFileLoadFormPopupClose = () => {
     </section>
     <LazyJournalFormPopup :is-open="isJournalFormPopupOpen" @close="onJournalFormPopupClose" />
     <LazyFileLoadFormPopup :is-open="isFileLoadFormPopupOpen" @close="onFileLoadFormPopupClose" />
-  </section>
+  </main>
 </template>
 
 <style lang="scss">
-@import url('~/assets/styles/components/journal.scss');
+@import url('~/assets/styles/pages/journal.scss');
 </style>

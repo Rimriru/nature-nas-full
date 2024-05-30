@@ -65,8 +65,6 @@ const onAddLinkFormSubmit = async () => {
     groupId: groupingLink.groupId
   };
 
-  console.log(groupingLink.groupId);
-
   try {
     const { updatedGroup, newLinkTyped } = await $fetch('/api/links', {
       method: 'post',

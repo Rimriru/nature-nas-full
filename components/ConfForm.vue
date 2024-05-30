@@ -283,7 +283,7 @@ const handleConfItemEditFormSubmit = async () => {
       emit('onClose');
     } catch (error: any) {
       submitError.value = `${error.status}: ${error.data.message}`;
-      console.log(error);
+      console.error(error);
     }
   }
 };

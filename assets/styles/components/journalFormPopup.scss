@@ -1,0 +1,51 @@
+.journal-form {
+  display: grid;
+  gap: 20px;
+
+  .journal-form__title {
+    text-align: center;
+    font-size: 18px;
+  }
+
+  .journal-form__cover {
+    display: flex;
+    gap: 30px;
+
+    .journal-form__cover-preview {
+      width: 300px;
+      height: 400px;
+      margin-bottom: 10px;
+      background-size: 100% 100%;
+      border-radius: 10px;
+    }
+
+    .journal-form__cover-input {
+      display: grid;
+      align-content: center;
+    }
+  }
+
+  .journal-form__files {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .journal-form__files-title {
+      font-size: 17px;
+    }
+
+    .journal-form__file-current {
+      text-decoration: underline;
+    }
+
+    .journal-form__file-data {
+      display: block;
+    }
+  }
+
+  .journal-form__btn-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+  }
+}

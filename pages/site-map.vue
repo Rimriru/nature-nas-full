@@ -2,7 +2,7 @@
 const title = 'Карта сайта';
 
 useSeoMeta({
-  title
+  title,
 });
 
 definePageMeta({

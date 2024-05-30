@@ -4,7 +4,8 @@ import type { ConfDataFromDb } from '~/types/ConfsDataFromDb';
 const title = 'Конференции';
 
 useSeoMeta({
-  title
+  title,
+  description: 'Конференции Института природопользования НАН Беларуси'
 });
 
 definePageMeta({

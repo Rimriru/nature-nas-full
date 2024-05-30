@@ -43,31 +43,25 @@ const emit = defineEmits(['onClose', 'pass']);
 if (props.isInPopup) {
   const newsItemForEditing: Ref<NewsDataFromDb> | undefined = inject('newsItem');
 
-  watch(
-    () => newsItemForEditing,
-    (newValue) => {
-      if (newValue?.value) {
-        newsForm.value?.clear();
-        newsData._id = newValue.value._id;
-        newsData.title = newValue.value.title;
-        newsData.description = newValue.value.description;
-        newsData.date = newValue.value.date;
-        newsData.cover = newValue.value.cover;
-        newsData.content = newValue.value.content;
+  if (newsItemForEditing?.value) {
+    newsForm.value?.clear();
+    newsData._id = newsItemForEditing.value._id;
+    newsData.title = newsItemForEditing.value.title;
+    newsData.description = newsItemForEditing.value.description;
+    newsData.date = newsItemForEditing.value.date;
+    newsData.cover = newsItemForEditing.value.cover;
+    newsData.content = newsItemForEditing.value.content;
 
-        const { _id, date, ...others } = newValue.value;
-        originalNewsItemData = others;
+    const { _id, date, ...others } = newsItemForEditing.value;
+    originalNewsItemData = others;
 
-        if (IMAGE_LINK_REG_EXP.test(newsData.cover)) {
-          coverPreview.value = newsData.cover;
-          coverForUploadingAsLink.value = newsData.cover;
-        } else {
-          coverPreview.value = `${config.public.domen}/image/${newsData.cover}`;
-        }
-      }
-    },
-    { deep: true }
-  );
+    if (IMAGE_LINK_REG_EXP.test(newsData.cover)) {
+      coverPreview.value = newsData.cover;
+      coverForUploadingAsLink.value = newsData.cover;
+    } else {
+      coverPreview.value = `${config.public.domen}/image/${newsData.cover}`;
+    }
+  }
 }
 
 const validate = (state: any): FormError[] => {
@@ -291,7 +285,7 @@ const handleNewsItemEditFormSubmit = async () => {
       emit('onClose');
     } catch (error: any) {
       submitError.value = `${error.status}: ${error.data.message}`;
-      console.log(error);
+      console.error(error);
     }
   }
 };

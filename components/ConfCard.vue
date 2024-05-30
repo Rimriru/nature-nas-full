@@ -46,50 +46,5 @@ const date = (date: string) =>
 </template>
 
 <style lang="scss">
-@use '~/assets/styles/variables.scss' as *;
-
-.conf-card {
-  width: 300px;
-  height: 400px;
-  border-radius: 10px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-
-  .conf-card__cover {
-    width: 100%;
-    height: 200px;
-  }
-
-  .conf-card__main-block {
-    display: grid;
-    padding: 10px 25px;
-    flex-grow: 1;
-    position: relative;
-
-    .conf-card__date {
-      color: $mid-blue;
-      font-weight: 500;
-      margin-bottom: 20px;
-    }
-
-    .conf-card__description {
-      font-size: 15px;
-      height: 100px;
-      overflow-y: auto;
-      padding-right: 0;
-    }
-
-    .conf-card__link {
-      border: none;
-      justify-self: left;
-    }
-
-    .conf-card__management {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-    }
-  }
-}
+@import url('~/assets/styles/components/confCard.scss');
 </style>

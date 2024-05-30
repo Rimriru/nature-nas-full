@@ -22,7 +22,8 @@ if (confItem.value) {
 const date = (date: string) => new Date(date).toLocaleDateString();
 
 useSeoMeta({
-  title: 'Конференции'
+  title: 'Конференции',
+  description: () => item.value?.description
 });
 
 definePageMeta({
@@ -33,25 +34,27 @@ definePageMeta({
 <template>
   <main class="main">
     <div class="news-item">
-      <h2 class="news-item__title">{{ item?.description }}</h2>
-      <p class="news-item__date">
-        {{
-          item?.endDate
-            ? `${date(item.startDate)} – ${date(item.endDate)}` // @ts-ignore
-            : `${date(item.startDate)}`
-        }}
-      </p>
-      <div class="news-item__content content" v-if="item?.content" v-html="item?.content"></div>
       <AnimatedLinkContent
         :to="'/conferences'"
         :text="'Назад'"
         :direction="'left'"
         class="news-item__back-link"
       />
+      <div>
+        <h2 class="news-item__title">{{ item?.description }}</h2>
+        <p class="news-item__date">
+          {{
+            item?.endDate
+              ? `${date(item.startDate)} – ${date(item.endDate)}` // @ts-ignore
+              : `${date(item.startDate)}`
+          }}
+        </p>
+        <div class="news-item__content content" v-if="item?.content" v-html="item?.content"></div>
+      </div>
     </div>
   </main>
 </template>
 
 <style lang="scss">
-@import url('~/assets/styles/components/newsItem.scss');
+@import url('~/assets/styles/pages/newsItem.scss');
 </style>
