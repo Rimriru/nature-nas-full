@@ -18,7 +18,7 @@ const loggedInState = useLoggedInState();
         }
       ]"
     >
-      <NuxtImg
+      <img
         v-if="props.personaData.photo"
         :src="`${$config.public.process === 'production' ? '' : $config.public.domen}/image/${
           props.personaData.photo
