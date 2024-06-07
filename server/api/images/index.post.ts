@@ -6,7 +6,7 @@ const allFileNames: string[] = [];
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'public/assets/images');
+    cb(null, '.output/public/assets/images');
   },
   filename: (req, file, cbd) => {
     const rand = crypto.randomUUID();

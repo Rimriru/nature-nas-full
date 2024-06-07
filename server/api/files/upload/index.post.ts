@@ -6,7 +6,7 @@ let uploadedFileName: string;
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'public/docs');
+    cb(null, '.output/public/docs');
   },
   filename: (req, file, cbd) => {
     const rand = crypto.randomUUID();

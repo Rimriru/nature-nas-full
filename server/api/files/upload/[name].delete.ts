@@ -5,7 +5,7 @@ export default defineEventHandler({
     const name = getRouterParam(event, 'name');
 
     try {
-      await fs.unlink(`public/docs/${name}`);
+      await fs.unlink(`.output/public/docs/${name}`);
       return { message: 'File is removed' };
     } catch (error: any) {
       throw createError({

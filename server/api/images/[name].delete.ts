@@ -5,7 +5,7 @@ export default defineEventHandler({
     const name = getRouterParam(event, 'name');
 
     try {
-      await fs.unlink(`public/assets/images/${name}`);
+      await fs.unlink(`.output/public/assets/images/${name}`);
     } catch (error: any) {
       throw createError({
         status: error.statusCode,

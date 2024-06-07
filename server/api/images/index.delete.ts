@@ -7,7 +7,7 @@ export default defineEventHandler({
     try {
       if (body.length) {
         body.forEach(async (image: string) => {
-          await fs.unlink(`public/assets/images/${image}`);
+          await fs.unlink(`.output/public/assets/images/${image}`);
         });
       }
       return { message: 'Images are removed' };
