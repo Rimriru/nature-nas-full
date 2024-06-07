@@ -3,14 +3,10 @@ import fs from 'fs';
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
-  const base = 'public/docs';
+  const base = '.output/public/docs';
 
   // on Windows only
-  const filePath = path.join(
-    `${config.public.process === 'production' ? 'file://' : ''}`,
-    base,
-    event.context.params!.name
-  );
+  const filePath = path.join(base, event.context.params!.name);
 
   setHeader(event, 'Cross-Origin-Resource-Policy', 'cross-origin');
 
