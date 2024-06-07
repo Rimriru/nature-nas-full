@@ -58,7 +58,6 @@ export default defineNuxtConfig({
           '*.tiny.cloud',
           'https://cdn.tiny.cloud',
           'http://www.localhost:3000',
-          'http://nature-nas.by',
           'https://nature-nas.by',
           "'unsafe-inline'",
           "'strict-dynamic'",
@@ -88,7 +87,6 @@ export default defineNuxtConfig({
           '*.tinymce.com',
           '*.tiny.cloud',
           'https://cdn.tiny.cloud',
-          'http://nature-nas.by',
           'https://nature-nas.by'
         ],
         'font-src': ["'self'", '*.tinymce.com', '*.tiny.cloud']

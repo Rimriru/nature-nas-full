@@ -2,8 +2,15 @@ import path from 'path';
 import fs from 'fs';
 
 export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig();
   const base = 'public/assets/images';
-  const filePath = path.join(base, event.context.params!.name);
+
+  // on Windows only
+  const filePath = path.join(
+    `${config.public.process === 'production' ? 'file://' : ''}`,
+    base,
+    event.context.params!.name
+  );
 
   setHeader(event, 'Cross-Origin-Resource-Policy', 'cross-origin');
 
