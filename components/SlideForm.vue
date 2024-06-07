@@ -58,7 +58,9 @@ watch(
         imgForUploadingAsLink.value = newValue.img;
         imgPreview.value = newValue.img;
       } else {
-        imgPreview.value = `${config.public.domen}/image/${newValue.img}`;
+        imgPreview.value = `${
+          config.public.process === 'production' ? '' : config.public.domen
+        }/image/${newValue.img}`;
       }
     }
   }

@@ -92,7 +92,12 @@ const isLoggedIn = useLoggedInState();
         :indicators="contentValues.photos.length > 1"
       >
         <template #default="{ item }">
-          <img :src="`${config.public.domen}/image/${item}`" class="carousel__img" />
+          <img
+            :src="`${
+              $config.public.process === 'production' ? '' : $config.public.domen
+            }/image/${item}`"
+            class="carousel__img"
+          />
         </template>
       </UCarousel>
     </article>

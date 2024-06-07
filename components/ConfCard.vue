@@ -17,7 +17,13 @@ const date = (date: string) =>
   <article class="shadow-border conf-card">
     <img
       class="conf-card__cover"
-      :src="coverAsSrc ? confItem.cover : `${$config.public.domen}/image/${confItem.cover}`"
+      :src="
+        coverAsSrc
+          ? confItem.cover
+          : `${$config.public.process === 'production' ? '' : $config.public.domen}/image/${
+              confItem.cover
+            }`
+      "
       alt="Обложка новости"
     />
     <div class="conf-card__main-block">

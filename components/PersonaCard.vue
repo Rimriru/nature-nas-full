@@ -20,7 +20,9 @@ const loggedInState = useLoggedInState();
     >
       <NuxtImg
         v-if="props.personaData.photo"
-        :src="`${config.public.domen}/image/${props.personaData.photo}`"
+        :src="`${$config.public.process === 'production' ? '' : $config.public.domen}/image/${
+          props.personaData.photo
+        }`"
       />
       <div class="persona-card__info">
         <h2>{{ props.personaData.position }}</h2>

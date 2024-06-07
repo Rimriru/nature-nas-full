@@ -14,7 +14,13 @@ const coverAsSrc = computed(() => IMAGE_LINK_REG_EXP.test(props.newsItem.cover))
   <article class="news-card">
     <img
       class="news-card__cover"
-      :src="coverAsSrc ? newsItem.cover : `${$config.public.domen}/image/${newsItem.cover}`"
+      :src="
+        coverAsSrc
+          ? newsItem.cover
+          : `${$config.public.process === 'production' ? '' : $config.public.domen}/image/${
+              newsItem.cover
+            }`
+      "
       alt="Обложка новости"
     />
     <div class="news-card__info-block">

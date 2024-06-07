@@ -96,7 +96,9 @@ watch(
       journalData.contacts.email = email;
 
       journalData.cover = cover;
-      journalCoverForPreview.value = `${config.public.domen}/image/${cover}`;
+      journalCoverForPreview.value = `${
+        config.public.process === 'production' ? '' : config.public.domen
+      }/image/${cover}`;
 
       originalJournalData = {
         description,
@@ -335,7 +337,11 @@ const onJournalFormSubmit = async () => {
             {{ `название: ${journalData.authorRules.name}` }}
           </p>
           <p class="journal-form__file-data">
-            {{ `ссылка: ${$config.public.domen}/file/${journalData.authorRules.file}` }}
+            {{
+              `ссылка: ${
+                $config.public.process === 'production' ? '' : $config.public.domen
+              }/file/${journalData.authorRules.file}`
+            }}
           </p>
         </div>
         <div>
@@ -362,7 +368,11 @@ const onJournalFormSubmit = async () => {
             {{ `название: ${journalData.editorialPolicy.name}` }}
           </p>
           <p class="journal-form__file-data">
-            {{ `ссылка: ${$config.public.domen}/file/${journalData.editorialPolicy.file}` }}
+            {{
+              `ссылка: ${
+                $config.public.process === 'production' ? '' : $config.public.domen
+              }/file/${journalData.editorialPolicy.file}`
+            }}
           </p>
         </div>
         <div>

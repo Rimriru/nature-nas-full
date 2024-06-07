@@ -18,7 +18,11 @@ defineProps<{
     <img
       class="home-slider__img"
       :src="
-        IMAGE_LINK_REG_EXP.test(item.img) ? item.img : `${$config.public.domen}/image/${item.img}`
+        IMAGE_LINK_REG_EXP.test(item.img)
+          ? item.img
+          : `${$config.public.process === 'production' ? '' : $config.public.domen}/image/${
+              item.img
+            }`
       "
     />
     <div

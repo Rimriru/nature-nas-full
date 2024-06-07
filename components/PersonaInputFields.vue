@@ -26,7 +26,9 @@ const onPhotoChange = (event: Event) => {
 
 onMounted(() => {
   if (props.photo) {
-    photoForPreview.value = `${config.public.domen}/image/${props.photo}`;
+    photoForPreview.value = `${
+      config.public.process === 'production' ? '' : config.public.domen
+    }/image/${props.photo}`;
   }
 });
 </script>

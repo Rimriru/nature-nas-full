@@ -28,7 +28,9 @@ const publications = computed(() => {
     .map((item) => {
       return {
         label: item.name,
-        to: `${config.public.domen}/file/${item.file}`,
+        to: `${config.public.process === 'production' ? '' : config.public.domen}/file/${
+          item.file
+        }`,
         external: true,
         target: '_blank',
         labelClass: 'journal__menu-item'
@@ -67,21 +69,27 @@ const onFileLoadFormPopupClose = () => {
     <aside class="journal__aside">
       <div class="journal__info">
         <img
-          :src="`${$config.public.domen}/image/${journalState?.cover}`"
+          :src="`${$config.public.process === 'production' ? '' : $config.public.domen}/image/${
+            journalState?.cover
+          }`"
           class="journal__cover"
           alt="Обложка журнала"
         />
         <div class="journal__info-container">
           <ClientOnly>
             <NuxtLink
-              :to="`${$config.public.domen}/file/${journalState?.authorRules.file}`"
+              :to="`${$config.public.process === 'production' ? '' : $config.public.domen}/file/${
+                journalState?.authorRules.file
+              }`"
               :external="true"
               class="button-border"
               target="_blank"
               >Правила для авторов</NuxtLink
             >
             <NuxtLink
-              :to="`${$config.public.domen}/file/${journalState?.editorialPolicy.file}`"
+              :to="`${$config.public.process === 'production' ? '' : $config.public.domen}/file/${
+                journalState?.editorialPolicy.file
+              }`"
               :external="true"
               class="button-border"
               target="_blank"

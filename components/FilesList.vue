@@ -47,7 +47,9 @@ const files = computed(() => {
         name: file.name,
         file: file.file,
         number: index + 1,
-        link: `${config.public.domen}/file/${file.file}`
+        link: `${config.public.process === 'production' ? '' : config.public.domen}/file/${
+          file.file
+        }`
       };
     })
     .reverse() as TableRow[];
