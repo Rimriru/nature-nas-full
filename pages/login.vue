@@ -14,6 +14,7 @@ const passwordInput = ref(null);
 const isPasswordTypePassword = ref(true);
 const isAlertShown = ref(false);
 const loginError = ref('');
+const isSubmitButtonDisabled = ref(false);
 
 const router = useRouter();
 const loggedInState = useLoggedInState();
@@ -30,6 +31,7 @@ const validate = (state: any): FormError[] => {
 const handleLoginFormSubmit = async () => {
   isAlertShown.value = false;
   loginError.value = '';
+  isSubmitButtonDisabled.value = true;
   const body = {
     username: userData.username,
     password: userData.password
@@ -41,6 +43,7 @@ const handleLoginFormSubmit = async () => {
     });
     isAlertShown.value = true;
     loggedInState.value = true;
+    isSubmitButtonDisabled.value = false;
     setTimeout(() => {
       router.push('/admin');
     }, 5000);
@@ -48,6 +51,7 @@ const handleLoginFormSubmit = async () => {
     isAlertShown.value = true;
     loginError.value = `${error.statusCode}: ${error.data.message}!`;
     console.error(error);
+    isSubmitButtonDisabled.value = false;
   }
 };
 </script>
@@ -96,7 +100,12 @@ const handleLoginFormSubmit = async () => {
         ></button>
       </UInput>
     </UFormGroup>
-    <MenuButton class="login__submit-btn" :button-type="'submit'" :size="'middle'" :is-active="true"
+    <MenuButton
+      class="login__submit-btn"
+      :button-type="'submit'"
+      :size="'middle'"
+      :is-disabled="isSubmitButtonDisabled"
+      :is-active="true"
       >Вход</MenuButton
     >
   </UForm>
