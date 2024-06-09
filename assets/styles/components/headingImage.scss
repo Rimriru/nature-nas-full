@@ -12,11 +12,12 @@
 
   .heading-image__title {
     color: #fff;
-    top: 95px;
-    left: 13vw;
     position: absolute;
+    top: 50%;
+    left: 13vw;
+    transform: translateY(-50%);
     z-index: 80;
-    font-size: 24px;
+    font-size: clamp(20px, 3vw, 24px);
     font-weight: 600;
     text-shadow: 6px 1px 6px rgba(0, 0, 0, 0.6);
     margin-right: 20px;
@@ -51,7 +52,6 @@
 @media screen and (max-width: 800px) {
   .heading-image {
     .heading-image__title {
-      font-size: 22px;
       left: 5vw;
     }
   }

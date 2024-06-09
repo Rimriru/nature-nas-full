@@ -133,12 +133,18 @@ const onRemoveLinkPopupAgree = async () => {
   <div>
     <ul class="links-list">
       <li v-for="group of HEADER_LINK_GROUPS" :key="group._id" class="links-list__item">
-        <a :href="group.to" class="links-list__title">
+        <p v-if="!group.to" class="links-list__title">
           <UIcon :name="group.icon" class="icon" />
           <span>
             {{ group.title }}
           </span>
-        </a>
+        </p>
+        <NuxtLink v-else :href="group.to" class="links-list__title" :aria-label="group.title">
+          <UIcon :name="group.icon" class="icon" />
+          <span>
+            {{ group.title }}
+          </span>
+        </NuxtLink>
         <ul class="links-list__links">
           <LinksListFilter :group="group.group" :is-admin-page="props.isInAdminPage" />
         </ul>
@@ -179,56 +185,62 @@ const onRemoveLinkPopupAgree = async () => {
     '6 column'
     '7 column';
 
-  @media screen and (max-width: 600px) {
-    & {
-      display: block;
+  .links-list__item {
+    &:nth-of-type(1) {
+      grid-area: 1;
     }
-  }
+    &:nth-of-type(2) {
+      grid-area: column;
+    }
+    &:nth-of-type(3) {
+      grid-area: 2;
+    }
+    &:nth-of-type(4) {
+      grid-area: 3;
+    }
+    &:nth-of-type(5) {
+      grid-area: 4;
+    }
+    &:nth-of-type(6) {
+      grid-area: 5;
+    }
+    &:nth-of-type(7) {
+      grid-area: 6;
+    }
+    &:nth-of-type(8) {
+      grid-area: 7;
+    }
 
-  li:nth-of-type(1) {
-    grid-area: 1;
-  }
-  li:nth-of-type(2) {
-    grid-area: column;
-  }
-  li:nth-of-type(3) {
-    grid-area: 2;
-  }
-  li:nth-of-type(4) {
-    grid-area: 3;
-  }
-  li:nth-of-type(5) {
-    grid-area: 4;
-  }
-  li:nth-of-type(6) {
-    grid-area: 5;
-  }
-  li:nth-of-type(7) {
-    grid-area: 6;
-  }
-  li:nth-of-type(8) {
-    grid-area: 7;
-  }
-
-  .links-list__title {
-    font-size: 20px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 12px;
-
-    span {
+    .links-list__title {
+      font-size: clamp(16px, 2vw, 20px);
       font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 12px;
+
+      span {
+        font-weight: 600;
+      }
+    }
+
+    .links-list__links {
+      padding-left: 60px;
+      list-style: disc;
+      display: flex;
+      gap: 10px;
+      flex-direction: column;
     }
   }
+}
 
-  .links-list__links {
-    padding-left: 60px;
-    list-style: disc;
-    display: flex;
-    gap: 10px;
-    flex-direction: column;
+@media screen and (max-width: 600px) {
+  .links-list {
+    display: block;
+
+    .links-list__item {
+      margin-bottom: 15px;
+    }
   }
 }
 </style>
