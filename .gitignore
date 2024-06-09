@@ -24,4 +24,4 @@ logs
 !.env.example
 
 dump
-composables/useRoutesAndLinkGroupSet.ts
+.ecosystem.config.cjs

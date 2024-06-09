@@ -47,6 +47,10 @@ export default defineNuxtConfig({
     }
   },
   security: {
+    rateLimiter: {
+      tokensPerInterval: 250,
+      interval: 10000
+    },
     headers: {
       crossOriginEmbedderPolicy: 'unsafe-none',
       crossOriginResourcePolicy: 'cross-origin',
@@ -93,12 +97,52 @@ export default defineNuxtConfig({
       }
     }
   },
+  hooks: {
+    'build:manifest': (manifest) => {
+      for (const key in manifest) {
+        manifest[key].dynamicImports = [];
+
+        const file = manifest[key];
+        if (file.assets) {
+          file.assets = file.assets.filter((assetName) => !/.+\.(jpe?g|png|svg)$/.test(assetName));
+        }
+      }
+    }
+  },
+
   router: {
     options: {
       scrollBehaviorType: 'smooth'
     }
   },
   css: ['~/assets/styles/base.css', '~/assets/styles/main.scss'],
+  vite: {
+    build: {
+      rollupOptions: {
+        output: {
+          experimentalMinChunkSize: 250 * 1024,
+          manualChunks: (id, _) => {
+            if (
+              !id.includes('node_modules') &&
+              !id.startsWith('virtual:') &&
+              !id.includes('src') &&
+              !id.includes('assets')
+            ) {
+              if (id.includes('pages')) {
+                const parts = id.split('/');
+                const folderIndex = parts.indexOf('pages');
+                if (folderIndex + 2 < parts.length) {
+                  const pageGroup = parts[folderIndex + 1];
+                  return `chunk-pg-${pageGroup}`;
+                }
+                return 'chunk-pg-misc';
+              }
+            }
+          }
+        }
+      }
+    }
+  },
   modules: ['@nuxt/image', '@nuxt/ui', '@vueuse/nuxt', 'nuxt-security'],
   nitro: {
     plugins: ['~/server/index.ts']
