@@ -22,6 +22,7 @@ const coverAsSrc = computed(() => IMAGE_LINK_REG_EXP.test(props.newsItem.cover))
             }`
       "
       alt="Обложка новости"
+      loading="lazy"
     />
     <div class="news-card__info-block">
       <h2 class="news-card__title">{{ newsItem.title }}</h2>

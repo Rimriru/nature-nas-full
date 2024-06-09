@@ -96,6 +96,7 @@ const isLoggedIn = useLoggedInState();
             :src="`${
               $config.public.process === 'production' ? '' : $config.public.domen
             }/image/${item}`"
+            loading="lazy"
             class="carousel__img"
           />
         </template>

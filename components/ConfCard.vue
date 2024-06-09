@@ -24,7 +24,8 @@ const date = (date: string) =>
               confItem.cover
             }`
       "
-      alt="Обложка новости"
+      alt="Обложка конференции"
+      loading="lazy"
     />
     <div class="conf-card__main-block">
       <p class="conf-card__date">

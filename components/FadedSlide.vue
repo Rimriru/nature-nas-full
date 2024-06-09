@@ -29,6 +29,7 @@ const image = IMAGE_LINK_REG_EXP.test(props.item.img)
       <img
         :class="['home-slider__img', { 'home-slider__img_none': index === 1 }]"
         :src="image"
+        loading="lazy"
         alt="Обложка слайда"
       />
       <div

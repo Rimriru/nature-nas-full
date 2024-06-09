@@ -24,6 +24,7 @@ defineProps<{
               item.img
             }`
       "
+      loading="lazy"
     />
     <div
       :class="[

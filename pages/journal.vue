@@ -74,6 +74,7 @@ const onFileLoadFormPopupClose = () => {
           }`"
           class="journal__cover"
           alt="Обложка журнала"
+          loading="lazy"
         />
         <div class="journal__info-container">
           <ClientOnly>

@@ -22,6 +22,7 @@ const coverAsSrc = IMAGE_LINK_REG_EXP.test(props.newsItem.cover);
                 newsItem.cover
               }`
         "
+        loading="lazy"
         class="news-card-small__img"
       />
       <span class="news-card-small__description">{{ newsItem.title }}</span>

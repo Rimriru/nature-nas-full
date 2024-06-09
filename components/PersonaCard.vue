@@ -23,6 +23,7 @@ const loggedInState = useLoggedInState();
         :src="`${$config.public.process === 'production' ? '' : $config.public.domen}/image/${
           props.personaData.photo
         }`"
+        loading="lazy"
       />
       <div class="persona-card__info">
         <h2>{{ props.personaData.position }}</h2>
