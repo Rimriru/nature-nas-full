@@ -142,6 +142,6 @@ const onAddLinkFormSubmit = async () => {
   </ClientOnly>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 @import '~/assets/styles/components/appHeader.scss';
 </style>

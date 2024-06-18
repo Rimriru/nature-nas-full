@@ -30,6 +30,7 @@
           transition: all 0.1s ease-in;
           cursor: pointer;
           font-size: clamp(16px, 3vw, 18px);
+          padding-inline: 5px;
 
           &:hover {
             background-color: $gray;
