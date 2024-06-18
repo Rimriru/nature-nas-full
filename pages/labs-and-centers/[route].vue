@@ -17,14 +17,10 @@ const currentPage = computed(() => {
 </script>
 
 <template>
-  <KeepAlive>
-    <div>
-      <component
-        :is="currentPage?.components?.default"
-        :route-data="(currentPage?.props.default as PageProps).routeData"
-      ></component>
-    </div>
-  </KeepAlive>
+  <component
+    :is="currentPage?.components?.default"
+    :route-data="(currentPage?.props.default as PageProps).routeData"
+  ></component>
 </template>
 
 <style lang="scss"></style>
