@@ -134,13 +134,15 @@ let originalState: OriginalContentValues = {
 
 const enableEditMode = () => {
   const { title, description, text, photos, personaOne, personaTwo } = contentValues.value;
+  const personaOneRaw = toRaw(personaOne);
+  const personaTwoRaw = toRaw(personaTwo);
   originalState = {
     title,
     description,
     text,
     photos,
-    personaOne,
-    personaTwo
+    personaOne: { ...personaOneRaw },
+    personaTwo: { ...personaTwoRaw }
   };
   isInEditMode.value = true;
 };
@@ -367,28 +369,30 @@ const handleCanvasFormSubmit = async () => {
       disableEditMode();
       wasContentBefore = true;
       isLoaderVisible.value = false;
+      return;
     } catch (error) {
       isLoaderVisible.value = false;
       console.error(error);
-    }
-  } else {
-    if (originalValues === JSON.stringify(contentBody)) {
-      isLoaderVisible.value = false;
-      disableEditMode();
       return;
     }
+  }
 
-    try {
-      await $fetch(`/api/content/${contentValues.value._id}`, {
-        method: 'patch',
-        body: contentBody
-      });
-      isLoaderVisible.value = false;
-      disableEditMode();
-    } catch (error) {
-      isLoaderVisible.value = false;
-      console.error(error);
-    }
+  if (originalValues === JSON.stringify(contentBody)) {
+    isLoaderVisible.value = false;
+    disableEditMode();
+    return;
+  }
+
+  try {
+    await $fetch(`/api/content/${contentValues.value._id}`, {
+      method: 'patch',
+      body: contentBody
+    });
+    isLoaderVisible.value = false;
+    disableEditMode();
+  } catch (error) {
+    isLoaderVisible.value = false;
+    console.error(error);
   }
 };
 </script>
