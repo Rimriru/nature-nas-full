@@ -75,10 +75,10 @@ const handleCreatePageFormSubmit = async () => {
       @submit="handleCreatePageFormSubmit"
     >
       <UFormGroup name="route" class="page-creation__text-field" :eager-validation="true">
-        Путь на будущую страницу: (http://www.nature-nas.by*ссылка*)
+        Путь на будущую страницу: (https://nature-nas.by*ссылка*)
         <span class="required">*</span>
         <UInput
-          v-model="newRouteValues.route"
+          v-model.trim="newRouteValues.route"
           placeholder="Введите ссылку на страницу латинницей: /..."
         />
       </UFormGroup>

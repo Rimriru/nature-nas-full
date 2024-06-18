@@ -251,7 +251,7 @@ const handleAddLink = async () => {
     });
     await navigateTo(`/labs-and-centers${newLinkTyped.to}`);
   } catch (error: any) {
-    requestError.value = `Ошибка ${error.statusCode}: ${error.data.message}`;
+    requestError.value = error.data.message;
     console.error(error);
   }
 };

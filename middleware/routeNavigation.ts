@@ -31,8 +31,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     }
   } else {
     throw createError({
-      statusCode: 500,
-      message: `Произошла ошибка при обращении к GET "/api/routes".`
+      statusCode: 404,
+      message: 'Список страниц не обнаружен!'
     });
   }
 });

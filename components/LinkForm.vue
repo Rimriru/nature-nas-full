@@ -51,7 +51,7 @@ const handleClose = () => {
           />
         </UFormGroup>
         <UFormGroup name="to" :eager-validation="true">
-          Ссылка (http://www.nature-nas.by*ссылка*)
+          Ссылка (https://nature-nas.by*ссылка*)
           <span class="required">*</span>
           <UInput
             color="blue"
