@@ -31,11 +31,13 @@ const loggedInState = useLoggedInState();
         <p>{{ props.personaData.phd }}</p>
         <p v-if="props.personaData.telNumber" class="info-data">
           <UIcon name="i-material-symbols-phone-enabled-outline" />
-          Тел.: {{ props.personaData.telNumber }}
+          Тел.:
+          <a :href="`tel:${props.personaData.telNumber}`">{{ props.personaData.telNumber }}</a>
         </p>
         <p v-if="props.personaData.faxNumber" class="info-data">
           <UIcon name="i-material-symbols-fax-outline" />
-          Тел./факс: {{ props.personaData.faxNumber }}
+          Тел./факс:
+          <a :href="`tel:${props.personaData.faxNumber}`">{{ props.personaData.faxNumber }}</a>
         </p>
         <p v-if="props.personaData.email" class="info-data">
           <UIcon name="i-material-symbols-mail-outline" />
