@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { canvases } from '~/utils/canvasesData';
+import type InitialDataType from './types/InitialDataFormDb';
 
 const loggedInState = useLoggedInState();
 const token = useCookie('jwt');
@@ -27,20 +28,16 @@ if (!linkGroupsState.value.length) {
   linkGroupsState.value = linkGroups;
 }
 
-const filesFromDb = await useFiles();
-const photoFromDb = await useMainPhotoRequest();
-const news = await useNewsRequest();
-const contacts = await useContacts();
-const conferencesFromDb = await useConfs();
-const personas = await usePersonas();
+// @ts-ignore
+const initialData: InitialDataType = await $fetch('/api/data');
 
 const router = useRouter();
-photoState.value = photoFromDb;
-newsState.value = news;
-contactsState.value = contacts;
-conferenceState.value = conferencesFromDb;
-filesState.value = filesFromDb;
-personasState.value = personas;
+photoState.value = initialData.photo;
+newsState.value = initialData.news;
+contactsState.value = initialData.contacts;
+conferenceState.value = initialData.confs;
+filesState.value = initialData.files;
+personasState.value = initialData.personas;
 
 routesState.value.forEach((route) => {
   router.addRoute({
