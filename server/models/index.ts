@@ -13,3 +13,4 @@ export { default as files } from './file';
 export { default as journal } from './journal';
 export { default as homeInfo } from './homeInfo';
 export { default as personas } from './persona';
+export { default as monographs } from './monograph';

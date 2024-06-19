@@ -12,7 +12,6 @@ const linkSchema = new mongoose.Schema(
     },
     route: {
       type: mongoose.Schema.Types.ObjectId,
-      required: [true, 'Необходимо передать роут'],
       ref: 'route'
     },
     couldBeEdited: {
