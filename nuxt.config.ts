@@ -34,14 +34,14 @@ export default defineNuxtConfig({
     '/api/files/upload': {
       security: {
         requestSizeLimiter: {
-          maxUploadFileRequestInBytes: 136314880
+          maxUploadFileRequestInBytes: 130000000
         }
       }
     },
     '/api/images': {
       security: {
         requestSizeLimiter: {
-          maxUploadFileRequestInBytes: 5242880
+          maxUploadFileRequestInBytes: 5000000
         }
       }
     }
