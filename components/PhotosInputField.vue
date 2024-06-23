@@ -25,7 +25,7 @@ const onPhotosChange = (event: Event) => {
     }
 
     filesArray.forEach((file) => {
-      if (file.size > 5242880) {
+      if (file.size > 5000000) {
         photosError.value = fileSizeError('5');
         errorPresent = true;
       }

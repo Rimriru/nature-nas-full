@@ -270,7 +270,7 @@ const handleSlideFormSubmit = async () => {
               @on-click="($refs.imgInput as HTMLInputElement).click()"
             />
             <span v-if="imgErrorVisibility.fileSizeError" class="error">{{
-              fileSizeError('2')
+              fileSizeError('2,5')
             }}</span>
           </div>
           <UDivider label="или" class="mb-5" />

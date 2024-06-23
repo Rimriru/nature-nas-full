@@ -14,7 +14,7 @@ const onPhotoChange = (event: Event) => {
   const fileInputData = event.target as HTMLInputElement;
   if (fileInputData.files && fileInputData.files.length) {
     const file = fileInputData.files[0];
-    if (file.size > 5242880) return (photoError.value = fileSizeError('5'));
+    if (file.size > 5000000) return (photoError.value = fileSizeError('5'));
     emit('onChange', file);
   } else {
     emit('onChange', '');

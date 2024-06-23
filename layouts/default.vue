@@ -29,7 +29,7 @@ onUnmounted(() => {
 
 <style lang="scss">
 .layout {
-  min-height: 100vh;
+  min-height: 100dvh;
   max-width: 1920px;
   width: 100%;
   margin: 0 auto;

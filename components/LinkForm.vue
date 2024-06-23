@@ -12,7 +12,7 @@ const validate = (state: any): FormError[] => {
     errors.push({ path: 'title', message: 'Поле "Название" является обязательным' });
   if (!state.to)
     errors.push({ path: 'to', message: 'Поле "Ссылка на страницу" является обязательным' });
-  if (!/^\/(?!\/)[a-zA-Z]/.test(state.to))
+  if (!props.isForMonographs && !/^\/(?!\/)[a-zA-Z]+(?:-[a-zA-Z]+)*$/.test(state.to))
     errors.push({
       path: 'to',
       message: 'Ссылка должна начинаться с / и содержать латинские символы после'
@@ -61,7 +61,7 @@ const handleClose = () => {
         </UFormGroup>
         <span class="error" v-if="props.error">{{ props.error }}</span>
         <div class="link-form__btns">
-          <MenuButton @click="handleClose" :size="'small'">Отмена</MenuButton>
+          <MenuButton :size="'small'" @click="handleClose">Отмена</MenuButton>
           <MenuButton :is-active="true" :button-type="'submit'" :size="'small'"
             >Добавить</MenuButton
           >

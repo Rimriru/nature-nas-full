@@ -45,7 +45,7 @@ const onFileChange = (event: Event) => {
   const fileInputData = event.target as HTMLInputElement;
   if (fileInputData.files && fileInputData.files.length) {
     const file = fileInputData.files[0];
-    if (file.size > 136314880) return (fileError.value = fileSizeError('130'));
+    if (file.size > 130000000) return (fileError.value = fileSizeError('130'));
     fileForUpload.value = file;
   } else {
     fileForUpload.value = '';
