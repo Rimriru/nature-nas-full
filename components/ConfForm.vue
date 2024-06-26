@@ -49,33 +49,29 @@ let originalConfItemData: {
 if (props.isInPopup) {
   const confItemForEditing: Ref<ConfDataFromDb> | undefined = inject('confItem');
 
-  watch(
-    () => confItemForEditing,
-    (newValue) => {
-      if (newValue?.value) {
-        confForm.value?.clear();
-        conferenceData._id = newValue.value._id;
-        conferenceData.description = newValue.value.description;
-        conferenceData.startDate = newValue.value.startDate;
-        conferenceData.endDate = newValue.value.endDate ? newValue.value.endDate : '';
-        conferenceData.cover = newValue.value.cover;
-        conferenceData.content = newValue.value.content;
+  if (confItemForEditing?.value) {
+    confForm.value?.clear();
+    conferenceData._id = String(confItemForEditing.value._id);
+    conferenceData.description = confItemForEditing.value.description;
+    conferenceData.startDate = confItemForEditing.value.startDate;
+    conferenceData.endDate = confItemForEditing.value.endDate
+      ? confItemForEditing.value.endDate
+      : '';
+    conferenceData.cover = confItemForEditing.value.cover;
+    conferenceData.content = confItemForEditing.value.content;
 
-        const { _id, ...others } = newValue.value;
-        originalConfItemData = others;
+    const { _id, ...others } = confItemForEditing.value;
+    originalConfItemData = others;
 
-        if (IMAGE_LINK_REG_EXP.test(conferenceData.cover)) {
-          coverPreview.value = conferenceData.cover;
-          coverForUploadingAsLink.value = conferenceData.cover;
-        } else {
-          coverPreview.value = `${
-            config.public.process === 'production' ? '' : config.public.domen
-          }/image/${conferenceData.cover}`;
-        }
-      }
-    },
-    { deep: true }
-  );
+    if (IMAGE_LINK_REG_EXP.test(conferenceData.cover)) {
+      coverPreview.value = conferenceData.cover;
+      coverForUploadingAsLink.value = conferenceData.cover;
+    } else {
+      coverPreview.value = `${
+        config.public.process === 'production' ? '' : config.public.domen
+      }/image/${conferenceData.cover}`;
+    }
+  }
 }
 
 const validate = (state: any): FormError[] => {
@@ -276,6 +272,7 @@ const handleConfItemEditFormSubmit = async () => {
         method: 'patch',
         body: confItemBody
       });
+
       const previousItemIndex = confsState.value.findIndex((item) => item._id === confItemId);
       confsState.value[previousItemIndex] = editedConfItem;
       notifications.add({
