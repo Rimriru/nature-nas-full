@@ -27,8 +27,8 @@ const notifications = useToast();
 provide('confItem', confItemOfInterest);
 
 const onEditBtnClick = (confItem: ConfDataFromDb) => {
-  isConfFormPopupOpen.value = true;
   confItemOfInterest.value = confItem;
+  isConfFormPopupOpen.value = true;
 };
 
 const resetConfItemOfInterest = () => {
