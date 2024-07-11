@@ -10,6 +10,7 @@ export default defineEventHandler({
       const editedNewsItem = await news.findByIdAndUpdate(id, body, { new: true });
       return editedNewsItem;
     } catch (error: any) {
+      mongooseErrorHandler(error);
       throw createError({
         status: error.statusCode,
         message: error.message

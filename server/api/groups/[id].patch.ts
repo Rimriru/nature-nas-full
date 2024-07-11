@@ -13,6 +13,7 @@ export default defineEventHandler({
       });
       return editedGroup;
     } catch (error: any) {
+      mongooseErrorHandler(error);
       throw createError({
         status: error.statusCode,
         message: error.message

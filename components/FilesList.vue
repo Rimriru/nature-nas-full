@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type FileDataFromDb from '~/types/FilesDataFromDb';
+import type { FileDataFromDb } from '~/types/FilesDataFromDb';
 
 interface TableRow extends FileDataFromDb {
   number: number;

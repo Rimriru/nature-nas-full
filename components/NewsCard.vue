@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { NewsCardData } from '~/types/NewsDataFromDb';
+import type { NewsDataFromDb } from '~/types/NewsDataFromDb';
 
 const props = defineProps<{
-  newsItem: NewsCardData;
+  newsItem: NewsDataFromDb;
 }>();
 
 const emit = defineEmits(['editClick', 'removeClick']);

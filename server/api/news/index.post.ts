@@ -10,6 +10,7 @@ export default defineEventHandler({
       setResponseStatus(event, 201);
       return createdNewsItem;
     } catch (error: any) {
+      mongooseErrorHandler(error);
       throw createError({
         status: error.statusCode,
         message: error.message

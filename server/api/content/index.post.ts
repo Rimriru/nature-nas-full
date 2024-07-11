@@ -17,12 +17,12 @@ export default defineEventHandler({
           statusCode: 409,
           message: CONFLICT_ROUTE_ERROR_MESSAGE
         });
-      } else {
-        throw createError({
-          status: error.statusCode,
-          message: error.message
-        });
       }
+      mongooseErrorHandler(error);
+      throw createError({
+        status: error.statusCode,
+        message: error.message
+      });
     }
   }
 });

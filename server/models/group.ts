@@ -1,6 +1,7 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
+import type { LinkGroup } from '~/types/LinkDataFromDb';
 
-const groupSchema = new mongoose.Schema(
+const groupSchema: Schema<LinkGroup> = new Schema(
   {
     title: {
       type: String,
@@ -9,10 +10,10 @@ const groupSchema = new mongoose.Schema(
     group: {
       type: String
     },
-    links: [{ type: mongoose.Schema.Types.ObjectId, ref: 'link' }]
+    links: [{ type: Schema.Types.ObjectId, ref: 'link' }]
   },
   { versionKey: false }
 );
 
-const Group = mongoose.model('group', groupSchema);
+const Group = model('group', groupSchema);
 export default Group;

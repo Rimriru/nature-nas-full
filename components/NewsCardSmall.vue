@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { IMAGE_LINK_REG_EXP } from '~/utils/regExp';
-import type { NewsCardData } from '~/types/NewsDataFromDb';
+import type { NewsDataFromDb } from '~/types/NewsDataFromDb';
 
 const props = defineProps<{
-  newsItem: NewsCardData;
+  newsItem: NewsDataFromDb;
 }>();
 
 const config = useRuntimeConfig();

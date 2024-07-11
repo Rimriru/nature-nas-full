@@ -1,6 +1,7 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
+import type { IContacts } from '~/types/ContactsDataFromDb';
 
-const contactSchema: any = new mongoose.Schema(
+const contactSchema: Schema<IContacts> = new Schema(
   {
     address: {
       type: String,
@@ -25,5 +26,5 @@ const contactSchema: any = new mongoose.Schema(
   { versionKey: false }
 );
 
-const Contact = mongoose.model('contact', contactSchema);
+const Contact = model('contact', contactSchema);
 export default Contact;

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { fileSizeError } from '~/utils/errorMessages';
 import type { ModelRef } from 'vue';
-import type { PersonaData } from '~/types/PersonasDataFromDb';
+import type { IPersonaData } from '~/types/PersonasDataFromDb';
 
-const model: ModelRef<PersonaData | undefined, string> = defineModel('personaData');
+const model: ModelRef<IPersonaData | undefined, string> = defineModel('personaData');
 const emit = defineEmits(['onPhotoChange']);
 const props = defineProps(['photo', 'heading']);
 const photoForPreview = ref<string>('');

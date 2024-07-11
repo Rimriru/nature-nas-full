@@ -1,6 +1,7 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
+import type { IJournal } from '~/types/JournalDataFromDb';
 
-const journalSchema: any = new mongoose.Schema(
+const journalSchema: Schema<IJournal> = new Schema(
   {
     description: {
       type: String,
@@ -20,12 +21,12 @@ const journalSchema: any = new mongoose.Schema(
       type: String
     },
     authorRules: {
-      type: mongoose.SchemaTypes.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'file',
       required: [true, 'Необходимо указать правила для авторов журнала']
     },
     editorialPolicy: {
-      type: mongoose.SchemaTypes.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'file',
       required: [true, 'Необходимо указать редакционную политику журнала']
     },
@@ -44,5 +45,5 @@ const journalSchema: any = new mongoose.Schema(
   { versionKey: false }
 );
 
-const Journal = mongoose.model('journal', journalSchema);
+const Journal = model('journal', journalSchema);
 export default Journal;

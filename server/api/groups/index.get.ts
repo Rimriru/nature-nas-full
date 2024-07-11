@@ -1,4 +1,4 @@
-import { groups, links } from '../../models/index';
+import { groups, links } from '~/server/models/index';
 import type { LinkGroup } from '~/types/LinkDataFromDb';
 
 export default defineEventHandler(async (evt) => {

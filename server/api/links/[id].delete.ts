@@ -23,6 +23,7 @@ export default defineEventHandler({
 
       return result;
     } catch (error: any) {
+      mongooseErrorHandler(error);
       throw createError({
         status: error.statusCode,
         message: error.message

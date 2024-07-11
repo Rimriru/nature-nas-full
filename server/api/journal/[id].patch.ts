@@ -1,4 +1,5 @@
 import { journal } from '~/server/models';
+import type { JournalDataFromDb } from '~/types/JournalDataFromDb';
 
 export default defineEventHandler({
   onRequest: [auth],
@@ -10,8 +11,9 @@ export default defineEventHandler({
       const editedJournal = await journal
         .findByIdAndUpdate(id, body, { new: true })
         .populate(['authorRules', 'editorialPolicy']);
-      return editedJournal;
+      return editedJournal as unknown as JournalDataFromDb;
     } catch (error: any) {
+      mongooseErrorHandler(error);
       throw createError({
         status: error.statusCode,
         message: error.message

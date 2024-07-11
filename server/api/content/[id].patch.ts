@@ -10,6 +10,7 @@ export default defineEventHandler({
       const editedContent = await contents.findByIdAndUpdate(id, contentBody, { new: true });
       return editedContent;
     } catch (error: any) {
+      mongooseErrorHandler(error);
       throw createError({
         status: error.statusCode,
         message: error.message

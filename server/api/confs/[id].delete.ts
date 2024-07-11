@@ -15,8 +15,9 @@ export default defineEventHandler({
         });
       }
       await conferences.findByIdAndDelete(id);
-      return { message: 'Конференция удалена' };
+      return { message: 'Конференция была удалена' };
     } catch (error: any) {
+      mongooseErrorHandler(error);
       throw createError({
         status: error.statusCode,
         message: error.message

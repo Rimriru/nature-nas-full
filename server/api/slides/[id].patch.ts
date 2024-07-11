@@ -1,4 +1,5 @@
 import { slides } from '~/server/models';
+import type Slide from '~/types/SlideDataFromDb';
 
 export default defineEventHandler({
   onRequest: [auth],
@@ -8,8 +9,9 @@ export default defineEventHandler({
 
     try {
       const editedSlide = await slides.findByIdAndUpdate(id, body, { new: true });
-      return editedSlide;
+      return editedSlide as unknown as Slide;
     } catch (error: any) {
+      mongooseErrorHandler(error);
       throw createError({
         status: error.statusCode,
         message: error.message

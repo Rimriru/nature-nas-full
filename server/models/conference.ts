@@ -1,6 +1,7 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
+import type { IConference } from '~/types/ConfsDataFromDb';
 
-const conferenceSchema: any = new mongoose.Schema(
+const conferenceSchema: Schema<IConference> = new Schema(
   {
     description: {
       type: String,
@@ -26,5 +27,5 @@ const conferenceSchema: any = new mongoose.Schema(
   { versionKey: false }
 );
 
-const ConferenceModel = mongoose.model('conference', conferenceSchema);
+const ConferenceModel = model('conference', conferenceSchema);
 export default ConferenceModel;

@@ -1,6 +1,7 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
+import type { INewsData } from '~/types/NewsDataFromDb';
 
-const newsSchema: any = new mongoose.Schema(
+const newsSchema: Schema<INewsData> = new Schema(
   {
     title: {
       type: String,
@@ -27,5 +28,5 @@ const newsSchema: any = new mongoose.Schema(
   { versionKey: false }
 );
 
-const NewsModel = mongoose.model('new', newsSchema);
+const NewsModel = model('new', newsSchema);
 export default NewsModel;

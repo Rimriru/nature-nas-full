@@ -7,6 +7,7 @@ export default defineEventHandler(async (event) => {
     await personas.findByIdAndDelete(personasId);
     return { message: 'Контакт удалён успешно' };
   } catch (error: any) {
+    mongooseErrorHandler(error);
     throw createError({
       status: error.statusCode,
       message: error.message

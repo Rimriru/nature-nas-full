@@ -1,13 +1,13 @@
-interface ConfCardData {
-  _id: string;
+interface IConference {
   description: string;
   cover: string;
   startDate: string;
   endDate?: string;
-}
-
-interface ConfDataFromDb extends ConfCardData {
   content: string;
 }
 
-export { ConfCardData, ConfDataFromDb };
+interface ConfDataFromDb extends IConference {
+  _id: string;
+}
+
+export { IConference, ConfDataFromDb };

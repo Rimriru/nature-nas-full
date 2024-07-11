@@ -20,6 +20,7 @@ export default defineEventHandler({
         .populate('links');
       return editedLinkGroup as unknown as LinkGroup;
     } catch (error: any) {
+      mongooseErrorHandler(error);
       throw createError({
         status: error.statusCode,
         message: error.message

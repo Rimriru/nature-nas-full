@@ -1,5 +1,6 @@
 import { conferences } from '~/server/models';
 import auth from '~/server/utils/auth';
+import type { ConfDataFromDb } from '~/types/ConfsDataFromDb';
 
 export default defineEventHandler({
   onRequest: [auth],
@@ -8,8 +9,9 @@ export default defineEventHandler({
     const body = await readBody(event);
     try {
       const editedConf = await conferences.findByIdAndUpdate(id, body, { new: true });
-      return editedConf;
+      return editedConf as unknown as ConfDataFromDb;
     } catch (error: any) {
+      mongooseErrorHandler(error);
       throw createError({
         status: error.statusCode,
         message: error.message

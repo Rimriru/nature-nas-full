@@ -1,6 +1,7 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
+import type HomeInfo from '~/types/HomeInfoDataFromDb';
 
-const homeInfoSchema: any = new mongoose.Schema(
+const homeInfoSchema: Schema<HomeInfo> = new Schema(
   {
     content: {
       type: String,
@@ -10,5 +11,5 @@ const homeInfoSchema: any = new mongoose.Schema(
   { versionKey: false }
 );
 
-const HomeInfo = mongoose.model('homeInfo', homeInfoSchema);
+const HomeInfo = model('homeInfo', homeInfoSchema);
 export default HomeInfo;
