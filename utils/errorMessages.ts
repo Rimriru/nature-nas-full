@@ -8,8 +8,10 @@ const FORBIDDEN_ERROR_MESSAGE = 'Ошибка 403: недостаточно пр
 
 const fileSizeError = (size: string) => `Размер загружаемого файла превышает ${size} мб!`;
 const NEWS_COVER_REQUIRED_ERROR = 'Необходимо загрузить или вставить ссылку на обложку';
-const LINK_VALIDATION_ERROR =
+const IMAGE_LINK_VALIDATION_ERROR =
   'Ссылка на изображение должна начинаться с http или https и оканчиваться форматом (".png"/".jpg"/".jpeg")';
+const PAGE_LINK_VALIDATION_ERROR =
+  'Ссылка должна начинаться с / и содержать строчные латинские символы после';
 
 export {
   CONFLICT_ROUTE_ERROR_MESSAGE,
@@ -19,5 +21,6 @@ export {
   FORBIDDEN_ERROR_MESSAGE,
   fileSizeError,
   NEWS_COVER_REQUIRED_ERROR,
-  LINK_VALIDATION_ERROR
+  IMAGE_LINK_VALIDATION_ERROR,
+  PAGE_LINK_VALIDATION_ERROR
 };

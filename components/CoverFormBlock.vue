@@ -3,7 +3,7 @@ import defaultNewsCover from '~/assets/images/news-preview-default.jpg';
 import {
   fileSizeError,
   NEWS_COVER_REQUIRED_ERROR,
-  LINK_VALIDATION_ERROR
+  IMAGE_LINK_VALIDATION_ERROR
 } from '~/utils/errorMessages';
 
 defineProps<{
@@ -66,7 +66,7 @@ defineExpose({
         @keyup="emit('onNewsCoverLinkChange')"
       />
       <span class="error cover-error" v-if="coverErrorVisibility.linkValidationError">{{
-        LINK_VALIDATION_ERROR
+        IMAGE_LINK_VALIDATION_ERROR
       }}</span>
     </div>
     <span v-if="coverErrorVisibility.requiredError" class="error cover-error">{{

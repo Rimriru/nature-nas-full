@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { CANVAS_OPTIONS, canvases } from '~/utils/canvasesData';
+import { PAGE_LINK_REG_EXP } from '~/utils/regExp';
+import { PAGE_LINK_VALIDATION_ERROR } from '~/utils/errorMessages';
 import type { Form, FormError } from '#ui/types';
-import type RouteDataFromDb from '~/types/RouteDataFromDb';
+import type { RouteDataFromDb } from '~/types/RouteDataFromDb';
 
 const newRouteValues = reactive({
   route: '',
@@ -16,10 +18,10 @@ const router = useRouter();
 const validate = (state: any): FormError[] => {
   const errors = [];
   if (!state.route) errors.push({ path: 'route', message: 'Поле "Ссылка" является обязательным' });
-  if (!/^\/(?!.*--)[a-z-]+$/.test(state.route))
+  if (!PAGE_LINK_REG_EXP.test(state.route))
     errors.push({
       path: 'route',
-      message: 'Ссылка должна начинаться с / и содержать строчные латинские символы после'
+      message: PAGE_LINK_VALIDATION_ERROR
     });
   return errors;
 };
@@ -75,10 +77,11 @@ const handleCreatePageFormSubmit = async () => {
       @submit="handleCreatePageFormSubmit"
     >
       <UFormGroup name="route" class="page-creation__text-field" :eager-validation="true">
-        Путь на будущую страницу: (https://nature-nas.by*ссылка*)
+        Путь на будущую страницу: (nature-nas.by*ссылка*)
         <span class="required">*</span>
         <UInput
           v-model.trim="newRouteValues.route"
+          :eager-validation="true"
           placeholder="Введите ссылку на страницу латинницей: /..."
         />
       </UFormGroup>

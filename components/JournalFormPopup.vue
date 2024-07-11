@@ -339,7 +339,7 @@ const onJournalFormSubmit = async () => {
           <p class="journal-form__file-data">
             {{
               `ссылка: ${
-                $config.public.process === 'production' ? '' : $config.public.domen
+                $config.public.process === 'production' ? 'nature-nas.by' : $config.public.domen
               }/file/${journalData.authorRules.file}`
             }}
           </p>

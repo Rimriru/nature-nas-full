@@ -3,7 +3,7 @@ import defaultImg from '~/assets/images/slide-preview-default.jpg';
 import {
   fileSizeError,
   NEWS_COVER_REQUIRED_ERROR,
-  LINK_VALIDATION_ERROR
+  IMAGE_LINK_VALIDATION_ERROR
 } from '~/utils/errorMessages';
 import type Slide from '~/types/SlideDataFromDb';
 import type { Form, FormError } from '#ui/types';
@@ -280,7 +280,7 @@ const handleSlideFormSubmit = async () => {
             @keyup="handleImgLinkChange"
           />
           <span class="error" v-if="imgErrorVisibility.linkValidationError">{{
-            LINK_VALIDATION_ERROR
+            IMAGE_LINK_VALIDATION_ERROR
           }}</span>
         </div>
         <span v-if="imgErrorVisibility.requiredError" class="error">{{

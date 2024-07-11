@@ -138,9 +138,9 @@ const enableEditMode = () => {
   const personaTwoRaw = toRaw(personaTwo);
   originalState = {
     title,
-    description,
-    text,
-    photos,
+    description: description ? description : '',
+    text: text ? text : '',
+    photos: photos ? photos : [],
     personaOne: { ...personaOneRaw },
     personaTwo: { ...personaTwoRaw }
   };
@@ -204,7 +204,11 @@ const onPhotosSelected = (files: FileList) => {
 };
 
 const onPhotosFromDbRemove = (removedValue: string) => {
-  contentValues.value.photos = contentValues.value.photos.filter((photo) => photo !== removedValue);
+  if (contentValues.value.photos) {
+    contentValues.value.photos = contentValues.value.photos.filter(
+      (photo) => photo !== removedValue
+    );
+  }
   carouselPhotosFromDbForRemove.value.push(removedValue);
 };
 
@@ -345,7 +349,7 @@ const handleCanvasFormSubmit = async () => {
         } else {
           carouselPhotosForLoading.value = [];
           response._data.forEach((photo: string) => {
-            return contentValues.value.photos.push(photo);
+            return contentValues.value.photos!.push(photo);
           });
         }
       }
