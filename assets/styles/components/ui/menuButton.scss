@@ -16,11 +16,7 @@
   &_disabled {
     background-color: $gray;
     opacity: 0.5;
-
-    &:hover {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+    cursor: not-allowed;
   }
 
   &_size_middle {

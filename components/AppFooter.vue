@@ -77,7 +77,7 @@ const currentYear = new Date().getFullYear();
             v-for="{ to, logo, alt } of FOOTER_LINKS_LOGOS"
             :key="JSON.stringify({ to, logo, alt })"
           >
-            <a :href="to" aria-label="Link">
+            <a :href="to" aria-label="Link" target="_blank">
               <img :src="logo" :alt="alt" class="footer__img" />
             </a>
           </li>

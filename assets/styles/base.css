@@ -30,11 +30,19 @@ a:visited {
   color: inherit;
 }
 
-a[href]:hover {
-  color: #f6bf25;
-}
-
 ul,
 ol {
   padding-left: 0;
+}
+
+@media (hover: hover) {
+  a[href]:hover {
+    color: #f6bf25;
+  }
+}
+
+@media (hover: none) {
+  a[href]:active {
+    color: #f6bf25;
+  }
 }

@@ -32,9 +32,18 @@
           font-size: clamp(16px, 3vw, 18px);
           padding-inline: 5px;
 
-          &:hover {
-            background-color: $gray;
-            color: #fff;
+          @media (hover: hover) {
+            &:hover {
+              background-color: $gray;
+              color: #fff;
+            }
+          }
+
+          @media (hover: none) {
+            &:active {
+              background-color: $gray;
+              color: #fff;
+            }
           }
         }
       }
@@ -90,9 +99,18 @@
             color: #fff;
           }
 
-          &:hover {
-            background-color: $gray;
-            color: #fff;
+          @media (hover: hover) {
+            &:hover {
+              background-color: $gray;
+              color: #fff;
+            }
+          }
+
+          @media (hover: none) {
+            &:active {
+              background-color: $gray;
+              color: #fff;
+            }
           }
         }
       }
