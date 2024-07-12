@@ -3,7 +3,7 @@
 <template>
   <div class="labs-centers">
     <SideMenu />
-    <NuxtPage keepalive />
+    <NuxtPage />
   </div>
 </template>
 
