@@ -17,7 +17,6 @@ if (router.currentRoute.value.meta.title) {
 const photoForLoading = ref<File | ''>('');
 const isImageLoadFormOpen = ref(false);
 const notifications = useToast();
-const config = useRuntimeConfig();
 
 const photoState = useMainPhotoState();
 
