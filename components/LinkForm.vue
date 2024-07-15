@@ -72,6 +72,9 @@ const handleClose = () => {
             v-model.trim="props.linkValue.to"
             placeholder="Введите ссылку: /..."
           />
+          <span v-if="isForMonographs" class="text-gray-500 text-sm block"
+            >Можно ввести произвольную ссылку</span
+          >
         </UFormGroup>
         <span class="error" v-if="props.error">{{ props.error }}</span>
         <div class="link-form__btns">
