@@ -8,6 +8,7 @@ interface NewLinkRequestBody {
 interface PatchLinkRequestBody {
   title: string;
   to: string;
+  type?: 'param' | '';
 }
 
 export { NewLinkRequestBody, PatchLinkRequestBody };
