@@ -318,8 +318,8 @@ onMounted(() => {
           :cover-error-visibility="coverErrorVisibility"
           :cover-preview="coverPreview"
           v-model="coverForUploadingAsLink"
-          @on-news-cover-input-change="handleNewsCoverInputChange"
-          @on-news-cover-link-change="handleNewsCoverLinkChange"
+          @on-cover-input-change="handleNewsCoverInputChange"
+          @on-cover-link-change="handleNewsCoverLinkChange"
         />
         <div class="news-form__header-inputs">
           <TitleFormBlock :placeholder="'Введите заголовок новости...'" v-model="newsData.title" />

@@ -17,7 +17,7 @@ defineProps<{
 
 const coverAsLinkModel = defineModel();
 
-const emit = defineEmits(['onNewsCoverInputChange', 'onNewsCoverLinkChange']);
+const emit = defineEmits(['onCoverInputChange', 'onCoverLinkChange']);
 
 const coverImageInput = ref();
 
@@ -49,7 +49,7 @@ defineExpose({
           type="file"
           ref="coverImageInput"
           accept="image/jpeg, image/png"
-          @change="(evt: Event) => emit('onNewsCoverInputChange', evt)"
+          @change="(evt: Event) => emit('onCoverInputChange', evt)"
         />
         <LoadButton
           class="w-30 mx-auto"
@@ -63,7 +63,7 @@ defineExpose({
       <UInput
         v-model="coverAsLinkModel"
         placeholder="Вставьте ссылку на изображение..."
-        @keyup="emit('onNewsCoverLinkChange')"
+        @keyup="emit('onCoverLinkChange')"
       />
       <span class="error cover-error" v-if="coverErrorVisibility.linkValidationError">{{
         IMAGE_LINK_VALIDATION_ERROR

@@ -178,23 +178,6 @@ const handleRemoveLinkFormSubmit = async () => {
 const addOrEditLinkHandlersForSubmit = computed(() =>
   isEditing.value ? handleEditLinkFormSubmit : handleAddLinkFormSubmit
 );
-
-const handleNewMgraphCreation = async () => {
-  try {
-    const newGraph = await $fetch('/api/mgraphs', {
-      method: 'post',
-      body: {
-        title: 'kek',
-        description: 'I a m h e r e',
-        cover: 'here',
-        year: '2000'
-      }
-    });
-    monographsState.value = [...monographsState.value, newGraph];
-  } catch (error) {
-    console.error(error);
-  }
-};
 </script>
 
 <template>
@@ -209,7 +192,6 @@ const handleNewMgraphCreation = async () => {
         @on-remove-link-button-click="onRemoveLinkButtonClick"
       />
     </div>
-    <MenuButton :size="'middle'" @click="handleNewMgraphCreation">Создать монографию</MenuButton>
     <LazyLinkForm
       v-if="isLoggedIn"
       :link-value="linkValues"
@@ -233,5 +215,6 @@ const handleNewMgraphCreation = async () => {
 <style lang="scss">
 .monographs {
   display: flex;
+  gap: 50px;
 }
 </style>
