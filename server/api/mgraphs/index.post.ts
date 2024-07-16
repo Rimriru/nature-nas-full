@@ -1,5 +1,5 @@
 import { monographs } from '~/server/models';
-import { mongooseErrorHandler } from '~/server/utils/mongooseErrorHandler';
+import type { IMonographFromDb } from '~/types/MgraphsDataFromDb';
 
 export default defineEventHandler({
   onRequest: [auth],
@@ -8,7 +8,7 @@ export default defineEventHandler({
 
     try {
       const newMonograph: any = await monographs.create(body);
-      return newMonograph;
+      return newMonograph as unknown as IMonographFromDb;
     } catch (error: any) {
       mongooseErrorHandler(error);
       throw createError({
