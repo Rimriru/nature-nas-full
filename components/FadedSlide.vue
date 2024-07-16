@@ -10,9 +10,11 @@ const props = defineProps<{
 
 const config = useRuntimeConfig();
 
-const image = IMAGE_LINK_REG_EXP.test(props.item.img)
-  ? props.item.img
-  : `${config.public.process === 'production' ? '' : config.public.domen}/image/${props.item.img}`;
+const image = computed(() =>
+  IMAGE_LINK_REG_EXP.test(props.item.img)
+    ? props.item.img
+    : `${config.public.process === 'production' ? '' : config.public.domen}/image/${props.item.img}`
+);
 </script>
 
 <template>
