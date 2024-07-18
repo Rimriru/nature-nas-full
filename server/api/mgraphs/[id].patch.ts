@@ -1,5 +1,6 @@
 import { mongooseErrorHandler } from '~/server/utils/mongooseErrorHandler';
 import { monographs } from '~/server/models';
+import type { IMonographFromDb } from '~/types/MgraphsDataFromDb';
 
 export default defineEventHandler({
   onRequest: [auth],
@@ -9,7 +10,7 @@ export default defineEventHandler({
 
     try {
       const editedMonograph: any = await monographs.findByIdAndUpdate(id, body, { new: true });
-      return editedMonograph;
+      return editedMonograph as unknown as IMonographFromDb;
     } catch (error: any) {
       mongooseErrorHandler(error);
       throw createError({

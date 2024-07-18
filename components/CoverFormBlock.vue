@@ -13,6 +13,7 @@ defineProps<{
     fileSizeError: boolean;
   };
   coverPreview: string;
+  isForMonograph?: boolean;
 }>();
 
 const coverAsLinkModel = defineModel();
@@ -35,7 +36,7 @@ defineExpose({
       ]"
     >
       <div
-        class="news-form__cover-perview"
+        :class="['news-form__cover-perview', { 'news-form__cover-perview_mono': isForMonograph }]"
         :style="{ backgroundImage: `url(${coverPreview ? coverPreview : defaultNewsCover})` }"
       ></div>
       <p>

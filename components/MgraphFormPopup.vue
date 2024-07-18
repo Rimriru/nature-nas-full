@@ -35,19 +35,34 @@ const coverErrorVisibility = ref({
 });
 const monographsState = useMgraphsState();
 const notifications = useToast();
+const config = useRuntimeConfig();
 
-if (props.isEditing && props.monographValues) {
-  monographId.value = props.monographValues._id;
-  monographValues.title = props.monographValues.title;
-  monographValues.description = props.monographValues.description;
-  monographValues.cover = props.monographValues.cover;
+watch(
+  () => props.isEditing,
+  (newValue) => {
+    if (newValue && props.monographValues) {
+      monographId.value = props.monographValues._id;
+      monographValues.title = props.monographValues.title;
+      monographValues.description = props.monographValues.description;
+      monographValues.cover = props.monographValues.cover;
 
-  originalMonographValues = {
-    title: props.monographValues.title,
-    description: props.monographValues.description,
-    cover: props.monographValues.cover
-  };
-}
+      if (IMAGE_LINK_REG_EXP.test(monographValues.cover)) {
+        coverPreview.value = monographValues.cover;
+        coverForUploadingAsLink.value = monographValues.cover;
+      } else {
+        coverPreview.value = `${
+          config.public.process === 'production' ? '' : config.public.domen
+        }/image/${monographValues.cover}`;
+      }
+
+      originalMonographValues = {
+        title: props.monographValues.title,
+        description: props.monographValues.description,
+        cover: props.monographValues.cover
+      };
+    }
+  }
+);
 
 const validate = (state: any): FormError[] => {
   const errors = [];
@@ -112,6 +127,50 @@ const handleMgraphInputChange = (event: Event) => {
   }
 };
 
+const onImageDownload = async () => {
+  if (coverForUploadingAsFile.value) {
+    const body = new FormData();
+    body.append('images', coverForUploadingAsFile.value);
+    await $fetch('/api/images', {
+      method: 'post',
+      body,
+      async onResponse({ response }) {
+        if (response.ok) {
+          const previousCoverFile =
+            monographValues.cover && !IMAGE_LINK_REG_EXP.test(monographValues.cover)
+              ? monographValues.cover
+              : '';
+          monographValues.cover = response._data[0];
+          coverForUploadingAsFile.value = '';
+
+          if (previousCoverFile) {
+            await $fetch(`/api/images/${previousCoverFile}`, {
+              method: 'delete',
+              onResponse({ response }) {
+                if (!response.ok) {
+                  notifications.add({
+                    id: 'mgraphs',
+                    title: String(response.status),
+                    description: response.statusText
+                  });
+                  return;
+                }
+              }
+            });
+          }
+        } else {
+          notifications.add({
+            id: 'mgraphs',
+            title: String(response.status),
+            description: response.statusText
+          });
+          return;
+        }
+      }
+    });
+  }
+};
+
 const handleMgraphLinkChange = () => {
   coverForUploadingAsFile.value = '';
   if (monographCover.value) {
@@ -128,6 +187,8 @@ const handleMgraphLinkChange = () => {
 };
 
 const handleAddingNewMonograph = async () => {
+  submitError.value = '';
+
   if (!coverForUploadingAsFile.value && !coverForUploadingAsLink.value) {
     coverErrorVisibility.value.requiredError = true;
     return;
@@ -139,25 +200,7 @@ const handleAddingNewMonograph = async () => {
   }
 
   if (coverForUploadingAsFile.value) {
-    const body = new FormData();
-    body.append('images', coverForUploadingAsFile.value);
-    await $fetch('/api/images', {
-      method: 'post',
-      body,
-      async onResponse({ response }) {
-        if (response.ok) {
-          monographValues.cover = response._data[0];
-          coverForUploadingAsFile.value = '';
-        } else {
-          notifications.add({
-            id: 'mgraphs',
-            title: String(response.status),
-            description: response.statusText
-          });
-          return;
-        }
-      }
-    });
+    await onImageDownload();
   }
 
   const newMonoBody = {
@@ -183,7 +226,62 @@ const handleAddingNewMonograph = async () => {
   }
 };
 
-const handleEditingMonograph = () => {};
+const handleEditingMonograph = async () => {
+  submitError.value = '';
+
+  const originalValues = JSON.stringify(originalMonographValues);
+
+  if (coverForUploadingAsLink.value && coverForUploadingAsLink.value !== monographValues.cover) {
+    const initialCover = monographValues.cover;
+    monographValues.cover = coverForUploadingAsLink.value;
+    coverForUploadingAsLink.value = '';
+
+    if (initialCover && !IMAGE_LINK_REG_EXP.test(initialCover)) {
+      await $fetch(`/api/images/${initialCover}`, {
+        method: 'delete',
+        onResponse({ response }) {
+          if (!response.ok) {
+            notifications.add({
+              id: 'news',
+              title: String(response.status),
+              description: response.statusText
+            });
+            return;
+          }
+        }
+      });
+    }
+  }
+
+  if (coverForUploadingAsFile.value) {
+    await onImageDownload();
+  }
+
+  const monoId = monographId.value;
+  const { title, description, cover } = monographValues;
+  const editedMonographBody = { title, description, cover };
+
+  if (originalValues === JSON.stringify(editedMonographBody)) {
+    handleMonographFormClose();
+  } else {
+    try {
+      const editedMono = await $fetch(`/api/mgraphs/${monoId}`, {
+        method: 'patch',
+        body: editedMonographBody
+      });
+      const editedMonoIndex = monographsState.value.findIndex((mono) => mono._id === monoId);
+      monographsState.value[editedMonoIndex] = editedMono;
+      notifications.add({
+        id: 'mgraphs',
+        title: `Монография ${originalMonographValues.title} была изменена!`
+      });
+      handleMonographFormClose();
+    } catch (error: any) {
+      console.error(error);
+      submitError.value = `${error.status}: ${error.data.message}`;
+    }
+  }
+};
 
 const submitHandler = computed(() =>
   props.isEditing ? handleEditingMonograph : handleAddingNewMonograph
@@ -192,51 +290,50 @@ const submitHandler = computed(() =>
 
 <template>
   <AppPopup :is-opened="isOpen" @on-close="handleMonographFormClose">
-    <div class="container">
-      <UForm
-        :state="monographValues"
-        :validate="validate"
-        class="news-form news-form_popup"
-        ref="monographForm"
-        @submit="submitHandler"
-      >
-        <fieldset class="news-form__top-container">
-          <CoverFormBlock
-            ref="monographCover"
-            :cover-error-visibility="coverErrorVisibility"
-            :cover-preview="coverPreview"
-            v-model="coverForUploadingAsLink"
-            @on-cover-input-change="handleMgraphInputChange"
-            @on-cover-link-change="handleMgraphLinkChange"
+    <UForm
+      :state="monographValues"
+      :validate="validate"
+      class="news-form news-form_popup"
+      ref="monographForm"
+      @submit="submitHandler"
+    >
+      <fieldset class="news-form__top-container">
+        <CoverFormBlock
+          ref="monographCover"
+          :cover-error-visibility="coverErrorVisibility"
+          :cover-preview="coverPreview"
+          :is-for-monograph="true"
+          v-model="coverForUploadingAsLink"
+          @on-cover-input-change="handleMgraphInputChange"
+          @on-cover-link-change="handleMgraphLinkChange"
+        />
+        <div class="news-form__header-inputs">
+          <TitleFormBlock
+            :placeholder="'Введите заголовок монографии...'"
+            v-model="monographValues.title"
           />
-          <div class="news-form__header-inputs">
-            <TitleFormBlock
-              :placeholder="'Введите заголовок монографии...'"
-              v-model="monographValues.title"
-            />
-            <DescriptionFormBlock
-              :placeholder="'Введите описание монографии...'"
-              v-model="monographValues.description"
-            />
-          </div>
-        </fieldset>
-        <span v-if="submitError" class="error">{{ submitError }}</span>
-        <div class="news-form__btn-container">
-          <MenuButton :size="'middle'" @click="handleMonographFormClose">Отмена</MenuButton>
-          <MenuButton
-            :button-type="'submit'"
-            :size="'middle'"
-            :is-active="true"
-            :is-disabled="
-              coverErrorVisibility.fileSizeError ||
-              coverErrorVisibility.linkValidationError ||
-              coverErrorVisibility.requiredError
-            "
-            >{{ isEditing ? 'Сохранить' : 'Создать' }}</MenuButton
-          >
+          <DescriptionFormBlock
+            :placeholder="'Введите описание монографии...'"
+            v-model="monographValues.description"
+          />
         </div>
-      </UForm>
-    </div>
+      </fieldset>
+      <span v-if="submitError" class="error">{{ submitError }}</span>
+      <div class="news-form__btn-container">
+        <MenuButton :size="'middle'" @click="handleMonographFormClose">Отмена</MenuButton>
+        <MenuButton
+          :button-type="'submit'"
+          :size="'middle'"
+          :is-active="true"
+          :is-disabled="
+            coverErrorVisibility.fileSizeError ||
+            coverErrorVisibility.linkValidationError ||
+            coverErrorVisibility.requiredError
+          "
+          >{{ isEditing ? 'Сохранить' : 'Создать' }}</MenuButton
+        >
+      </div>
+    </UForm>
   </AppPopup>
 </template>
 
