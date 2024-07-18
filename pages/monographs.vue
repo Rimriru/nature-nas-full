@@ -38,6 +38,13 @@ router.push({
 const notifications = useToast();
 const isLoggedIn = useLoggedInState();
 
+const modifiedLinksArray = computed(() => {
+  return monographsLinks.value?.map((link) => {
+    const linkMgraphs = monographsState.value.filter((mono) => `/${mono.year}` === link.to);
+    return { ...link, linkMgraphs: linkMgraphs.length };
+  });
+});
+
 const onAddLinkButtonClick = () => {
   isEditing.value = false;
   isLinkFormPopupOpen.value = true;
@@ -72,9 +79,10 @@ const onEditLinkButtonClick = (linkId: string, linkTitle: string, linkTo: string
   isLinkFormPopupOpen.value = true;
 };
 
-const onRemoveLinkButtonClick = (linkId: string, linkTitle: string) => {
-  linkValues.title = linkTitle;
+const onRemoveLinkButtonClick = (linkId: string, linkTitle: string, linkTo: string) => {
   linkIdOfInterest.value = linkId;
+  linkValues.title = linkTitle;
+  linkValues.to = linkTo;
   isConfirmPopupOpen.value = true;
 };
 
@@ -129,7 +137,6 @@ const handleEditLinkFormSubmit = async () => {
       });
 
       if (editedLink) {
-        console.log('link');
         const groupIndex = linkGroupsState.value.findIndex((group) => group.group === 'monographs');
         const linkIndex = linkGroupsState.value[groupIndex].links.findIndex(
           (link) => link._id === editedLink._id
@@ -138,7 +145,7 @@ const handleEditLinkFormSubmit = async () => {
       }
       notifications.add({
         id: 'mgraphs',
-        title: `Ссылка "${commonLinkValues.title}" была изменена!`
+        title: `Ссылка "${originalLinkValues.title}" была изменена!`
       });
       onCloseLinkFormPopup();
     } catch (error: any) {
@@ -151,6 +158,7 @@ const handleEditLinkFormSubmit = async () => {
 const handleRemoveLinkFormSubmit = async () => {
   const groupId = monographsLinkGroup?._id;
   const linkId = linkIdOfInterest.value;
+  const linkTo = linkValues.to;
   try {
     const { message } = await $fetch(`/api/links/${linkId}`, {
       method: 'delete',
@@ -168,6 +176,12 @@ const handleRemoveLinkFormSubmit = async () => {
       id: 'mgraphs',
       title: 'Ссылка была удалена!'
     });
+    if (linkTo === `/${router.currentRoute.value.params.year}`) {
+      router.push({
+        path: `/monographs${monographsLinks.value ? monographsLinks.value[0].to : ''}`,
+        replace: true
+      });
+    }
     onConfirmPopupClose();
   } catch (error: any) {
     console.error(error);
@@ -185,30 +199,32 @@ const addOrEditLinkHandlersForSubmit = computed(() =>
     <div class="monographs">
       <NuxtPage />
       <Sidebar
-        :links="monographsLinks"
+        :links="modifiedLinksArray"
         :is-icon-present="true"
         @on-add-link-button-click="onAddLinkButtonClick"
         @on-edit-link-button-click="onEditLinkButtonClick"
         @on-remove-link-button-click="onRemoveLinkButtonClick"
       />
     </div>
-    <LazyLinkForm
-      v-if="isLoggedIn"
-      :link-value="linkValues"
-      :is-opened="isLinkFormPopupOpen"
-      :grouping-link-title="isEditing ? '' : 'Монографии'"
-      :is-for-monographs="true"
-      :error="requestError"
-      @on-close="onCloseLinkFormPopup"
-      @on-submit="addOrEditLinkHandlersForSubmit"
-    />
-    <LazyConfirmPopup
-      :is-open="isConfirmPopupOpen"
-      :what-is-removed="'link'"
-      :removed-item-title="linkValues.title"
-      @on-agree="handleRemoveLinkFormSubmit"
-      @on-close="onConfirmPopupClose"
-    />
+    <ClientOnly>
+      <LazyLinkForm
+        v-if="isLoggedIn"
+        :link-value="linkValues"
+        :is-opened="isLinkFormPopupOpen"
+        :grouping-link-title="isEditing ? '' : 'Монографии'"
+        :is-for-monographs="true"
+        :error="requestError"
+        @on-close="onCloseLinkFormPopup"
+        @on-submit="addOrEditLinkHandlersForSubmit"
+      />
+      <LazyConfirmPopup
+        :is-open="isConfirmPopupOpen"
+        :what-is-removed="'link'"
+        :removed-item-title="linkValues.title"
+        @on-agree="handleRemoveLinkFormSubmit"
+        @on-close="onConfirmPopupClose"
+      />
+    </ClientOnly>
   </main>
 </template>
 
@@ -216,5 +232,14 @@ const addOrEditLinkHandlersForSubmit = computed(() =>
 .monographs {
   display: flex;
   gap: 50px;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 900px) {
+  .monographs {
+    flex-direction: column;
+    align-items: center;
+    width: calc(100% - 20px * 2);
+  }
 }
 </style>

@@ -2,7 +2,7 @@
 // Компонент бокового меню с ссылками
 import type { Link } from '~/types/LinkDataFromDb';
 defineProps<{
-  links?: Link[];
+  links?: MgraphLink[];
   isIconPresent: boolean;
 }>();
 
@@ -13,12 +13,16 @@ const emit = defineEmits([
 ]);
 
 const isLoggedIn = useLoggedInState();
+
+interface MgraphLink extends Link {
+  linkMgraphs: number;
+}
 </script>
 
 <template>
   <aside class="sidebar">
     <ul>
-      <li v-for="{ _id: id, title, to } of links" :key="id" class="sidebar__item">
+      <li v-for="{ _id: id, title, to, linkMgraphs } of links" :key="id" class="sidebar__item">
         <NuxtLink :to="`/monographs${to}`" class="sidebar__link">
           <UIcon
             v-if="isIconPresent && $route.fullPath === `/monographs${to}`"
@@ -30,7 +34,11 @@ const isLoggedIn = useLoggedInState();
         >
         <div v-if="isLoggedIn" class="sidebar__btn-container">
           <EditBtn :color="'black'" @click="emit('onEditLinkButtonClick', id, title, to)" />
-          <RemoveBtn @click="emit('onRemoveLinkButtonClick', id, title)" />
+          <RemoveBtn
+            :disabled="linkMgraphs === 0"
+            :class="{ 'sidebar__remove-btn': linkMgraphs === 0 }"
+            @click="emit('onRemoveLinkButtonClick', id, title, to)"
+          />
         </div>
       </li>
     </ul>
@@ -44,6 +52,7 @@ const isLoggedIn = useLoggedInState();
 .sidebar {
   flex-basis: 250px;
   display: flex;
+  flex-shrink: 0;
   flex-direction: column;
   gap: 20px;
   text-align: center;
@@ -110,11 +119,27 @@ const isLoggedIn = useLoggedInState();
       right: 0;
       opacity: 0.3;
       transition: opacity 0.3s ease-in-out;
+      background-color: white;
+      mix-blend-mode: difference;
 
       &:hover {
         opacity: 1;
       }
+
+      .sidebar__remove-btn {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
     }
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .sidebar {
+    order: -1;
+    flex-basis: auto;
+    max-width: 300px;
+    width: 100%;
   }
 }
 </style>
