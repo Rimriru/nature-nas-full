@@ -64,6 +64,13 @@
   border-radius: 20px;
 }
 
+.info {
+  color: $gray-text-dark;
+  font-size: 14px;
+  line-height: 1.4;
+  display: block;
+}
+
 .content {
   ul,
   ol {

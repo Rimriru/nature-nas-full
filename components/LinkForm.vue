@@ -72,9 +72,15 @@ const handleClose = () => {
             v-model.trim="props.linkValue.to"
             placeholder="Введите ссылку: /..."
           />
-          <span v-if="isForMonographs" class="text-gray-500 text-sm block"
-            >Можно ввести произвольную ссылку</span
-          >
+          <div class="link-form__message">
+            <UIcon name="i-material-symbols-info-outline-rounded" class="icon" />
+            <div>
+              <span v-if="isForMonographs" class="info">Можно ввести произвольную ссылку.</span>
+              <span v-if="isForMonographs" class="info"
+                >Она будет отображена в годе выпуска монографии.</span
+              >
+            </div>
+          </div>
         </UFormGroup>
         <span class="error" v-if="props.error">{{ props.error }}</span>
         <div class="link-form__btns">
@@ -101,6 +107,12 @@ const handleClose = () => {
   .link-form__heading {
     font-size: 17px;
     text-align: center;
+  }
+
+  .link-form__message {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
   }
 
   .link-form__btns {
