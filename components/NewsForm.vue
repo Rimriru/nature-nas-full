@@ -45,14 +45,13 @@ if (props.isInPopup) {
 
   if (newsItemForEditing?.value) {
     newsForm.value?.clear();
-    newsData._id = newsItemForEditing.value._id;
+    const { _id, date, ...others } = newsItemForEditing.value;
+    newsData._id = _id;
     newsData.title = newsItemForEditing.value.title;
     newsData.description = newsItemForEditing.value.description;
-    newsData.date = newsItemForEditing.value.date;
+    newsData.date = date;
     newsData.cover = newsItemForEditing.value.cover;
     newsData.content = newsItemForEditing.value.content;
-
-    const { _id, date, ...others } = newsItemForEditing.value;
     originalNewsItemData = others;
 
     if (IMAGE_LINK_REG_EXP.test(newsData.cover)) {
@@ -304,55 +303,53 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container">
-    <UForm
-      :state="newsData"
-      :validate="validate"
-      :class="['news-form', { 'news-form_popup': isInPopup }]"
-      ref="newsForm"
-      @submit="submitHandler"
-    >
-      <fieldset class="news-form__top-container">
-        <CoverFormBlock
-          ref="newsCover"
-          :cover-error-visibility="coverErrorVisibility"
-          :cover-preview="coverPreview"
-          v-model="coverForUploadingAsLink"
-          @on-cover-input-change="handleNewsCoverInputChange"
-          @on-cover-link-change="handleNewsCoverLinkChange"
+  <UForm
+    :state="newsData"
+    :validate="validate"
+    :class="['news-form', { 'news-form_popup': isInPopup }]"
+    ref="newsForm"
+    @submit="submitHandler"
+  >
+    <fieldset class="news-form__top-container">
+      <CoverFormBlock
+        ref="newsCover"
+        :cover-error-visibility="coverErrorVisibility"
+        :cover-preview="coverPreview"
+        v-model="coverForUploadingAsLink"
+        @on-cover-input-change="handleNewsCoverInputChange"
+        @on-cover-link-change="handleNewsCoverLinkChange"
+      />
+      <div class="news-form__header-inputs">
+        <TitleFormBlock :placeholder="'Введите заголовок новости...'" v-model="newsData.title" />
+        <DescriptionFormBlock
+          :placeholder="'Введите описание новости...'"
+          v-model="newsData.description"
         />
-        <div class="news-form__header-inputs">
-          <TitleFormBlock :placeholder="'Введите заголовок новости...'" v-model="newsData.title" />
-          <DescriptionFormBlock
-            :placeholder="'Введите описание новости...'"
-            v-model="newsData.description"
-          />
-        </div>
-      </fieldset>
-      <UFormGroup name="content">
-        Содержимое
-        <span class="required">*</span>
-        <ClientOnly>
-          <ContentEditor v-model="newsData.content" />
-        </ClientOnly>
-      </UFormGroup>
-      <span v-if="submitError" class="error">{{ submitError }}</span>
-      <div class="news-form__btn-container">
-        <MenuButton v-if="isInPopup" :size="'middle'" @click="emit('onClose')">Отмена</MenuButton>
-        <MenuButton
-          :button-type="'submit'"
-          :size="'middle'"
-          :is-active="true"
-          :is-disabled="
-            coverErrorVisibility.fileSizeError ||
-            coverErrorVisibility.linkValidationError ||
-            coverErrorVisibility.requiredError
-          "
-          >{{ isInPopup ? 'Сохранить' : 'Создать' }}</MenuButton
-        >
       </div>
-    </UForm>
-  </div>
+    </fieldset>
+    <UFormGroup name="content">
+      Содержимое
+      <span class="required">*</span>
+      <ClientOnly>
+        <ContentEditor v-model="newsData.content" />
+      </ClientOnly>
+    </UFormGroup>
+    <span v-if="submitError" class="error">{{ submitError }}</span>
+    <div class="news-form__btn-container">
+      <MenuButton v-if="isInPopup" :size="'middle'" @click="emit('onClose')">Отмена</MenuButton>
+      <MenuButton
+        :button-type="'submit'"
+        :size="'middle'"
+        :is-active="true"
+        :is-disabled="
+          coverErrorVisibility.fileSizeError ||
+          coverErrorVisibility.linkValidationError ||
+          coverErrorVisibility.requiredError
+        "
+        >{{ isInPopup ? 'Сохранить' : 'Создать' }}</MenuButton
+      >
+    </div>
+  </UForm>
 </template>
 
 <style lang="scss">
