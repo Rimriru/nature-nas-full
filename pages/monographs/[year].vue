@@ -7,7 +7,7 @@ const monographsState = useMgraphsState();
 // collect all monographs, display only with that year
 
 const selectedYearMonographs = computed(() => {
-  return monographsState.value.filter((graph) => graph.year === selectedYear);
+  return monographsState.value.filter((graph) => graph.year === selectedYear).reverse();
 });
 
 let monoValues = {
@@ -26,20 +26,6 @@ const pageCount = ref(3);
 
 const isLoggedIn = useLoggedInState();
 const notifications = useToast();
-
-const indexes = computed(() => {
-  const firstIndex = (page.value - 1) * pageCount.value;
-  const lastIndex = firstIndex + pageCount.value;
-  return { firstIndex, lastIndex };
-});
-const mgraphsPerPage = computed(() => {
-  const reversedMgraphs = selectedYearMonographs.value.slice().reverse();
-  return reversedMgraphs.slice(indexes.value.firstIndex, indexes.value.lastIndex);
-});
-
-watch(page, () => {
-  window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-});
 
 const onOpenMonographForm = () => {
   isMgraphPopupOpen.value = true;
@@ -100,7 +86,7 @@ const handleMonographRemoval = async () => {
 <template>
   <div class="monographs__container">
     <ul class="monographs__items shadow-border">
-      <li v-for="graph of mgraphsPerPage" :key="graph._id" class="monographs__item">
+      <li v-for="graph of selectedYearMonographs" :key="graph._id" class="monographs__item">
         <MgraphCard
           :item="graph"
           @on-edit-click="onEditMonographBtnClick"
@@ -116,26 +102,6 @@ const handleMonographRemoval = async () => {
         @click="onOpenMonographForm"
         >Создать монографию</MenuButton
       >
-    </ClientOnly>
-    <UPagination
-      class="pagination"
-      v-if="selectedYearMonographs && selectedYearMonographs.length"
-      v-model="page"
-      :page-count="pageCount"
-      :total="selectedYearMonographs.length"
-      :max="7"
-      size="md"
-      show-last
-      show-first
-      :prev-button="{ icon: 'i-heroicons-arrow-small-left-20-solid', label: 'Пред', color: 'gray' }"
-      :next-button="{
-        icon: 'i-heroicons-arrow-small-right-20-solid',
-        trailing: true,
-        label: 'След',
-        color: 'gray'
-      }"
-    />
-    <ClientOnly>
       <LazyMgraphFormPopup
         v-if="isLoggedIn"
         :is-open="isMgraphPopupOpen"
