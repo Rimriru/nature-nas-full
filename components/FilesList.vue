@@ -6,11 +6,17 @@ interface TableRow extends FileDataFromDb {
   link: string;
 }
 
+const props = defineProps<{
+  filesList: FileDataFromDb[];
+  isForImages: boolean;
+}>();
+
+const emit = defineEmits(['onFileRemove']);
+
 const isFileEditFormPopupOpen = ref(false);
 const isConfirmPopupOpen = ref(false);
 const fileOfInterest = ref<FileDataFromDb | ''>('');
 const removeFileError = ref('');
-const filesState = useFilesState();
 const notifications = useToast();
 const config = useRuntimeConfig();
 
@@ -40,14 +46,14 @@ const columns = [
 ];
 
 const files = computed(() => {
-  const f = filesState.value
+  const f = props.filesList
     .map((file, index) => {
       return {
         _id: file._id,
         name: file.name,
         file: file.file,
         number: index + 1,
-        link: `${config.public.domen}/file/${file.file}`
+        link: `${config.public.domen}/${props.isForImages ? 'image' : 'file'}/${file.file}`
       };
     })
     .reverse() as TableRow[];
@@ -106,10 +112,13 @@ const handleFileRemove = async () => {
       const fileId = fileOfInterest.value._id;
       // @ts-ignore
       const { message } = await $fetch(`/api/files/${fileId}`, {
-        method: 'delete'
+        method: 'delete',
+        query: {
+          image: props.isForImages ? true : false
+        }
       });
 
-      filesState.value = filesState.value.filter((file) => file._id !== fileId);
+      emit('onFileRemove', fileId);
 
       onConfirmPopupClose();
       notifications.add({
@@ -147,8 +156,7 @@ const fileOfInterestName = computed(() => {
           color: 'blue',
           variant: 'outline',
           size: '2xs',
-          square: false,
-          ui: { rounded: 'rounded-full' }
+          square: false
         }"
         :empty-state="{ icon: 'i-heroicons-circle-stack-20-solid', label: 'Не найдено' }"
         :ui="{
@@ -174,7 +182,7 @@ const fileOfInterestName = computed(() => {
           v-model="page"
           :max="7"
           :page-count="pageCount"
-          :total="filesState.length"
+          :total="props.filesList.length"
           show-last
           show-first
         />
