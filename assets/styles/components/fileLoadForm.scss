@@ -6,6 +6,12 @@
   flex-direction: column;
   gap: 20px;
 
+  .file-form__title {
+    &_admin {
+      margin-bottom: 20px;
+    }
+  }
+
   .file-form__label {
     display: block;
   }
@@ -20,10 +26,7 @@
   }
 
   .file-form__message {
-    font-size: 14px;
-    color: gray;
     margin-top: 10px;
-    display: block;
   }
 
   .file-form__btn-container {

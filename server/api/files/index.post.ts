@@ -1,10 +1,12 @@
 import { files } from '~/server/models';
+import type { FileDataFromDb } from '~/types/FilesDataFromDb';
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   try {
     const newFile = await files.create(body);
-    return newFile;
+    setResponseStatus(event, 201);
+    return newFile as unknown as FileDataFromDb;
   } catch (error: any) {
     throw createError({
       status: error.statusCode,

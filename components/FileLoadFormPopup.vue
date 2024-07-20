@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const props = defineProps<{
   isOpen: boolean;
+  isUploadingJurnalIssue: boolean;
 }>();
 
 const emit = defineEmits(['close']);
@@ -8,7 +9,11 @@ const emit = defineEmits(['close']);
 
 <template>
   <AppPopup :is-opened="isOpen" @on-close="emit('close')">
-    <FileLoadForm :is-uploading-journal-issue="true" :is-popup-open="isOpen" @close="emit('close')">
+    <FileLoadForm
+      :is-uploading-journal-issue="isUploadingJurnalIssue"
+      :is-popup-open="isOpen"
+      @close="emit('close')"
+    >
       <MenuButton :size="'small'" @click="emit('close')">Отмена</MenuButton>
     </FileLoadForm>
   </AppPopup>
