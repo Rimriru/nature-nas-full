@@ -53,7 +53,9 @@ const files = computed(() => {
         name: file.name,
         file: file.file,
         number: index + 1,
-        link: `${config.public.domen}/${props.isForImages ? 'image' : 'file'}/${file.file}`
+        link: `${
+          config.public.process === 'production' ? config.public.prodDomen : config.public.devDomen
+        }/${props.isForImages ? 'image' : 'file'}/${file.file}`
       };
     })
     .reverse() as TableRow[];
@@ -103,6 +105,7 @@ const onRemoveBtnClick = (fileData: TableRow) => {
 
 const onConfirmPopupClose = () => {
   isConfirmPopupOpen.value = false;
+  removeFileError.value = '';
   resetFileOfInterest();
 };
 
@@ -197,6 +200,7 @@ const fileOfInterestName = computed(() => {
       :is-open="isConfirmPopupOpen"
       :what-is-removed="'file'"
       :removedItemTitle="fileOfInterestName"
+      :error="removeFileError"
       @on-close="onConfirmPopupClose"
       @on-agree="handleFileRemove"
     />

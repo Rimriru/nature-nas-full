@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
         message: 'Файл с данным идентификатором не найден'
       });
     }
-    if (!image) {
+    if (image === 'false') {
       const { message } = await $fetch(`/api/files/upload/${file.file}`, {
         method: 'delete'
       });
@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
       if (!message) {
         throw createError({
           status: 500,
-          message: 'Произола ошибка во время удаления файла'
+          message: 'Произошла ошибка во время удаления файла'
         });
       }
 

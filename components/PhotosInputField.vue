@@ -85,9 +85,7 @@ watch(
 onMounted(() => {
   if (props.photosFromDb.length > 0) {
     props.photosFromDb.forEach((photo: string) => {
-      photosForDemonstration.value.push(
-        `${config.public.process === 'production' ? '' : config.public.domen}/image/${photo}`
-      );
+      photosForDemonstration.value.push(`/image/${photo}`);
     });
   }
 });

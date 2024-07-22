@@ -96,9 +96,7 @@ watch(
       journalData.contacts.email = email;
 
       journalData.cover = cover;
-      journalCoverForPreview.value = `${
-        config.public.process === 'production' ? '' : config.public.domen
-      }/image/${cover}`;
+      journalCoverForPreview.value = `/image/${cover}`;
 
       originalJournalData = {
         description,
@@ -339,7 +337,9 @@ const onJournalFormSubmit = async () => {
           <p class="journal-form__file-data">
             {{
               `ссылка: ${
-                $config.public.process === 'production' ? 'nature-nas.by' : $config.public.domen
+                $config.public.process === 'production'
+                  ? $config.public.prodDomen
+                  : $config.public.devDomen
               }/file/${journalData.authorRules.file}`
             }}
           </p>
@@ -370,7 +370,9 @@ const onJournalFormSubmit = async () => {
           <p class="journal-form__file-data">
             {{
               `ссылка: ${
-                $config.public.process === 'production' ? '' : $config.public.domen
+                $config.public.process === 'production'
+                  ? $config.public.prodDomen
+                  : $config.public.devDomen
               }/file/${journalData.editorialPolicy.file}`
             }}
           </p>

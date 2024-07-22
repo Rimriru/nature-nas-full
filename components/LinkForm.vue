@@ -65,7 +65,8 @@ const handleClose = () => {
           />
         </UFormGroup>
         <UFormGroup name="to" :eager-validation="true">
-          Ссылка (nature-nas.by{{ isForMonographs === true ? '/monographs' : '' }}*ссылка*)
+          Ссылка ({{ $config.public.prodDomen
+          }}{{ isForMonographs === true ? '/monographs' : '' }}*ссылка*)
           <span class="required">*</span>
           <UInput
             color="blue"

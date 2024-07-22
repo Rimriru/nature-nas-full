@@ -104,9 +104,7 @@ const handleFormSubmit = async () => {
         { 'heading-image__img_main': ['/', '/admin'].includes($route.fullPath) }
       ]"
       :style="{
-        backgroundImage: `url(${
-          $config.public.process === 'production' ? '' : $config.public.domen
-        }/image/${photoState[0].name})`
+        backgroundImage: `url(/image/${photoState[0].name})`
       }"
     ></div>
     <div

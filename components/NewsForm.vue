@@ -58,9 +58,7 @@ if (props.isInPopup) {
       coverPreview.value = newsData.cover;
       coverForUploadingAsLink.value = newsData.cover;
     } else {
-      coverPreview.value = `${
-        config.public.process === 'production' ? '' : config.public.domen
-      }/image/${newsData.cover}`;
+      coverPreview.value = `/image/${newsData.cover}`;
     }
   }
 }

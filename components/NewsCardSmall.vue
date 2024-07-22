@@ -15,13 +15,7 @@ const coverAsSrc = IMAGE_LINK_REG_EXP.test(props.newsItem.cover);
   <NuxtLink :to="`/news/${newsItem._id}`" class="news-card-small">
     <div class="news-card-small__container">
       <img
-        :src="
-          coverAsSrc
-            ? newsItem.cover
-            : `${$config.public.process === 'production' ? '' : $config.public.domen}/image/${
-                newsItem.cover
-              }`
-        "
+        :src="coverAsSrc ? newsItem.cover : `/image/${newsItem.cover}`"
         :alt="newsItem.title"
         loading="lazy"
         class="news-card-small__img"
