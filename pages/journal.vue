@@ -28,7 +28,9 @@ const publications = computed(() => {
     .map((item) => {
       return {
         label: item.name,
-        to: `/file/${item.file}`
+        to: `${
+          config.public.process === 'production' ? config.public.prodDomen : config.public.devDomen
+        }/file/${item.file}`
       };
     })
     .sort((a, b) => b.label.localeCompare(a.label));
