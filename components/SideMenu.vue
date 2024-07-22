@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// Компонент бокового меню с группами ссылок
 import type { Link } from '~/types/LinkDataFromDb';
 import type RemovedItem from '~/types/RemovedItemForConfirmPopup';
 

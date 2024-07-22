@@ -7,6 +7,7 @@ type RemovedItem =
   | 'confItem'
   | 'file'
   | 'persona'
+  | 'monograph'
   | '';
 
 export default RemovedItem;

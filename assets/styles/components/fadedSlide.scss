@@ -45,9 +45,10 @@
   }
 
   .home-slider__img {
-    width: 300px;
-    height: max-content;
+    width: 210px;
+    max-height: 100%;
     object-position: center;
+    object-fit: cover;
 
     &_none {
       display: none;

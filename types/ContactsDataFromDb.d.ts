@@ -9,7 +9,7 @@ interface IContacts {
 }
 
 interface ContactsDataFromDb extends IContacts {
-  readonly _id: ObjectId;
+  readonly _id: string;
 }
 
 export { IContacts, ContactsDataFromDb };

@@ -28,12 +28,7 @@ const publications = computed(() => {
     .map((item) => {
       return {
         label: item.name,
-        to: `${config.public.process === 'production' ? '' : config.public.domen}/file/${
-          item.file
-        }`,
-        external: true,
-        target: '_blank',
-        labelClass: 'journal__menu-item'
+        to: `${config.public.process === 'production' ? '' : config.public.domen}/file/${item.file}`
       };
     })
     .sort((a, b) => b.label.localeCompare(a.label));
@@ -77,26 +72,24 @@ const onFileLoadFormPopupClose = () => {
           loading="lazy"
         />
         <div class="journal__info-container">
-          <ClientOnly>
-            <NuxtLink
-              :to="`${$config.public.process === 'production' ? '' : $config.public.domen}/file/${
-                journalState?.authorRules.file
-              }`"
-              :external="true"
-              class="button-border"
-              target="_blank"
-              >Правила для авторов</NuxtLink
-            >
-            <NuxtLink
-              :to="`${$config.public.process === 'production' ? '' : $config.public.domen}/file/${
-                journalState?.editorialPolicy.file
-              }`"
-              :external="true"
-              class="button-border"
-              target="_blank"
-              >Редакционная политика</NuxtLink
-            >
-          </ClientOnly>
+          <NuxtLink
+            :to="`${$config.public.process === 'production' ? '' : $config.public.domen}/file/${
+              journalState?.authorRules.file
+            }`"
+            :external="true"
+            class="button-border"
+            target="_blank"
+            >Правила для авторов</NuxtLink
+          >
+          <NuxtLink
+            :to="`${$config.public.process === 'production' ? '' : $config.public.domen}/file/${
+              journalState?.editorialPolicy.file
+            }`"
+            :external="true"
+            class="button-border"
+            target="_blank"
+            >Редакционная политика</NuxtLink
+          >
           <UDropdown
             :items="publications"
             mode="hover"
@@ -120,6 +113,11 @@ const onFileLoadFormPopupClose = () => {
             >
               Публикации
             </UButton>
+            <template #item="{ item }">
+              <NuxtLink class="journal__menu-item" :to="item.to" target="_blank">{{
+                item.label
+              }}</NuxtLink>
+            </template>
           </UDropdown>
         </div>
       </div>
@@ -169,7 +167,11 @@ const onFileLoadFormPopupClose = () => {
       </div>
     </section>
     <LazyJournalFormPopup :is-open="isJournalFormPopupOpen" @close="onJournalFormPopupClose" />
-    <LazyFileLoadFormPopup :is-open="isFileLoadFormPopupOpen" @close="onFileLoadFormPopupClose" />
+    <LazyFileLoadFormPopup
+      :is-open="isFileLoadFormPopupOpen"
+      :is-uploading-jurnal-issue="true"
+      @close="onFileLoadFormPopupClose"
+    />
   </main>
 </template>
 

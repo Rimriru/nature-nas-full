@@ -28,7 +28,8 @@ const message = {
   newsItem: () => `${COMMON_CONFIRM_MESSAGE} новость "${props.removedItemTitle}"?`,
   confItem: () => `${COMMON_CONFIRM_MESSAGE} данную конференцию?`,
   file: () => `${COMMON_CONFIRM_MESSAGE} файл "${props.removedItemTitle}"?`,
-  persona: () => `${COMMON_CONFIRM_MESSAGE} данный контакт?`
+  persona: () => `${COMMON_CONFIRM_MESSAGE} данный контакт?`,
+  monograph: () => `${COMMON_CONFIRM_MESSAGE} монографию "${props.removedItemTitle}"?`
 };
 </script>
 

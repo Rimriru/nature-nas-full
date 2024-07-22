@@ -18,7 +18,7 @@ export default defineEventHandler({
           }
         });
 
-        return { message: 'Ссылка  удалена' };
+        return { message: 'Ссылка удалена' };
       });
 
       return result;
