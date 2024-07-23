@@ -1,4 +1,5 @@
 import { personas } from '~/server/models';
+import type { PersonaInstanceFromDb } from '~/types/PersonasDataFromDb';
 
 export default defineEventHandler(async (event) => {
   const personasId = getRouterParam(event, 'id');
@@ -8,8 +9,9 @@ export default defineEventHandler(async (event) => {
     const editedPersona = await personas.findByIdAndUpdate(personasId, editedPersonaBody, {
       new: true
     });
-    return editedPersona;
+    return editedPersona as unknown as PersonaInstanceFromDb;
   } catch (error: any) {
+    mongooseErrorHandler(error);
     throw createError({
       status: error.statusCode,
       message: error.message

@@ -1,9 +1,5 @@
 @use '~/assets/styles/variables.scss' as *;
 
-.container {
-  height: 100%;
-}
-
 .news-form {
   width: 100%;
   margin-right: 60px;
@@ -13,6 +9,7 @@
 
   &_popup {
     margin: 0 auto;
+    min-width: 750px;
   }
 
   .news-form__top-container {
@@ -36,9 +33,15 @@
         width: 308px;
         height: 200px;
         background-size: cover;
+        background-repeat: no-repeat;
         background-position: center;
         border-radius: 10px;
         margin: 0 auto;
+
+        &_mono {
+          width: 250px;
+          height: 353px;
+        }
       }
 
       .news-form__cover-file {
@@ -58,7 +61,7 @@
     }
 
     .news-form__header-inputs {
-      flex-basis: 40%;
+      flex-grow: 1;
       display: grid;
       row-gap: 10px;
     }
@@ -83,11 +86,15 @@
 
 @media screen and (max-width: 1350px) {
   .news-form {
+    &_popup {
+      min-width: 300px;
+    }
+
     .news-form__top-container {
       flex-wrap: wrap;
 
       .news-form__header-inputs {
-        flex-basis: 100%;
+        width: 100%;
       }
     }
   }

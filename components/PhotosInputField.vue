@@ -85,9 +85,7 @@ watch(
 onMounted(() => {
   if (props.photosFromDb.length > 0) {
     props.photosFromDb.forEach((photo: string) => {
-      photosForDemonstration.value.push(
-        `${config.public.process === 'production' ? '' : config.public.domen}/image/${photo}`
-      );
+      photosForDemonstration.value.push(`/image/${photo}`);
     });
   }
 });
@@ -110,9 +108,7 @@ onMounted(() => {
       />
       <LoadButton @on-click="($refs.fileInput as HTMLInputElement).click()" />
     </label>
-    <span class="text-gray-500 text-sm block"
-      >Обратите внимание: одновременно можно загрузить лишь до 8 фото</span
-    >
+    <span class="info">Обратите внимание: одновременно можно загрузить лишь до 8 фото</span>
     <div class="photos-input__preview">
       <span class="photos-input__preview-text">Предпросмотр:</span>
       <UCarousel

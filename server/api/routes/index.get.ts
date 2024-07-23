@@ -1,5 +1,5 @@
-import { routes } from '../../models/index';
-import type RouteDataFromDb from '~/types/RouteDataFromDb';
+import { routes } from '~/server/models/index';
+import type { RouteDataFromDb } from '~/types/RouteDataFromDb';
 
 export default defineEventHandler(async () => {
   try {

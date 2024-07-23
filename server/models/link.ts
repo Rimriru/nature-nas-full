@@ -1,6 +1,7 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
+import type { ILink } from '~/types/LinkDataFromDb';
 
-const linkSchema = new mongoose.Schema(
+const linkSchema: Schema<ILink> = new Schema(
   {
     title: {
       type: String,
@@ -11,7 +12,7 @@ const linkSchema = new mongoose.Schema(
       required: [true, 'Требуется указать ссылку']
     },
     route: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'route'
     },
     couldBeEdited: {
@@ -22,5 +23,5 @@ const linkSchema = new mongoose.Schema(
   { versionKey: false }
 );
 
-const Link = mongoose.model('link', linkSchema);
+const Link = model('link', linkSchema);
 export default Link;

@@ -33,7 +33,7 @@ const validate = (state: any): FormError[] => {
     <AppPopup :is-opened="isOpen" @on-close="handlePopupClose">
       <UForm
         ref="form"
-        :state="groupData"
+        :state="groupData!"
         :validate="validate"
         @submit="isEditing ? emit('onEdit') : emit('onAdd')"
         class="group-form"

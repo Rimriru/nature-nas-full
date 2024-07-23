@@ -7,6 +7,7 @@ export default defineEventHandler(async (event) => {
     const editedFile = await files.findByIdAndUpdate(id, body, { new: true });
     return editedFile;
   } catch (error: any) {
+    mongooseErrorHandler(error);
     throw createError({
       status: error.statusCode,
       message: error.message

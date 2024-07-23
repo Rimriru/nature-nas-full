@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Section } from '~/types/SectionDataFromDb';
+import type { ISection } from '~/types/SectionDataFromDb';
 import type { FormError, Form } from '#ui/types';
 
-const sectionValues = defineModel<Section>('sectionValues');
+const sectionValues = defineModel<ISection>('sectionValues');
 defineProps<{
   isEditing: boolean;
 }>();

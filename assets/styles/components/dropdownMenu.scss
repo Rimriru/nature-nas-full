@@ -14,8 +14,16 @@
     border-top-right-radius: 8px;
     cursor: pointer;
 
-    &:hover {
-      background-color: $light-blue;
+    @media (hover: hover) {
+      &:hover {
+        background-color: $light-blue;
+      }
+    }
+
+    @media (hover: none) {
+      &:active {
+        background-color: $light-blue;
+      }
     }
 
     @media screen and (max-width: 1360px) {
@@ -42,8 +50,17 @@
 
     li {
       cursor: pointer;
-      &:hover {
-        background-color: #7195bf;
+
+      @media (hover: hover) {
+        &:hover {
+          background-color: #7195bf;
+        }
+      }
+
+      @media (hover: none) {
+        &:active {
+          background-color: #7195bf;
+        }
       }
 
       a {
@@ -61,7 +78,7 @@
       font-size: clamp(15px, 2.5vw, 18px);
       padding-block: 10px;
 
-      &:hover {
+      &:active {
         background-color: transparent;
       }
 

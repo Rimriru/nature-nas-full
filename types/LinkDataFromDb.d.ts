@@ -1,10 +1,13 @@
-type Link = {
-  _id: string;
+interface ILink {
   title: string;
   to: string;
   route?: string;
-  couldBeEdited: true;
-};
+  couldBeEdited: boolean;
+}
+
+interface Link extends ILink {
+  _id: string;
+}
 
 interface LinkGroup {
   _id: string;
@@ -13,4 +16,4 @@ interface LinkGroup {
   links: Link[];
 }
 
-export type { Link, LinkGroup };
+export type { ILink, Link, LinkGroup };

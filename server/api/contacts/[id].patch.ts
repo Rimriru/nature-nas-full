@@ -1,5 +1,5 @@
 import { contacts } from '~/server/models';
-import auth from '~/server/utils/auth';
+import type { ContactsDataFromDb } from '~/types/ContactsDataFromDb';
 
 export default defineEventHandler({
   onRequest: [auth],
@@ -9,8 +9,9 @@ export default defineEventHandler({
 
     try {
       const editedContactsData = await contacts.findByIdAndUpdate(id, body, { new: true });
-      return editedContactsData;
+      return editedContactsData as unknown as ContactsDataFromDb;
     } catch (error: any) {
+      mongooseErrorHandler(error);
       throw createError({
         status: error.statusCode,
         message: error.message

@@ -11,6 +11,7 @@ export default defineEventHandler({
       setResponseStatus(evt, 201);
       return newGroup as unknown as LinkGroup;
     } catch (error: any) {
+      mongooseErrorHandler(error);
       throw createError({
         status: error.statusCode,
         message: error.message

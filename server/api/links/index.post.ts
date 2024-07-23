@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { links, routes } from '../../models/index';
+import { links, routes } from '~/server/models/index';
 import { NOT_FOUND_ERROR_MESSAGE, BAD_REQUEST_ERROR_MESSAGE } from '~/utils/errorMessages';
 import type { NewLinkRequestBody } from './types/links';
 import type { Link } from '~/types/LinkDataFromDb';
@@ -50,6 +50,7 @@ export default defineEventHandler({
 
       return result;
     } catch (error: any) {
+      mongooseErrorHandler(error);
       throw createError({
         status: error.statusCode,
         message: error.message

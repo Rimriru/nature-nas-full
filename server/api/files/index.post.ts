@@ -8,6 +8,7 @@ export default defineEventHandler(async (event) => {
     setResponseStatus(event, 201);
     return newFile as unknown as FileDataFromDb;
   } catch (error: any) {
+    mongooseErrorHandler(error);
     throw createError({
       status: error.statusCode,
       message: error.message

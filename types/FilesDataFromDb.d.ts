@@ -1,8 +1,11 @@
-interface FileDataFromDb {
-  _id: string;
+interface IFile {
   name: string;
   file: string;
   category?: string;
 }
 
-export default FileDataFromDb;
+interface FileDataFromDb extends IFile {
+  _id: string;
+}
+
+export { IFile, FileDataFromDb };

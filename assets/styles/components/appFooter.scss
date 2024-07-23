@@ -57,8 +57,16 @@
           display: block;
           padding: 5px 10px;
 
-          &:hover {
-            box-shadow: 0px 0px 10px 0px $light-blue;
+          @media (hover: hover) {
+            &:hover {
+              box-shadow: 0px 0px 10px 0px $light-blue;
+            }
+          }
+
+          @media (hover: none) {
+            &:active {
+              box-shadow: 0px 0px 10px 0px $light-blue;
+            }
           }
 
           .footer__img {

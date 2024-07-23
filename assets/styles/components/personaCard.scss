@@ -43,8 +43,16 @@
         .persona-card__email-link {
           color: $light-blue;
 
-          &:hover {
-            color: #f6bf25;
+          @media (hover: hover) {
+            &:hover {
+              color: #f6bf25;
+            }
+          }
+
+          @media (hover: none) {
+            &:active {
+              color: #f6bf25;
+            }
           }
         }
       }

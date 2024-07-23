@@ -1,6 +1,7 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
+import type { IPersonaData } from '~/types/PersonasDataFromDb';
 
-const personasSchema: any = new mongoose.Schema(
+const personasSchema: Schema<IPersonaData> = new Schema(
   {
     position: {
       type: String,
@@ -41,6 +42,6 @@ const personasSchema: any = new mongoose.Schema(
   { versionKey: false }
 );
 
-const Persona = mongoose.model('persona', personasSchema);
+const Persona = model('persona', personasSchema);
 
 export default Persona;

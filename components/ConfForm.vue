@@ -67,9 +67,7 @@ if (props.isInPopup) {
       coverPreview.value = conferenceData.cover;
       coverForUploadingAsLink.value = conferenceData.cover;
     } else {
-      coverPreview.value = `${
-        config.public.process === 'production' ? '' : config.public.domen
-      }/image/${conferenceData.cover}`;
+      coverPreview.value = `/image/${conferenceData.cover}`;
     }
   }
 }

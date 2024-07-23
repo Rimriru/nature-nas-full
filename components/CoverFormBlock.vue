@@ -3,7 +3,7 @@ import defaultNewsCover from '~/assets/images/news-preview-default.jpg';
 import {
   fileSizeError,
   NEWS_COVER_REQUIRED_ERROR,
-  LINK_VALIDATION_ERROR
+  IMAGE_LINK_VALIDATION_ERROR
 } from '~/utils/errorMessages';
 
 defineProps<{
@@ -13,11 +13,12 @@ defineProps<{
     fileSizeError: boolean;
   };
   coverPreview: string;
+  isForMonograph?: boolean;
 }>();
 
 const coverAsLinkModel = defineModel();
 
-const emit = defineEmits(['onNewsCoverInputChange', 'onNewsCoverLinkChange']);
+const emit = defineEmits(['onCoverInputChange', 'onCoverLinkChange']);
 
 const coverImageInput = ref();
 
@@ -35,7 +36,7 @@ defineExpose({
       ]"
     >
       <div
-        class="news-form__cover-perview"
+        :class="['news-form__cover-perview', { 'news-form__cover-perview_mono': isForMonograph }]"
         :style="{ backgroundImage: `url(${coverPreview ? coverPreview : defaultNewsCover})` }"
       ></div>
       <p>
@@ -49,7 +50,7 @@ defineExpose({
           type="file"
           ref="coverImageInput"
           accept="image/jpeg, image/png"
-          @change="(evt: Event) => emit('onNewsCoverInputChange', evt)"
+          @change="(evt: Event) => emit('onCoverInputChange', evt)"
         />
         <LoadButton
           class="w-30 mx-auto"
@@ -63,10 +64,10 @@ defineExpose({
       <UInput
         v-model="coverAsLinkModel"
         placeholder="Вставьте ссылку на изображение..."
-        @keyup="emit('onNewsCoverLinkChange')"
+        @keyup="emit('onCoverLinkChange')"
       />
       <span class="error cover-error" v-if="coverErrorVisibility.linkValidationError">{{
-        LINK_VALIDATION_ERROR
+        IMAGE_LINK_VALIDATION_ERROR
       }}</span>
     </div>
     <span v-if="coverErrorVisibility.requiredError" class="error cover-error">{{

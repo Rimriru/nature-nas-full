@@ -1,6 +1,6 @@
-import type Journal from '~/types/JournalDataFromDb';
+import type { JournalDataFromDb } from '~/types/JournalDataFromDb';
 
-export const useJournalState = () => useState<Journal | null>('journal', () => null);
+export const useJournalState = () => useState<JournalDataFromDb | null>('journal', () => null);
 
 export const useJournal = async () => {
   const journal = await $fetch('/api/journal');

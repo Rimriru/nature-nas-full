@@ -18,11 +18,12 @@ export default defineEventHandler({
           }
         });
 
-        return { message: 'Ссылка  удалена' };
+        return { message: 'Ссылка удалена' };
       });
 
       return result;
     } catch (error: any) {
+      mongooseErrorHandler(error);
       throw createError({
         status: error.statusCode,
         message: error.message

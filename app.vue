@@ -31,13 +31,14 @@ if (!linkGroupsState.value.length) {
 // @ts-ignore
 const initialData: InitialDataType = await $fetch('/api/data');
 
-const router = useRouter();
 photoState.value = initialData.photo;
 newsState.value = initialData.news;
 contactsState.value = initialData.contacts;
 conferenceState.value = initialData.confs;
 filesState.value = initialData.files;
 personasState.value = initialData.personas;
+
+const router = useRouter();
 
 routesState.value.forEach((route) => {
   router.addRoute({

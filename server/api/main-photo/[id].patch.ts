@@ -10,6 +10,7 @@ export default defineEventHandler({
       const updatedPhoto = await mainPhoto.findByIdAndUpdate(id, body, { new: true });
       return updatedPhoto;
     } catch (error: any) {
+      mongooseErrorHandler(error);
       throw createError({
         status: error.statusCode,
         message: error.message

@@ -1,4 +1,6 @@
-interface Contacts {
+import type { ObjectId } from 'mongoose';
+
+interface IContacts {
   address: string;
   telNumber: string;
   faxNumber: string;
@@ -6,8 +8,8 @@ interface Contacts {
   content: string;
 }
 
-interface ContactsDataFromDb extends Contacts {
-  _id: string;
+interface ContactsDataFromDb extends IContacts {
+  readonly _id: string;
 }
 
-export { Contacts, ContactsDataFromDb };
+export { IContacts, ContactsDataFromDb };

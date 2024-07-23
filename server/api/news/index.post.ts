@@ -1,4 +1,5 @@
 import { news } from '~/server/models';
+import type { NewsDataFromDb } from '~/types/NewsDataFromDb';
 
 export default defineEventHandler({
   onRequest: [auth],
@@ -8,8 +9,9 @@ export default defineEventHandler({
     try {
       const createdNewsItem = await news.create(body);
       setResponseStatus(event, 201);
-      return createdNewsItem;
+      return createdNewsItem as unknown as NewsDataFromDb;
     } catch (error: any) {
+      mongooseErrorHandler(error);
       throw createError({
         status: error.statusCode,
         message: error.message

@@ -1,6 +1,7 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
+import type { IContent } from '~/types/ContentDataFromDb';
 
-const contentSchema = new mongoose.Schema(
+const contentSchema: Schema<IContent> = new Schema(
   {
     title: {
       type: String,
@@ -10,7 +11,7 @@ const contentSchema = new mongoose.Schema(
     description: String,
     sections: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'section'
       }
     ],
@@ -71,7 +72,7 @@ const contentSchema = new mongoose.Schema(
       type: [String]
     },
     route: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       required: [true, 'Необходимо передать роут'],
       unique: true
     }
@@ -79,5 +80,5 @@ const contentSchema = new mongoose.Schema(
   { versionKey: false }
 );
 
-const Content = mongoose.model('content', contentSchema);
+const Content = model('content', contentSchema);
 export default Content;

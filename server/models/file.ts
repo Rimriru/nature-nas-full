@@ -1,6 +1,7 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
+import type { IFile } from '~/types/FilesDataFromDb';
 
-const fileSchema: any = new mongoose.Schema(
+const fileSchema: Schema<IFile> = new Schema(
   {
     name: {
       type: String,
@@ -17,6 +18,6 @@ const fileSchema: any = new mongoose.Schema(
   { versionKey: false }
 );
 
-const File = mongoose.model('file', fileSchema);
+const File = model('file', fileSchema);
 
 export default File;

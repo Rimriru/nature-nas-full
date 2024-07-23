@@ -9,6 +9,7 @@ export default defineEventHandler({
       await sections.findByIdAndDelete(id);
       return { message: 'Раздел удалён' };
     } catch (error: any) {
+      mongooseErrorHandler(error);
       throw createError({
         status: error.statusCode,
         message: error.message

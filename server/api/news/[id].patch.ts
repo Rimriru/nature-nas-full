@@ -1,4 +1,5 @@
 import { news } from '~/server/models';
+import type { NewsDataFromDb } from '~/types/NewsDataFromDb';
 
 export default defineEventHandler({
   onRequest: [auth],
@@ -8,8 +9,9 @@ export default defineEventHandler({
 
     try {
       const editedNewsItem = await news.findByIdAndUpdate(id, body, { new: true });
-      return editedNewsItem;
+      return editedNewsItem as unknown as NewsDataFromDb;
     } catch (error: any) {
+      mongooseErrorHandler(error);
       throw createError({
         status: error.statusCode,
         message: error.message

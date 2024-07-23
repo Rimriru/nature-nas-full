@@ -9,6 +9,7 @@ export default defineEventHandler({
       const editedInfo = await homeInfo.findByIdAndUpdate(id, body, { new: true });
       return editedInfo;
     } catch (error: any) {
+      mongooseErrorHandler(error);
       throw createError({
         status: error.statusCode,
         message: error.message

@@ -1,5 +1,6 @@
-import { sections } from '../../models/index';
+import { sections } from '~/server/models';
 import { BAD_REQUEST_ERROR_MESSAGE } from '~/utils/errorMessages';
+import type { SectionFromDb } from '~/types/SectionDataFromDb';
 
 export default defineEventHandler({
   onRequest: [auth],
@@ -15,10 +16,13 @@ export default defineEventHandler({
     }
 
     try {
-      const updatedSection = await sections.findByIdAndUpdate(id, sectionBody, { new: true });
+      const updatedSection = await sections.findByIdAndUpdate(id, sectionBody, {
+        new: true
+      });
       const message = `Раздел "${sectionBody.title}" был изменён`;
-      return { message, updatedSection };
+      return { message, updatedSection: updatedSection as unknown as SectionFromDb };
     } catch (error: any) {
+      mongooseErrorHandler(error);
       throw createError({
         status: error.statusCode,
         message: error.message

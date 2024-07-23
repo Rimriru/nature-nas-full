@@ -1,6 +1,7 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
+import type { ISection } from '~/types/SectionDataFromDb';
 
-const sectionSchema = new mongoose.Schema(
+const sectionSchema: Schema<ISection> = new Schema(
   {
     title: {
       type: String,
@@ -14,5 +15,5 @@ const sectionSchema = new mongoose.Schema(
   { versionKey: false }
 );
 
-const Section = mongoose.model('section', sectionSchema);
+const Section = model('section', sectionSchema);
 export default Section;

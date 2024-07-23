@@ -1,4 +1,4 @@
-import type RouteDataFromDb from '~/types/RouteDataFromDb';
+import type { RouteDataFromDb } from '~/types/RouteDataFromDb';
 
 export const useRoutesState: () => globalThis.Ref<RouteDataFromDb[]> = () =>
   useState('routes', () => []);
@@ -9,9 +9,5 @@ export const useRouteFindByPath = (routes: RouteDataFromDb[], path: string) =>
 export const useAllRoutes = async () => {
   const data = await $fetch('/api/routes');
 
-  if (!data) {
-    return [];
-  } else {
-    return data;
-  }
+  return data ? data : [];
 };

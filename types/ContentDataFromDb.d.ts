@@ -1,38 +1,33 @@
-import type { PersonaData } from './PersonasDataFromDb';
+import type { ObjectId } from 'mongoose';
+import type { IPersonaData } from './PersonasDataFromDb';
 import type { SectionFromDb } from './SectionDataFromDb';
 
-interface ContentFromDb {
-  _id: string;
+interface IContent {
   title: string;
-  text: string;
-  description: string;
-  photos: any[];
-  route: string;
+  text?: string;
+  description?: string;
+  photos?: string[];
+  route: ObjectId;
   sections: SectionFromDb[];
-  personaOne: PersonaData;
-  personaTwo: PersonaData;
+  personaOne: IPersonaData;
+  personaTwo: IPersonaData;
 }
 
-interface CanvasContent {
-  _id: string;
-  title: string;
-  text: string;
-  description: string;
-  photos: any[];
-  sections: SectionFromDb[];
-  personaOne: PersonaData;
-  personaTwo: PersonaData;
+interface ContentFromDb extends IContent {
+  _id: ObjectId | string;
 }
+
+type CanvasContent = Omit<ContentFromDb, 'route'>;
 
 interface OriginalContentValues {
   title: string;
   description: string;
   text: string;
-  photos: any[];
-  personaOne: PersonaData;
-  personaTwo: PersonaData;
+  photos: string[];
+  personaOne: IPersonaData;
+  personaTwo: IPersonaData;
 }
 
 type CanvasOptions = 'one' | 'two' | 'three' | 'four' | 'five' | 'six';
 
-export { ContentFromDb, CanvasContent, OriginalContentValues, CanvasOptions };
+export { IContent, ContentFromDb, CanvasContent, OriginalContentValues, CanvasOptions };

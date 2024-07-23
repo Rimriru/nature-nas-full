@@ -1,5 +1,5 @@
 import type Photo from './MainPhotoDataFromDb';
-import type FileDataFromDb from './FilesDataFromDb';
+import type { FileDataFromDb } from './FilesDataFromDb';
 import type { NewsDataFromDb } from './NewsDataFromDb';
 import type { ContactsDataFromDb } from './ContactsDataFromDb';
 import type { ConfDataFromDb } from './ConfsDataFromDb';

@@ -1,4 +1,4 @@
-import type FileDataFromDb from './FilesDataFromDb';
+import type { FileDataFromDb } from './FilesDataFromDb';
 
 type Contacts = {
   address: string;
@@ -6,8 +6,7 @@ type Contacts = {
   email: string;
 };
 
-interface Journal {
-  _id: string;
+interface IJournal {
   description: string;
   cover: string;
   editChief: string;
@@ -18,4 +17,8 @@ interface Journal {
   contacts: Contacts;
 }
 
-export default Journal;
+interface JournalDataFromDb extends IJournal {
+  _id: string;
+}
+
+export { IJournal, JournalDataFromDb };

@@ -20,7 +20,7 @@ const date = (date: string) =>
       :src="
         coverAsSrc
           ? confItem.cover
-          : `${$config.public.process === 'production' ? '' : $config.public.domen}/image/${
+          : `/image/${
               confItem.cover
             }`
       "

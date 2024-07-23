@@ -17,7 +17,6 @@ if (router.currentRoute.value.meta.title) {
 const photoForLoading = ref<File | ''>('');
 const isImageLoadFormOpen = ref(false);
 const notifications = useToast();
-const config = useRuntimeConfig();
 
 const photoState = useMainPhotoState();
 
@@ -105,9 +104,7 @@ const handleFormSubmit = async () => {
         { 'heading-image__img_main': ['/', '/admin'].includes($route.fullPath) }
       ]"
       :style="{
-        backgroundImage: `url(${
-          $config.public.process === 'production' ? '' : $config.public.domen
-        }/image/${photoState[0].name})`
+        backgroundImage: `url(/image/${photoState[0].name})`
       }"
     ></div>
     <div

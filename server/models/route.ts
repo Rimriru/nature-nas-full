@@ -1,6 +1,7 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
+import type { IRoute } from '~/types/RouteDataFromDb';
 
-const routeSchema = new mongoose.Schema(
+const routeSchema: Schema<IRoute> = new Schema(
   {
     name: {
       type: String,
@@ -20,5 +21,5 @@ const routeSchema = new mongoose.Schema(
   { versionKey: false }
 );
 
-const Route = mongoose.model('route', routeSchema);
+const Route = model('route', routeSchema);
 export default Route;

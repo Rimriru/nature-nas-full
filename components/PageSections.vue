@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import type { Section, SectionFromDb } from '~/types/SectionDataFromDb';
+import type { ISection, SectionFromDb } from '~/types/SectionDataFromDb';
+import type { ObjectId } from 'mongoose';
 
 const sections = ref<SectionFromDb[]>([]);
-const sectionValues = reactive<Section>({
+const sectionValues = reactive<ISection>({
   title: '',
   content: ''
 });
@@ -21,7 +22,7 @@ const removalError = '';
 
 const props = defineProps<{
   sections: SectionFromDb[];
-  contentId: string;
+  contentId: string | ObjectId;
   isSingle: boolean;
 }>();
 

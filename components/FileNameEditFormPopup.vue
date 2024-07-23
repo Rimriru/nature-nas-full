@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Form, FormError } from '#ui/types';
-import type FileDataFromDb from '~/types/FilesDataFromDb';
+import type { FileDataFromDb } from '~/types/FilesDataFromDb';
 
 const fileName = reactive({
   name: ''

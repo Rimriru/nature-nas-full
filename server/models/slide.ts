@@ -1,6 +1,7 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
+import type Slide from '~/types/SlideDataFromDb';
 
-const slideSchema: any = new mongoose.Schema(
+const slideSchema: Schema<Slide> = new Schema(
   {
     img: {
       type: String,
@@ -19,5 +20,5 @@ const slideSchema: any = new mongoose.Schema(
   { versionKey: false }
 );
 
-const Slide = mongoose.model('slide', slideSchema);
+const Slide = model('slide', slideSchema);
 export default Slide;

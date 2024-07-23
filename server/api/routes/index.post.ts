@@ -1,6 +1,6 @@
-import { routes } from '../../models/index';
+import { routes } from '~/server/models/index';
 import { CONFLICT_ROUTE_ERROR_MESSAGE } from '~/utils/errorMessages';
-import type RouteDataFromDb from '~/types/RouteDataFromDb';
+import type { RouteDataFromDb } from '~/types/RouteDataFromDb';
 
 export default defineEventHandler({
   onRequest: [auth],

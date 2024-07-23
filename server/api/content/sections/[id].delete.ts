@@ -22,6 +22,7 @@ export default defineEventHandler({
       );
       return newContent;
     } catch (error: any) {
+      mongooseErrorHandler(error);
       throw createError({
         status: error.statusCode,
         message: error.message

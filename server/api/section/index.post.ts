@@ -1,4 +1,4 @@
-import { sections } from '../../models/index';
+import { sections } from '~/server/models';
 import { SectionFromDb } from '~/types/SectionDataFromDb';
 
 export default defineEventHandler({
@@ -14,6 +14,7 @@ export default defineEventHandler({
         newSection: newSection as unknown as SectionFromDb
       };
     } catch (error: any) {
+      mongooseErrorHandler(error);
       throw createError({
         status: error.statusCode,
         message: error.message

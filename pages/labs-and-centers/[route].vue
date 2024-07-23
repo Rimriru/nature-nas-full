@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type RouteDataFromDb from '~/types/RouteDataFromDb';
+import type { RouteDataFromDb } from '~/types/RouteDataFromDb';
 
 const appRouter = useRouter();
 const appRoute = useRoute();

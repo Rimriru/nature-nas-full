@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type RouteDataFromDb from '~/types/RouteDataFromDb';
+import type { RouteDataFromDb } from '~/types/RouteDataFromDb';
 
 const isConfirmPopupOpen = ref(false);
 const routeDataForRemove = reactive({

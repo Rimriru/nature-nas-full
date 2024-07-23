@@ -1,27 +1,21 @@
 <script setup lang="ts">
-import type { NewsCardData } from '~/types/NewsDataFromDb';
+import type { NewsDataFromDb } from '~/types/NewsDataFromDb';
 
 const props = defineProps<{
-  newsItem: NewsCardData;
+  newsItem: NewsDataFromDb;
 }>();
 
 const emit = defineEmits(['editClick', 'removeClick']);
 
-const coverAsSrc = computed(() => IMAGE_LINK_REG_EXP.test(props.newsItem.cover));
+const isCoverLink = computed(() => IMAGE_LINK_REG_EXP.test(props.newsItem.cover));
 </script>
 
 <template>
   <article class="news-card">
     <img
       class="news-card__cover"
-      :src="
-        coverAsSrc
-          ? newsItem.cover
-          : `${$config.public.process === 'production' ? '' : $config.public.domen}/image/${
-              newsItem.cover
-            }`
-      "
-      alt="Обложка новости"
+      :src="isCoverLink ? newsItem.cover : `/image/${newsItem.cover}`"
+      :alt="newsItem.title"
       loading="lazy"
     />
     <div class="news-card__info-block">

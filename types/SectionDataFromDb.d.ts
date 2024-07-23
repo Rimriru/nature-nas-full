@@ -1,12 +1,10 @@
-interface Section {
+interface ISection {
   title: string;
   content: string;
 }
 
-interface SectionFromDb {
+interface SectionFromDb extends ISection {
   _id: string;
-  title: string;
-  content: string;
 }
 
-export { Section, SectionFromDb };
+export { ISection, SectionFromDb };
