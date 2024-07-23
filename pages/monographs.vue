@@ -32,7 +32,9 @@ const monographsLinks = computed(() => monographsLinkGroup?.links);
 
 const router = useRouter();
 router.push({
-  path: `/monographs${monographsLinks.value ? monographsLinks.value[0].to : ''}`,
+  path: `/monographs${
+    monographsLinks.value && monographsLinks.value.length ? monographsLinks.value[0].to : ''
+  }`,
   replace: true
 });
 const notifications = useToast();

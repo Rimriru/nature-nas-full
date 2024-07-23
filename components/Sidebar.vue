@@ -35,8 +35,8 @@ interface MgraphLink extends Link {
         <div v-if="isLoggedIn" class="sidebar__btn-container">
           <EditBtn :color="'black'" @click="emit('onEditLinkButtonClick', id, title, to)" />
           <RemoveBtn
-            :disabled="linkMgraphs === 0"
-            :class="{ 'sidebar__remove-btn': linkMgraphs === 0 }"
+            :disabled="linkMgraphs !== 0"
+            :class="{ 'sidebar__remove-btn': linkMgraphs !== 0 }"
             @click="emit('onRemoveLinkButtonClick', id, title, to)"
           />
         </div>
