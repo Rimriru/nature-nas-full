@@ -7,20 +7,14 @@ const props = defineProps<{
 
 const emit = defineEmits(['editClick', 'removeClick']);
 
-const coverAsSrc = computed(() => IMAGE_LINK_REG_EXP.test(props.newsItem.cover));
+const isCoverLink = computed(() => IMAGE_LINK_REG_EXP.test(props.newsItem.cover));
 </script>
 
 <template>
   <article class="news-card">
     <img
       class="news-card__cover"
-      :src="
-        coverAsSrc
-          ? newsItem.cover
-          : `${$config.public.process === 'production' ? '' : $config.public.domen}/image/${
-              newsItem.cover
-            }`
-      "
+      :src="isCoverLink ? newsItem.cover : `/image/${newsItem.cover}`"
       :alt="newsItem.title"
       loading="lazy"
     />

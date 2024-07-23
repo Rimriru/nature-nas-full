@@ -14,7 +14,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     mongoDbUrl: process.env.MONGODB_URL,
     public: {
-      domen: process.env.DOMEN,
+      devDomen: process.env.DEV_DOMEN,
+      prodDomen: process.env.PROD_DOMEN,
       process: process.env.NODE_ENV,
       tinymce: process.env.TINYMCE_API_KEY
     },

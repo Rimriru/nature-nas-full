@@ -20,9 +20,7 @@ const loggedInState = useLoggedInState();
     >
       <img
         v-if="props.personaData.photo"
-        :src="`${$config.public.process === 'production' ? '' : $config.public.domen}/image/${
-          props.personaData.photo
-        }`"
+        :src="`/image/${props.personaData.photo}`"
         :alt="`Фото${props.personaData.name ? ' ' + props.personaData.name : ''}`"
         loading="lazy"
       />

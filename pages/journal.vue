@@ -28,7 +28,9 @@ const publications = computed(() => {
     .map((item) => {
       return {
         label: item.name,
-        to: `${config.public.process === 'production' ? '' : config.public.domen}/file/${item.file}`
+        to: `${
+          config.public.process === 'production' ? config.public.prodDomen : config.public.devDomen
+        }/file/${item.file}`
       };
     })
     .sort((a, b) => b.label.localeCompare(a.label));
@@ -64,27 +66,21 @@ const onFileLoadFormPopupClose = () => {
     <aside class="journal__aside">
       <div class="journal__info">
         <img
-          :src="`${$config.public.process === 'production' ? '' : $config.public.domen}/image/${
-            journalState?.cover
-          }`"
+          :src="`/image/${journalState?.cover}`"
           class="journal__cover"
           alt="Обложка журнала"
           loading="lazy"
         />
         <div class="journal__info-container">
           <NuxtLink
-            :to="`${$config.public.process === 'production' ? '' : $config.public.domen}/file/${
-              journalState?.authorRules.file
-            }`"
+            :to="`/file/${journalState?.authorRules.file}`"
             :external="true"
             class="button-border"
             target="_blank"
             >Правила для авторов</NuxtLink
           >
           <NuxtLink
-            :to="`${$config.public.process === 'production' ? '' : $config.public.domen}/file/${
-              journalState?.editorialPolicy.file
-            }`"
+            :to="`/file/${journalState?.editorialPolicy.file}`"
             :external="true"
             class="button-border"
             target="_blank"

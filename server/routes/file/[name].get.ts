@@ -2,7 +2,8 @@ import path from 'path';
 import fs from 'fs';
 
 export default defineEventHandler(async (event) => {
-  const base = '.output/public/docs';
+  const config = useRuntimeConfig();
+  const base = `${config.public.process === 'production' ? '.output/' : ''}public/docs`;
 
   const filePath = path.join(base, event.context.params!.name);
 
