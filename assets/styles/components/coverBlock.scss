@@ -1,0 +1,51 @@
+@use '~/assets/styles/variables.scss' as *;
+
+.cover {
+  &_centered {
+    margin: 0 auto;
+  }
+
+  .cover-block {
+    display: grid;
+    row-gap: 10px;
+    padding: 10px;
+    margin-bottom: 5px;
+    max-width: 400px;
+
+    &_required {
+      border: $required 1px solid;
+      border-radius: 0.375rem;
+    }
+
+    .cover-block__perview {
+      width: 308px;
+      height: 200px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      border-radius: 10px;
+      margin: 0 auto;
+
+      &_vertical {
+        width: 250px;
+        height: 353px;
+      }
+    }
+
+    .cover-block__cover-file {
+      padding-bottom: 30px;
+      margin: 0 auto;
+      display: grid;
+      position: relative;
+      width: 100%;
+
+      span.error {
+        max-width: 300px;
+        position: absolute;
+        text-align: left;
+        top: 33px;
+        margin-block: 0;
+      }
+    }
+  }
+}

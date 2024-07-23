@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { fileSizeError } from '~/utils/errorMessages';
-import defaultCover from '~/assets/images/journal-preview-default.jpg';
 import type { Form, FormError } from '#ui/types';
+import type { DefineComponent } from 'vue';
 
 const journalData = reactive({
   description: '',
@@ -26,10 +25,16 @@ const journalData = reactive({
   }
 });
 const journalForm = ref<Form<string> | null>(null);
-const journalCoverInput = ref<HTMLInputElement | null>(null);
+const journalCoverInput = ref<DefineComponent | null>(null);
 const journalCoverForPreview = ref('');
-const journalCoverOnUpload = ref<File | ''>('');
-const journalCoverError = ref('');
+const journalCoverAsFile = ref<File | ''>('');
+const journalCoverAsLink = ref('');
+const journalCoverErrorsVisibility = ref({
+  requiredError: false,
+  linkValidationError: false,
+  fileSizeError: false
+});
+const submitError = ref('');
 
 const props = defineProps<{
   isOpen: boolean;
@@ -37,7 +42,6 @@ const props = defineProps<{
 const emit = defineEmits(['close']);
 const journalState = useJournalState();
 const filesState = useFilesState();
-const config = useRuntimeConfig();
 const notifications = useToast();
 
 const selectedAuthorRules = ref(filesState.value[0]);
@@ -63,6 +67,21 @@ let originalJournalData = {
     address: '',
     telNumber: '',
     email: ''
+  }
+};
+
+const resetErrors = () => {
+  submitError.value = '';
+  journalCoverErrorsVisibility.value = {
+    requiredError: false,
+    linkValidationError: false,
+    fileSizeError: false
+  };
+};
+
+const resetCoverFileInputValue = () => {
+  if (journalCoverInput.value) {
+    journalCoverInput.value.coverImageInput.value = '';
   }
 };
 
@@ -96,7 +115,7 @@ watch(
       journalData.contacts.email = email;
 
       journalData.cover = cover;
-      journalCoverForPreview.value = `/image/${cover}`;
+      journalCoverForPreview.value = IMAGE_LINK_REG_EXP.test(cover) ? cover : `/image/${cover}`;
 
       originalJournalData = {
         description,
@@ -113,10 +132,10 @@ watch(
         }
       };
     } else {
-      if (journalCoverInput.value) {
-        journalCoverInput.value.value = '';
-      }
-      journalCoverError.value = '';
+      resetCoverFileInputValue();
+      journalCoverAsFile.value = '';
+      journalCoverAsLink.value = '';
+      resetErrors();
       originalJournalData = {
         description: '',
         cover: '',
@@ -166,38 +185,81 @@ const validate = (state: any): FormError[] => {
 };
 
 const onJournalCoverInputChange = (event: Event) => {
+  resetErrors();
+  journalCoverAsLink.value = '';
   journalCoverForPreview.value = '';
+
   const fileInputData = event.target as HTMLInputElement;
   if (fileInputData.files && fileInputData.files.length) {
     const file = fileInputData.files[0];
-    if (file.size > 5000000) return (journalCoverError.value = fileSizeError('5'));
-    journalCoverOnUpload.value = file;
+    if (file.size > 5000000) return (journalCoverErrorsVisibility.value.fileSizeError = true);
+    journalCoverAsFile.value = file;
     journalCoverForPreview.value = URL.createObjectURL(file);
   } else {
-    journalCoverOnUpload.value = '';
+    journalCoverAsFile.value = '';
   }
 };
 
+const onJournalCoverLinkChange = () => {
+  journalCoverAsFile.value = '';
+  resetCoverFileInputValue();
+  resetErrors();
+
+  if (!IMAGE_LINK_REG_EXP.test(journalCoverAsLink.value)) {
+    journalCoverForPreview.value = '';
+    journalCoverErrorsVisibility.value.linkValidationError = true;
+    return;
+  }
+  journalCoverForPreview.value = journalCoverAsLink.value;
+};
+
 const onJournalFormSubmit = async () => {
-  if (journalCoverOnUpload.value) {
+  submitError.value = '';
+
+  if (journalCoverAsLink.value && journalCoverAsLink.value !== journalData.cover) {
+    const initialCover = journalData.cover;
+    journalData.cover = journalCoverAsLink.value;
+    journalCoverAsLink.value = '';
+
+    if (initialCover && !IMAGE_LINK_REG_EXP.test(initialCover)) {
+      await $fetch(`/api/images/${initialCover}`, {
+        method: 'delete',
+        onResponse({ response }) {
+          if (!response.ok) {
+            notifications.add({
+              id: 'news',
+              title: String(response.status),
+              description: response.statusText
+            });
+            return;
+          }
+        }
+      });
+    }
+  }
+
+  if (journalCoverAsFile.value) {
     const body = new FormData();
-    body.append('images', journalCoverOnUpload.value);
+    body.append('images', journalCoverAsFile.value);
     await $fetch('/api/images', {
       method: 'post',
       body,
       async onResponse({ response }) {
         if (response.ok) {
-          const previousCover = journalData.cover;
+          const previousCoverFile = !IMAGE_LINK_REG_EXP.test(journalData.cover)
+            ? journalData.cover
+            : '';
           journalData.cover = response._data[0];
-          journalCoverOnUpload.value = '';
+          journalCoverAsFile.value = '';
+          resetCoverFileInputValue();
 
-          if (previousCover) {
-            await $fetch(`/api/images/${previousCover}`, {
+          if (previousCoverFile) {
+            await $fetch(`/api/images/${previousCoverFile}`, {
               method: 'delete',
               onResponse({ response }) {
                 if (!response.ok) {
                   notifications.add({
-                    id: 'journal',
+                    id: 'mgraphs',
                     title: String(response.status),
                     description: response.statusText
                   });
@@ -212,6 +274,7 @@ const onJournalFormSubmit = async () => {
             title: String(response.status),
             description: response.statusText
           });
+          resetCoverFileInputValue();
           return;
         }
       }
@@ -243,6 +306,7 @@ const onJournalFormSubmit = async () => {
       emit('close');
     } catch (error: any) {
       notifications.add({ id: 'journal', title: error.status, description: error.data.message });
+      submitError.value = `${error.status}: ${error.data.message}`;
       console.error(error);
     }
   }
@@ -269,34 +333,17 @@ const onJournalFormSubmit = async () => {
           />
         </UFormGroup>
       </ClientOnly>
-      <div>
-        Обложка <span class="required">*</span>
-        <div class="journal-form__cover">
-          <div
-            :style="{
-              backgroundImage: `url(${
-                journalCoverForPreview ? journalCoverForPreview : defaultCover
-              })`
-            }"
-            class="journal-form__cover-preview"
-          ></div>
-          <div class="journal-form__cover-input">
-            <label>
-              Загрузить:
-              <input
-                style="display: none"
-                id="journalCover"
-                type="file"
-                ref="journalCoverInput"
-                accept="image/jpeg, image/png"
-                @change="onJournalCoverInputChange"
-              />
-              <LoadButton @on-click="($refs.journalCoverInput as HTMLInputElement).click()" />
-            </label>
-            <span v-if="journalCoverError" class="error">{{ journalCoverError }}</span>
-          </div>
-        </div>
-      </div>
+      <CoverFormBlock
+        ref="journalCoverInput"
+        v-model="journalCoverAsLink"
+        :cover-error-visibility="journalCoverErrorsVisibility"
+        :cover-preview="journalCoverForPreview"
+        :cover-size-limit="'5'"
+        :centered="true"
+        :vertical="true"
+        @on-cover-input-change="onJournalCoverInputChange"
+        @on-cover-link-change="onJournalCoverLinkChange"
+      />
       <UFormGroup name="chief">
         Главный редактор
         <span class="required">*</span>
@@ -409,7 +456,15 @@ const onJournalFormSubmit = async () => {
         <MenuButton :size="'middle'" :button-type="'submit'" @click="emit('close')"
           >Отмена</MenuButton
         >
-        <MenuButton :is-active="true" :size="'middle'" :button-type="'submit'"
+        <MenuButton
+          :is-active="true"
+          :size="'middle'"
+          :button-type="'submit'"
+          :is-disabled="
+            journalCoverErrorsVisibility.fileSizeError ||
+            journalCoverErrorsVisibility.linkValidationError ||
+            journalCoverErrorsVisibility.requiredError
+          "
           >Сохранить</MenuButton
         >
       </div>
@@ -418,5 +473,6 @@ const onJournalFormSubmit = async () => {
 </template>
 
 <style lang="scss">
-@import url('~/assets/styles/components/journalFormPopup.scss');
+@import '~/assets/styles/components/journalFormPopup.scss';
+@import '~/assets/styles/components/newsForm.scss';
 </style>

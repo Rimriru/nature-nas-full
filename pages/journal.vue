@@ -66,7 +66,7 @@ const onFileLoadFormPopupClose = () => {
     <aside class="journal__aside">
       <div class="journal__info">
         <img
-          :src="`/image/${journalState?.cover}`"
+          :src="IMAGE_LINK_REG_EXP.test(journalState?.cover!) ? `${journalState?.cover}` : `/image/${journalState?.cover}`"
           class="journal__cover"
           alt="Обложка журнала"
           loading="lazy"

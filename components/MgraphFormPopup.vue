@@ -302,7 +302,7 @@ const submitHandler = computed(() =>
           ref="monographCover"
           :cover-error-visibility="coverErrorVisibility"
           :cover-preview="coverPreview"
-          :is-for-monograph="true"
+          :vertical="true"
           v-model="coverForUploadingAsLink"
           @on-cover-input-change="handleMgraphInputChange"
           @on-cover-link-change="handleMgraphLinkChange"
