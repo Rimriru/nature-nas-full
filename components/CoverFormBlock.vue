@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import defaultNewsCover from '~/assets/images/news-preview-default.jpg';
+import defaultHorizontalCover from '~/assets/images/news-preview-default.jpg';
+import defaultVerticalCover from '~/assets/images/journal-preview-default.jpg';
+
 import {
   fileSizeError,
   NEWS_COVER_REQUIRED_ERROR,
@@ -13,11 +15,12 @@ defineProps<{
     fileSizeError: boolean;
   };
   coverPreview: string;
-  isForMonograph?: boolean;
+  coverSizeLimit?: string;
+  centered?: boolean;
+  vertical?: boolean;
 }>();
 
-const coverAsLinkModel = defineModel();
-
+const coverAsLinkModel = defineModel<string | number | undefined>();
 const emit = defineEmits(['onCoverInputChange', 'onCoverLinkChange']);
 
 const coverImageInput = ref();
@@ -28,22 +31,28 @@ defineExpose({
 </script>
 
 <template>
-  <UFormGroup name="cover">
+  <UFormGroup name="cover" :class="['cover', { cover_centered: centered }]">
     <div
       :class="[
-        'news-form__cover-block',
-        { 'news-form__cover-block_required': coverErrorVisibility.requiredError }
+        'cover-block',
+        {
+          'cover-block_required': coverErrorVisibility.requiredError
+        }
       ]"
     >
       <div
-        :class="['news-form__cover-perview', { 'news-form__cover-perview_mono': isForMonograph }]"
-        :style="{ backgroundImage: `url(${coverPreview ? coverPreview : defaultNewsCover})` }"
+        :class="['cover-block__perview', { 'cover-block__perview_vertical': vertical }]"
+        :style="{
+          backgroundImage: `url(${
+            coverPreview ? coverPreview : vertical ? defaultVerticalCover : defaultHorizontalCover
+          })`
+        }"
       ></div>
       <p>
         <span class="required">*</span>
         Выбрать фото для обложки:
       </p>
-      <div class="news-form__cover-file">
+      <div class="cover-block__cover-file">
         <input
           style="display: none"
           id="newsCover"
@@ -57,7 +66,7 @@ defineExpose({
           @on-click="($refs.coverImageInput as HTMLInputElement).click()"
         />
         <span v-if="coverErrorVisibility.fileSizeError" class="error">{{
-          fileSizeError('2')
+          fileSizeError(coverSizeLimit ? coverSizeLimit : '2,5')
         }}</span>
       </div>
       <UDivider label="или" class="mb-5" />
@@ -66,18 +75,16 @@ defineExpose({
         placeholder="Вставьте ссылку на изображение..."
         @keyup="emit('onCoverLinkChange')"
       />
-      <span class="error cover-error" v-if="coverErrorVisibility.linkValidationError">{{
+      <span class="error" v-if="coverErrorVisibility.linkValidationError">{{
         IMAGE_LINK_VALIDATION_ERROR
       }}</span>
     </div>
-    <span v-if="coverErrorVisibility.requiredError" class="error cover-error">{{
+    <span v-if="coverErrorVisibility.requiredError" class="error">{{
       NEWS_COVER_REQUIRED_ERROR
     }}</span>
   </UFormGroup>
 </template>
 
 <style lang="scss">
-.cover-error {
-  max-width: 300px;
-}
+@import url('~/assets/styles/components/coverBlock.scss');
 </style>
