@@ -22,6 +22,7 @@ const isConfFormPopupOpen = ref(false);
 const isConfirmPopupOpen = ref(false);
 const confItemOfInterest = ref<ConfDataFromDb | ''>('');
 const removeRequestError = ref('');
+const isConfRemoveRequestPending = ref(false);
 const notifications = useToast();
 
 provide('confItem', confItemOfInterest);
@@ -48,9 +49,11 @@ const onRemoveBtnClick = (confItem: ConfDataFromDb) => {
 const onConfirmPopupClose = () => {
   isConfirmPopupOpen.value = false;
   resetConfItemOfInterest();
+  isConfRemoveRequestPending.value = false;
 };
 
 const onConfirmPopupSubmit = async () => {
+  isConfRemoveRequestPending.value = true;
   const confId = (confItemOfInterest.value as ConfDataFromDb)._id;
   try {
     await $fetch(`/api/confs/${confId}`, {
@@ -65,6 +68,7 @@ const onConfirmPopupSubmit = async () => {
     });
     onConfirmPopupClose();
   } catch (error: any) {
+    isConfRemoveRequestPending.value = false;
     removeRequestError.value = `${error.statusCode}: ${error.data.message}`;
     console.error(error);
   }
@@ -83,6 +87,7 @@ const onConfirmPopupSubmit = async () => {
       <LazyConfirmPopup
         :is-open="isConfirmPopupOpen"
         :what-is-removed="'confItem'"
+        :is-request-pending="isConfRemoveRequestPending"
         :error="removeRequestError"
         @on-close="onConfirmPopupClose"
         @on-agree="onConfirmPopupSubmit"

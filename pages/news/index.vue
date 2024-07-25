@@ -11,6 +11,7 @@ const newsItemOfInterest = ref<NewsDataFromDb | ''>('');
 const newsItemTitleForRemove = ref('');
 const isConfirmPopupOpen = ref(false);
 const removeRequestError = ref('');
+const isNewsItemRemoveRequestPending = ref(false);
 const notifications = useToast();
 
 provide('newsItem', newsItemOfInterest);
@@ -61,9 +62,11 @@ const onConfirmPopupClose = () => {
   isConfirmPopupOpen.value = false;
   resetNewsItemOfInterest();
   newsItemTitleForRemove.value = '';
+  isNewsItemRemoveRequestPending.value = false;
 };
 
 const handleNewsItemRemove = async () => {
+  isNewsItemRemoveRequestPending.value = true;
   try {
     await $fetch(`/api/news/${(newsItemOfInterest.value as NewsDataFromDb)._id}`, {
       method: 'delete'
@@ -78,6 +81,7 @@ const handleNewsItemRemove = async () => {
     });
     onConfirmPopupClose();
   } catch (error: any) {
+    isNewsItemRemoveRequestPending.value = false;
     removeRequestError.value = `${error.statusCode}: ${error.data.message}`;
   }
 };
@@ -118,6 +122,7 @@ const handleNewsItemRemove = async () => {
         :is-open="isConfirmPopupOpen"
         :what-is-removed="'newsItem'"
         :removed-item-title="newsItemTitleForRemove"
+        :is-request-pending="isNewsItemRemoveRequestPending"
         :error="removeRequestError"
         @on-close="onConfirmPopupClose"
         @on-agree="handleNewsItemRemove"

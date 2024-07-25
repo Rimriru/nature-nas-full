@@ -17,6 +17,7 @@ const isFileEditFormPopupOpen = ref(false);
 const isConfirmPopupOpen = ref(false);
 const fileOfInterest = ref<FileDataFromDb | ''>('');
 const removeFileError = ref('');
+const isFileRemoveRequestPending = ref(false);
 const notifications = useToast();
 const config = useRuntimeConfig();
 
@@ -107,9 +108,11 @@ const onConfirmPopupClose = () => {
   isConfirmPopupOpen.value = false;
   removeFileError.value = '';
   resetFileOfInterest();
+  isFileRemoveRequestPending.value = false;
 };
 
 const handleFileRemove = async () => {
+  isFileRemoveRequestPending.value = true;
   try {
     if (fileOfInterest.value) {
       const fileId = fileOfInterest.value._id;
@@ -122,7 +125,6 @@ const handleFileRemove = async () => {
       });
 
       emit('onFileRemove', fileId);
-
       onConfirmPopupClose();
       notifications.add({
         id: 'file',
@@ -130,6 +132,7 @@ const handleFileRemove = async () => {
       });
     }
   } catch (error: any) {
+    isFileRemoveRequestPending.value = false;
     removeFileError.value = `${error.status}: ${error.data.message}`;
     console.error(error);
   }
@@ -200,6 +203,7 @@ const fileOfInterestName = computed(() => {
       :is-open="isConfirmPopupOpen"
       :what-is-removed="'file'"
       :removedItemTitle="fileOfInterestName"
+      :is-request-pending="isFileRemoveRequestPending"
       :error="removeFileError"
       @on-close="onConfirmPopupClose"
       @on-agree="handleFileRemove"

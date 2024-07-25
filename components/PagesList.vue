@@ -8,6 +8,7 @@ const routeDataForRemove = reactive({
   path: ''
 });
 const removeRouteError = ref('');
+const isPageRemoveRequestPending = ref(false);
 
 const linkGroups = useLinkGroupsState();
 const routesFromDb = useRoutesState();
@@ -26,9 +27,11 @@ const onConfirmPopupClose = () => {
   routeDataForRemove.id = '';
   routeDataForRemove.name = '';
   routeDataForRemove.path = '';
+  isPageRemoveRequestPending.value = false;
 };
 
 const handleRouteRemove = async () => {
+  isPageRemoveRequestPending.value = true;
   try {
     const { message, links } = await $fetch(`/api/routes/${routeDataForRemove.id}`, {
       method: 'delete'
@@ -50,6 +53,7 @@ const handleRouteRemove = async () => {
     onConfirmPopupClose();
     notifications.add({ id: 'route-remove', title: message });
   } catch (error: any) {
+    isPageRemoveRequestPending.value = false;
     removeRouteError.value = error.data.message;
   }
 };
@@ -78,6 +82,7 @@ const handleRouteRemove = async () => {
       :is-open="isConfirmPopupOpen"
       :what-is-removed="'route'"
       :removed-item-title="routeDataForRemove.path"
+      :is-request-pending="isPageRemoveRequestPending"
       :error="removeRouteError"
       @on-close="onConfirmPopupClose"
       @on-agree="handleRouteRemove"

@@ -14,9 +14,12 @@
   }
 
   &_disabled {
-    background-color: $gray;
-    opacity: 0.5;
+    background-color: darkgray;
     cursor: not-allowed;
+
+    &:hover {
+      opacity: 1;
+    }
   }
 
   &_size_middle {

@@ -21,8 +21,7 @@ const isMgraphPopupOpen = ref(false);
 const isMonoGonnaEdit = ref(false);
 const isConfirmPopupOpen = ref(false);
 const removalSubmitError = ref('');
-const page = ref(1);
-const pageCount = ref(3);
+const isRequestPending = ref(false);
 
 const isLoggedIn = useLoggedInState();
 const notifications = useToast();
@@ -63,9 +62,11 @@ const onConfirmPopupClose = () => {
   isConfirmPopupOpen.value = false;
   resetMonoValues();
   removalSubmitError.value = '';
+  isRequestPending.value = false;
 };
 
 const handleMonographRemoval = async () => {
+  isRequestPending.value = true;
   const monoId = monoValues._id;
   try {
     const { message } = await $fetch(`/api/mgraphs/${monoId}`, {
@@ -78,6 +79,7 @@ const handleMonographRemoval = async () => {
     onConfirmPopupClose();
   } catch (error: any) {
     console.error(error);
+    isRequestPending.value = false;
     removalSubmitError.value = `${error.status}: ${error.data.message}`;
   }
 };
@@ -115,6 +117,7 @@ const handleMonographRemoval = async () => {
         :is-open="isConfirmPopupOpen"
         :what-is-removed="'monograph'"
         :removed-item-title="monoValues.title"
+        :is-request-pending="isRequestPending"
         :error="removalSubmitError"
         @on-close="onConfirmPopupClose"
         @on-agree="handleMonographRemoval"

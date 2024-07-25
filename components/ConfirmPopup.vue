@@ -14,6 +14,10 @@ const props = defineProps({
     type: String,
     required: false
   },
+  isRequestPending: {
+    type: Boolean,
+    required: true
+  },
   error: String
 });
 const emit = defineEmits(['onClose', 'onAgree']);
@@ -43,10 +47,17 @@ const message = {
         <p v-if="props.whatIsRemoved === 'route'">
           Обратите внимание: будут удалены все ссылки, ведущие на эту страницу
         </p>
+        <LazyTinyLoader v-show="isRequestPending" />
         <span v-if="props.error" class="error">{{ props.error }}</span>
         <div class="confirm-popup__btns">
           <MenuButton :size="'small'" @click="emit('onClose')">Нет</MenuButton>
-          <MenuButton :is-active="true" :size="'small'" @click="emit('onAgree')">Да</MenuButton>
+          <MenuButton
+            :is-active="true"
+            :is-disabled="isRequestPending"
+            :size="'small'"
+            @click="emit('onAgree')"
+            >Да</MenuButton
+          >
         </div>
       </div>
     </AppPopup>

@@ -27,6 +27,7 @@ const isLinkFormPopupOpen = ref(false);
 const isConfirmPopupOpen = ref(false);
 const requestError = ref('');
 const isEditing = ref(false);
+const isRequestPending = ref(false);
 
 const monographsLinks = computed(() => monographsLinkGroup?.links);
 
@@ -57,6 +58,7 @@ const resetValues = () => {
   linkValues.title = '';
   linkValues.to = '';
   requestError.value = '';
+  isRequestPending.value = false;
 };
 
 const onCloseLinkFormPopup = () => {
@@ -94,6 +96,7 @@ const onConfirmPopupClose = () => {
 };
 
 const handleAddLinkFormSubmit = async () => {
+  isRequestPending.value = true;
   const groupId = monographsLinkGroup?._id;
   const newLinkBody = {
     title: linkValues.title,
@@ -111,15 +114,24 @@ const handleAddLinkFormSubmit = async () => {
       (group) => group._id === monographsLinkGroup?._id
     );
     linkGroupsState.value[linkGroupIndex].links.push(newLink.newLinkTyped);
+    if (linkGroupsState.value[linkGroupIndex].links.length === 1) {
+      router.push({
+        path: `/monographs${monographsLinks.value ? monographsLinks.value[0].to : ''}`,
+        replace: true
+      });
+    }
     onCloseLinkFormPopup();
     notifications.add({ id: 'mgraphs', title: `Новая ссылка "${newLinkBody.title}" создана!` });
   } catch (error: any) {
     console.error(error);
+    isRequestPending.value = false;
     requestError.value = `${error.status}: ${error.data.message}`;
   }
 };
 
 const handleEditLinkFormSubmit = async () => {
+  isRequestPending.value = true;
+
   const commonLinkValues = {
     title: linkValues.title,
     to: linkValues.to
@@ -152,12 +164,15 @@ const handleEditLinkFormSubmit = async () => {
       onCloseLinkFormPopup();
     } catch (error: any) {
       console.error(error);
+      isRequestPending.value = false;
       requestError.value = `${error.status}: ${error.data.message}`;
     }
   }
 };
 
 const handleRemoveLinkFormSubmit = async () => {
+  isRequestPending.value = true;
+
   const groupId = monographsLinkGroup?._id;
   const linkId = linkIdOfInterest.value;
   const linkTo = linkValues.to;
@@ -180,13 +195,16 @@ const handleRemoveLinkFormSubmit = async () => {
     });
     if (linkTo === `/${router.currentRoute.value.params.year}`) {
       router.push({
-        path: `/monographs${monographsLinks.value ? monographsLinks.value[0].to : ''}`,
+        path: `/monographs${
+          monographsLinks.value && monographsLinks.value.length ? monographsLinks.value[0].to : ''
+        }`,
         replace: true
       });
     }
     onConfirmPopupClose();
   } catch (error: any) {
     console.error(error);
+    isRequestPending.value = false;
     requestError.value = `${error.status}: ${error.data.message}`;
   }
 };
@@ -199,7 +217,7 @@ const addOrEditLinkHandlersForSubmit = computed(() =>
 <template>
   <main class="main">
     <div class="monographs">
-      <NuxtPage />
+      <NuxtPage keepalive />
       <Sidebar
         :links="modifiedLinksArray"
         :is-icon-present="true"
@@ -208,25 +226,26 @@ const addOrEditLinkHandlersForSubmit = computed(() =>
         @on-remove-link-button-click="onRemoveLinkButtonClick"
       />
     </div>
-    <ClientOnly>
-      <LazyLinkForm
-        v-if="isLoggedIn"
-        :link-value="linkValues"
-        :is-opened="isLinkFormPopupOpen"
-        :grouping-link-title="isEditing ? '' : 'Монографии'"
-        :is-for-monographs="true"
-        :error="requestError"
-        @on-close="onCloseLinkFormPopup"
-        @on-submit="addOrEditLinkHandlersForSubmit"
-      />
-      <LazyConfirmPopup
-        :is-open="isConfirmPopupOpen"
-        :what-is-removed="'link'"
-        :removed-item-title="linkValues.title"
-        @on-agree="handleRemoveLinkFormSubmit"
-        @on-close="onConfirmPopupClose"
-      />
-    </ClientOnly>
+    <LazyLinkForm
+      v-if="isLoggedIn"
+      :link-value="linkValues"
+      :is-opened="isLinkFormPopupOpen"
+      :grouping-link-title="isEditing ? '' : 'Монографии'"
+      :is-for-monographs="true"
+      :is-editing="isEditing"
+      :is-request-pending="isRequestPending"
+      :error="requestError"
+      @on-close="onCloseLinkFormPopup"
+      @on-submit="addOrEditLinkHandlersForSubmit"
+    />
+    <LazyConfirmPopup
+      :is-open="isConfirmPopupOpen"
+      :what-is-removed="'link'"
+      :removed-item-title="linkValues.title"
+      :is-request-pending="isRequestPending"
+      @on-agree="handleRemoveLinkFormSubmit"
+      @on-close="onConfirmPopupClose"
+    />
   </main>
 </template>
 

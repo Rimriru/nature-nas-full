@@ -14,6 +14,8 @@ const isNavMenuOpen = ref(false);
 const loggedInState = useLoggedInState();
 const isAddLinkPopupOpened = ref(false);
 const addLinkError = ref('');
+const isAddLinkRequestPending = ref(false);
+
 const notifications = useToast();
 const { width } = useWindowSize();
 const route = useRoute();
@@ -51,14 +53,16 @@ const resetFormFields = () => {
 };
 
 const onCloseLinkForm = () => {
-  resetFormFields();
   isAddLinkPopupOpened.value = false;
-  addLinkError.value = '';
+  resetFormFields();
   groupingLink.title = '';
   groupingLink.groupId = '';
+  addLinkError.value = '';
+  isAddLinkRequestPending.value = false;
 };
 
 const onAddLinkFormSubmit = async () => {
+  isAddLinkRequestPending.value = true;
   const newLinkBody = {
     title: linkValue.title,
     to: linkValue.to,
@@ -66,7 +70,7 @@ const onAddLinkFormSubmit = async () => {
   };
 
   try {
-    const { updatedGroup, newLinkTyped } = await $fetch('/api/links', {
+    const { updatedGroup } = await $fetch('/api/links', {
       method: 'post',
       body: newLinkBody
     });
@@ -79,6 +83,7 @@ const onAddLinkFormSubmit = async () => {
     notifications.add({ id: 'link-create', title: `Ссылка "${newLinkBody.title}" создана!` });
     onCloseLinkForm();
   } catch (err: any) {
+    isAddLinkRequestPending.value = false;
     addLinkError.value = err.data.message;
   }
 };
@@ -129,6 +134,7 @@ const onAddLinkFormSubmit = async () => {
         :grouping-link-title="groupingLink.title"
         :error="addLinkError"
         :place="'header'"
+        :is-request-pending="isAddLinkRequestPending"
         @on-close="onCloseLinkForm"
         @on-submit="onAddLinkFormSubmit"
       />

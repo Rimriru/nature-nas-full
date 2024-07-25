@@ -10,6 +10,6 @@ defineProps<{
   </div>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 @import url('~/assets/styles/components/ui/loader.scss');
 </style>

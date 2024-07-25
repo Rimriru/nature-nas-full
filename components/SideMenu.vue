@@ -40,6 +40,7 @@ const isEditing = ref(false);
 const requestError = ref('');
 const allGroupLinks = useLinkGroupsState();
 const groupLinkShowed = ref('');
+const isGroupLinkRequestPending = ref(false);
 
 const route = useRoute();
 const router = useRouter();
@@ -107,6 +108,7 @@ const handleLinkFormClose = () => {
   };
   isEditing.value = false;
   requestError.value = '';
+  isGroupLinkRequestPending.value = false;
 };
 
 const handleGroupLinkFormClose = () => {
@@ -116,6 +118,7 @@ const handleGroupLinkFormClose = () => {
   groupData.title = '';
   groupData.id = '';
   requestError.value = '';
+  isGroupLinkRequestPending.value = false;
 };
 
 const handleRemoveLinkGroupBtnClick = () => {
@@ -147,10 +150,13 @@ const handleConfirmPopupClose = () => {
     groupId: ''
   };
   instanceBeingRemoved.value = '';
+  isGroupLinkRequestPending.value = false;
   requestError.value = '';
 };
 
 const handleAddLinkGroup = async () => {
+  isGroupLinkRequestPending.value = true;
+  requestError.value = '';
   try {
     const data = await $fetch('/api/groups', {
       method: 'post',
@@ -163,12 +169,16 @@ const handleAddLinkGroup = async () => {
     handleGroupLinkFormClose();
     notifications.add({ id: 'link-group', title: `Группа ссылок ${data.title} была добавлена` });
   } catch (error: any) {
-    requestError.value = error.data.message;
+    isGroupLinkRequestPending.value = false;
+    requestError.value = `Ошибка ${error.statusCode}: ${error.data.message}`;
     console.error(error);
   }
 };
 
 const handleEditLinkGroup = async () => {
+  isGroupLinkRequestPending.value = true;
+  requestError.value = '';
+  console.log(isGroupLinkRequestPending.value);
   const body = {
     title: groupData.title
   };
@@ -193,6 +203,7 @@ const handleEditLinkGroup = async () => {
         title: `Группа ссылок ${groupData.title} была изменена`
       });
     } catch (error: any) {
+      isGroupLinkRequestPending.value = false;
       requestError.value = `Ошибка ${error.statusCode}: ${error.data.message}`;
       console.error(error);
     }
@@ -200,6 +211,8 @@ const handleEditLinkGroup = async () => {
 };
 
 const handleRemoveLinkGroup = async () => {
+  requestError.value = '';
+  isGroupLinkRequestPending.value = true;
   const groupId = groupDataForRemoval.value.id;
   try {
     const data = await $fetch(`/api/groups/${groupId}`, {
@@ -221,12 +234,15 @@ const handleRemoveLinkGroup = async () => {
       title: data.message
     });
   } catch (error: any) {
+    isGroupLinkRequestPending.value = false;
     requestError.value = `Ошибка ${error.statusCode}: ${error.data.message}`;
     console.error(error);
   }
 };
 
 const handleAddLink = async () => {
+  isGroupLinkRequestPending.value = true;
+  requestError.value = '';
   const body = {
     title: linkValues.title,
     to: linkValues.to
@@ -252,12 +268,15 @@ const handleAddLink = async () => {
     });
     await navigateTo(`/labs-and-centers${newLinkTyped.to}`);
   } catch (error: any) {
-    requestError.value = error.data.message;
+    isGroupLinkRequestPending.value = false;
+    requestError.value = `Ошибка ${error.statusCode}: ${error.data.message}`;
     console.error(error);
   }
 };
 
 const handleEditLink = async () => {
+  isGroupLinkRequestPending.value = true;
+  requestError.value = '';
   const linkId = linkValues.linkId;
   const groupId = groupDataForAddingOrEditingLink.value.id;
   const body = {
@@ -289,6 +308,7 @@ const handleEditLink = async () => {
         title: `Ссылка "${body.title}" была изменена`
       });
     } catch (error: any) {
+      isGroupLinkRequestPending.value = false;
       requestError.value = `Ошибка ${error.statusCode}: ${error.data.message}`;
       console.error(error);
     }
@@ -296,6 +316,8 @@ const handleEditLink = async () => {
 };
 
 const handleRemoveLink = async () => {
+  requestError.value = '';
+  isGroupLinkRequestPending.value = true;
   const { linkId, groupId } = linkValuesForRemoval.value;
 
   try {
@@ -339,6 +361,7 @@ const handleRemoveLink = async () => {
       title: data.message
     });
   } catch (error: any) {
+    isGroupLinkRequestPending.value = false;
     requestError.value = `Ошибка ${error.statusCode}: ${error.data.message}`;
     console.error(error);
   }
@@ -428,6 +451,7 @@ onMounted(() => {
         v-model="groupData"
         :is-open="isGroupPopupOpen"
         :is-editing="isEditing"
+        :is-request-pending="isGroupLinkRequestPending"
         :error="requestError"
         @on-close="handleGroupLinkFormClose"
         @on-add="handleAddLinkGroup"
@@ -439,6 +463,8 @@ onMounted(() => {
         :link-value="linkValues"
         :is-opened="isLinkPopupOpen"
         :grouping-link-title="groupDataForAddingOrEditingLink.title"
+        :is-editing="isEditing"
+        :is-request-pending="isGroupLinkRequestPending"
         :error="requestError"
         @on-submit="addOrEditHandlersForLinkFormSubmit"
         @on-close="handleLinkFormClose"
@@ -454,6 +480,8 @@ onMounted(() => {
         :is-open="isConfirmPopupOpen"
         :what-is-removed="instanceBeingRemoved"
         :removedItemTitle="removedInstanceData.title"
+        :is-request-pending="isGroupLinkRequestPending"
+        :error="requestError"
         @on-close="handleConfirmPopupClose"
         @on-agree="removedInstanceData.handler"
       />

@@ -10,6 +10,7 @@ const groupData = defineModel<{
 defineProps<{
   isOpen: boolean;
   isEditing: boolean;
+  isRequestPending: boolean;
   error: string;
 }>();
 
@@ -46,10 +47,16 @@ const validate = (state: any): FormError[] => {
           <span class="required">*</span>
           <UInput color="sky" v-model="groupData!.title" placeholder="Введите название группы..." />
         </UFormGroup>
+        <LazyTinyLoader v-show="isRequestPending" />
         <span class="error" v-if="error">{{ error }}</span>
         <div class="group-form__btn-container">
           <MenuButton :size="'small'" @click="handlePopupClose"> Отменить </MenuButton>
-          <MenuButton :size="'small'" :is-active="true" :button-type="'submit'">
+          <MenuButton
+            :size="'small'"
+            :is-disabled="isRequestPending"
+            :is-active="true"
+            :button-type="'submit'"
+          >
             Сохранить
           </MenuButton>
         </div>

@@ -33,6 +33,7 @@ const coverErrorVisibility = ref({
   linkValidationError: false,
   fileSizeError: false
 });
+const isLoaderVisible = useLoaderVisibilityState();
 const monographsState = useMgraphsState();
 const notifications = useToast();
 const config = useRuntimeConfig();
@@ -103,6 +104,7 @@ const resetMonographFormValues = () => {
       description: ''
     };
   }
+  isLoaderVisible.value = false;
 };
 
 const handleMonographFormClose = () => {
@@ -128,47 +130,49 @@ const handleMgraphInputChange = (event: Event) => {
 };
 
 const onImageDownload = async () => {
-  if (coverForUploadingAsFile.value) {
-    const body = new FormData();
-    body.append('images', coverForUploadingAsFile.value);
-    await $fetch('/api/images', {
-      method: 'post',
-      body,
-      async onResponse({ response }) {
-        if (response.ok) {
-          const previousCoverFile =
-            monographValues.cover && !IMAGE_LINK_REG_EXP.test(monographValues.cover)
-              ? monographValues.cover
-              : '';
-          monographValues.cover = response._data[0];
-          coverForUploadingAsFile.value = '';
+  const body = new FormData();
+  body.append('images', coverForUploadingAsFile.value);
+  await $fetch('/api/images', {
+    method: 'post',
+    body,
+    async onResponse({ response }) {
+      if (response.ok) {
+        const previousCoverFile =
+          monographValues.cover && !IMAGE_LINK_REG_EXP.test(monographValues.cover)
+            ? monographValues.cover
+            : '';
+        monographValues.cover = response._data[0];
+        coverForUploadingAsFile.value = '';
 
-          if (previousCoverFile) {
-            await $fetch(`/api/images/${previousCoverFile}`, {
-              method: 'delete',
-              onResponse({ response }) {
-                if (!response.ok) {
-                  notifications.add({
-                    id: 'mgraphs',
-                    title: String(response.status),
-                    description: response.statusText
-                  });
-                  return;
-                }
+        if (previousCoverFile) {
+          await $fetch(`/api/images/${previousCoverFile}`, {
+            method: 'delete',
+            onResponse({ response }) {
+              if (!response.ok) {
+                isLoaderVisible.value = false;
+                notifications.add({
+                  id: 'mgraphs',
+                  title: String(response.status),
+                  description: response.statusText
+                });
+                submitError.value = `${response._data.status}: ${response._data.message}`;
+                return;
               }
-            });
-          }
-        } else {
-          notifications.add({
-            id: 'mgraphs',
-            title: String(response.status),
-            description: response.statusText
+            }
           });
-          return;
         }
+      } else {
+        isLoaderVisible.value = false;
+        notifications.add({
+          id: 'mgraphs',
+          title: String(response.status),
+          description: response.statusText
+        });
+        submitError.value = `${response._data.status}: ${response._data.message}`;
+        return;
       }
-    });
-  }
+    }
+  });
 };
 
 const handleMgraphLinkChange = () => {
@@ -187,10 +191,12 @@ const handleMgraphLinkChange = () => {
 };
 
 const handleAddingNewMonograph = async () => {
+  isLoaderVisible.value = true;
   submitError.value = '';
 
   if (!coverForUploadingAsFile.value && !coverForUploadingAsLink.value) {
     coverErrorVisibility.value.requiredError = true;
+    isLoaderVisible.value = false;
     return;
   }
 
@@ -222,11 +228,13 @@ const handleAddingNewMonograph = async () => {
     notifications.add({ id: 'mgraphs', title: 'Новая монография создана!' });
   } catch (error: any) {
     console.error(error);
+    isLoaderVisible.value = false;
     submitError.value = `${error.status}: ${error.data.message}`;
   }
 };
 
 const handleEditingMonograph = async () => {
+  isLoaderVisible.value = true;
   submitError.value = '';
 
   const originalValues = JSON.stringify(originalMonographValues);
@@ -241,11 +249,13 @@ const handleEditingMonograph = async () => {
         method: 'delete',
         onResponse({ response }) {
           if (!response.ok) {
+            isLoaderVisible.value = false;
             notifications.add({
               id: 'news',
               title: String(response.status),
               description: response.statusText
             });
+            submitError.value = `${response._data.status}: ${response._data.message}`;
             return;
           }
         }
@@ -278,6 +288,7 @@ const handleEditingMonograph = async () => {
       handleMonographFormClose();
     } catch (error: any) {
       console.error(error);
+      isLoaderVisible.value = false;
       submitError.value = `${error.status}: ${error.data.message}`;
     }
   }

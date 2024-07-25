@@ -10,6 +10,8 @@ const props = defineProps([
   'isOpened',
   'groupingLinkTitle',
   'isForMonographs',
+  'isEditing',
+  'isRequestPending',
   'error'
 ]);
 const emit = defineEmits(['onClose', 'onSubmit']);
@@ -42,9 +44,9 @@ const handleClose = () => {
 
 <template>
   <ClientOnly>
-    <AppPopup :is-opened="props.isOpened" @on-close="handleClose">
+    <AppPopup :is-opened="isOpened" @on-close="handleClose">
       <UForm
-        :state="props.linkValue"
+        :state="linkValue"
         :validate="validate"
         ref="form"
         class="link-form"
@@ -60,7 +62,7 @@ const handleClose = () => {
           <span class="required">*</span>
           <UInput
             color="blue"
-            v-model.trim="props.linkValue.title"
+            v-model.trim="linkValue.title"
             placeholder="Введите название ссылки"
           />
         </UFormGroup>
@@ -70,10 +72,12 @@ const handleClose = () => {
           <span class="required">*</span>
           <UInput
             color="blue"
-            v-model.trim="props.linkValue.to"
+            :disabled="isForMonographs && isEditing"
+            :class="{ 'link-form__input': isForMonographs && isEditing }"
+            v-model.trim="linkValue.to"
             placeholder="Введите ссылку: /..."
           />
-          <div v-if="isForMonographs" class="link-form__message">
+          <div v-if="isForMonographs && !isEditing" class="link-form__message">
             <UIcon name="i-material-symbols-info-outline-rounded" class="icon" />
             <div>
               <span class="info">Можно ввести произвольную ссылку.</span>
@@ -81,11 +85,16 @@ const handleClose = () => {
             </div>
           </div>
         </UFormGroup>
-        <span class="error" v-if="props.error">{{ props.error }}</span>
+        <LazyTinyLoader v-show="isRequestPending" />
+        <span class="error" v-if="error">{{ error }}</span>
         <div class="link-form__btns">
           <MenuButton :size="'small'" @click="handleClose">Отмена</MenuButton>
-          <MenuButton :is-active="true" :button-type="'submit'" :size="'small'"
-            >Добавить</MenuButton
+          <MenuButton
+            :is-active="true"
+            :is-disabled="isRequestPending"
+            :button-type="'submit'"
+            :size="'small'"
+            >{{ isEditing ? 'Сохранить' : 'Добавить' }}</MenuButton
           >
         </div>
       </UForm>
@@ -106,6 +115,12 @@ const handleClose = () => {
   .link-form__heading {
     font-size: 17px;
     text-align: center;
+  }
+
+  .link-form__input {
+    input:disabled {
+      --tw-ring-color: rgb(203 213 225);
+    }
   }
 
   .link-form__message {

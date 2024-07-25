@@ -20,8 +20,9 @@ const isEditLinkPopupOpened = ref(false);
 const isConfirmPopupOpened = ref(false);
 const editLinkError = ref('');
 const removeLinkError = ref('');
-const linkGroups = useLinkGroupsState();
+const isLinkRequestPending = ref(false);
 
+const linkGroups = useLinkGroupsState();
 const notifications = useToast();
 
 const props = defineProps(['isInAdminPage']);
@@ -37,6 +38,7 @@ const onEditLinkClick = (id: string, title: string, to: string, groupId: string)
 };
 
 const onRemoveLinkClick = (id: string, linkTitle: string, groupId: string) => {
+  isLinkRequestPending.value = false;
   removedOrEditedLinkData.id = id;
   removedOrEditedLinkData.groupId = groupId;
   removedOrEditedLinkData.title = linkTitle;
@@ -62,6 +64,7 @@ const onCloseLinkForm = () => {
   linkData.groupId = '';
   editLinkError.value = '';
   removedOrEditedLinkData.id = '';
+  isLinkRequestPending.value = false;
 };
 
 const onCloseConfirmPopup = () => {
@@ -69,9 +72,11 @@ const onCloseConfirmPopup = () => {
   removedOrEditedLinkData.title = '';
   removedOrEditedLinkData.id = '';
   removedOrEditedLinkData.groupId = '';
+  isLinkRequestPending.value = false;
 };
 
 const onEditLinkFormSubmit = async () => {
+  isLinkRequestPending.value = true;
   if (linkData.title === linkDataBeforeEdit.title && linkData.to === linkDataBeforeEdit.to) {
     onCloseLinkForm();
   } else {
@@ -96,12 +101,14 @@ const onEditLinkFormSubmit = async () => {
       notifications.add({ id: 'link', title: `Ссылка "${linkData.title}" была изменена` });
       onCloseLinkForm();
     } catch (error: any) {
+      isLinkRequestPending.value = false;
       editLinkError.value = error?.data.message;
     }
   }
 };
 
 const onRemoveLinkPopupAgree = async () => {
+  isLinkRequestPending.value = true;
   try {
     const { message } = await $fetch(`/api/links/${removedOrEditedLinkData.id}`, {
       method: 'delete',
@@ -120,10 +127,10 @@ const onRemoveLinkPopupAgree = async () => {
         removedLinkGroupIndex
       ].links.filter((link) => link._id !== removedOrEditedLinkData.id);
     }
-
     onCloseConfirmPopup();
     notifications.add({ id: 'link', title: message });
   } catch (error: any) {
+    isLinkRequestPending.value = false;
     removeLinkError.value = error.data.message;
   }
 };
@@ -155,6 +162,8 @@ const onRemoveLinkPopupAgree = async () => {
       :link-value="linkData"
       :is-opened="isEditLinkPopupOpened"
       :place="'link-list'"
+      :is-editing="true"
+      :is-request-pending="isLinkRequestPending"
       :error="editLinkError"
       @on-close="onCloseLinkForm"
       @on-submit="onEditLinkFormSubmit"
@@ -164,6 +173,7 @@ const onRemoveLinkPopupAgree = async () => {
       :is-open="isConfirmPopupOpened"
       :what-is-removed="'link'"
       :removed-item-title="removedOrEditedLinkData.title"
+      :is-request-pending="isLinkRequestPending"
       :error="removeLinkError"
       @on-close="onCloseConfirmPopup"
       @on-agree="onRemoveLinkPopupAgree"

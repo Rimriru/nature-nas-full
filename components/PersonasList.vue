@@ -5,7 +5,7 @@ const loggedInState = useLoggedInState();
 const personasState = usePersonasState();
 const notifications = useToast();
 
-const props = defineProps<{
+defineProps<{
   placement: string;
   personas: PersonaInstanceFromDb[];
 }>();
@@ -15,6 +15,7 @@ const isConfirmPopupOpen = ref(false);
 const isEditing = ref(false);
 const personaOfInterest = ref<PersonaInstanceFromDb | null>(null);
 const submitRemoveError = ref('');
+const isPersonaRemoveRequestPending = ref(false);
 
 const onAddBtnClick = () => {
   isEditing.value = false;
@@ -41,36 +42,38 @@ const onRemovePersonaCardBtnClick = (persona: PersonaInstanceFromDb) => {
 const onConfirmPopupClose = () => {
   isConfirmPopupOpen.value = false;
   personaOfInterest.value = null;
+  isPersonaRemoveRequestPending.value = false;
 };
 
 const onPersonaRemove = async () => {
-  if (personaOfInterest.value) {
-    if (personaOfInterest.value.photo) {
-      await $fetch(`/api/images/${personaOfInterest.value.photo}`, {
-        method: 'delete',
-        onResponse({ response }) {
-          if (!response.ok) {
-            notifications.add({
-              id: 'images',
-              title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
-            });
-            return;
-          }
-        }
-      });
+  isPersonaRemoveRequestPending.value = true;
+  await $fetch(`/api/images/${personaOfInterest.value!.photo}`, {
+    method: 'delete',
+    onResponse({ response }) {
+      if (!response.ok) {
+        notifications.add({
+          id: 'images',
+          title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
+        });
+        submitRemoveError.value = `${response._data.statusCode}: ${response._data.message}`;
+        isPersonaRemoveRequestPending.value = false;
+        return;
+      }
     }
-    const id = personaOfInterest.value._id;
-    try {
-      const { message } = await $fetch(`/api/personas/${id}`, {
-        method: 'delete'
-      });
-      personasState.value = personasState.value.filter((persona) => persona._id !== id);
-      onConfirmPopupClose();
-      notifications.add({ id: 'personas', title: message });
-    } catch (error: any) {
-      submitRemoveError.value = `${error.status}: ${error.data.message}`;
-      console.error(error);
-    }
+  });
+
+  const id = personaOfInterest.value!._id;
+  try {
+    const { message } = await $fetch(`/api/personas/${id}`, {
+      method: 'delete'
+    });
+    personasState.value = personasState.value.filter((persona) => persona._id !== id);
+    onConfirmPopupClose();
+    notifications.add({ id: 'personas', title: message });
+  } catch (error: any) {
+    isPersonaRemoveRequestPending.value = false;
+    submitRemoveError.value = `${error.status}: ${error.data.message}`;
+    console.error(error);
   }
 };
 </script>
@@ -102,6 +105,7 @@ const onPersonaRemove = async () => {
       <LazyConfirmPopup
         :is-open="isConfirmPopupOpen"
         :what-is-removed="'persona'"
+        :is-request-pending="isPersonaRemoveRequestPending"
         :error="submitRemoveError"
         @on-close="onConfirmPopupClose"
         @on-agree="onPersonaRemove"

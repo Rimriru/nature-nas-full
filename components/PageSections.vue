@@ -16,9 +16,11 @@ const whatSectionShown = ref<SectionFromDb>({
 const isEditing = ref(false);
 const isSectionPopupOpened = useSectionPopupOpeningState();
 const isConfirmPopupOpened = ref(false);
+const removalError = '';
+const isSectionRemoveRequestPending = ref(false);
+
 const isLoggedIn = useLoggedInState();
 const notifications = useToast();
-const removalError = '';
 
 const props = defineProps<{
   sections: SectionFromDb[];
@@ -61,16 +63,18 @@ const onRemoveBtnClick = () => {
 };
 
 const onConfirmPopupClose = () => {
-  sectionIdOfInterest.value = '';
   isConfirmPopupOpened.value = false;
+  sectionIdOfInterest.value = '';
+  isSectionRemoveRequestPending.value = false;
 };
 
 const handleSectionRemoval = async () => {
+  isSectionRemoveRequestPending.value = true;
   try {
     const { message } = await $fetch(`/api/section/${sectionIdOfInterest.value}`, {
       method: 'delete'
     });
-    const newContent = await $fetch(`/api/content/sections/${props.contentId}`, {
+    await $fetch(`/api/content/sections/${props.contentId}`, {
       method: 'delete',
       body: {
         sectionId: sectionIdOfInterest.value
@@ -90,6 +94,7 @@ const handleSectionRemoval = async () => {
     onConfirmPopupClose();
   } catch (error) {
     console.error(error);
+    isSectionRemoveRequestPending.value = false;
   }
 };
 
@@ -205,6 +210,7 @@ onMounted(() => {
         :is-open="isConfirmPopupOpened"
         :what-is-removed="'section'"
         :removed-item-title="whatSectionShown.title"
+        :is-request-pending="isSectionRemoveRequestPending"
         :error="removalError"
         @on-close="onConfirmPopupClose"
         @on-agree="handleSectionRemoval"

@@ -30,6 +30,7 @@ defineProps({
     }"
     class="menu-button button"
     :type="buttonType"
+    :disabled="isDisabled"
   >
     <slot />
   </button>
