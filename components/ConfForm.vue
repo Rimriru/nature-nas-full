@@ -24,7 +24,7 @@ const coverPreview = ref('');
 const submitError = ref('');
 const confForm = ref<Form<string> | null>(null);
 const notifications = useToast();
-const config = useRuntimeConfig();
+const isLoaderVisible = useLoaderVisibilityState();
 
 const props = defineProps<{
   isInPopup: boolean;
@@ -103,6 +103,7 @@ const handleResetFormFields = () => {
   if (conferenceCover.value) {
     conferenceCover.value.coverImageInput.value = '';
   }
+  isLoaderVisible.value = false;
 };
 
 const handleConfCoverInputChange = (event: Event) => {
@@ -137,10 +138,13 @@ const handleConfCoverLinkChange = () => {
 };
 
 const handleConfItemCreationFormSubmit = async () => {
+  submitError.value = '';
   if (!coverForUploadingAsFile.value && !coverForUploadingAsLink.value) {
     coverErrorVisibility.value.requiredError = true;
     return;
   }
+
+  isLoaderVisible.value = true;
 
   if (coverForUploadingAsLink.value) {
     conferenceData.cover = coverForUploadingAsLink.value;
@@ -158,10 +162,11 @@ const handleConfItemCreationFormSubmit = async () => {
           conferenceData.cover = response._data[0];
           coverForUploadingAsFile.value = '';
         } else {
+          isLoaderVisible.value = false;
+          submitError.value = `${response._data.status}: ${response._data.message}`;
           notifications.add({
             id: 'news',
-            title: String(response.status),
-            description: response.statusText
+            title: IMAGE_LOAD_ERROR
           });
           return;
         }
@@ -186,6 +191,7 @@ const handleConfItemCreationFormSubmit = async () => {
     handleResetFormFields();
     notifications.add({ id: 'confs', title: 'Конференция создана!' });
   } catch (error: any) {
+    isLoaderVisible.value = false;
     submitError.value = `${error.statusCode}: ${error.data.message}`;
     console.error(error);
   }
@@ -194,6 +200,7 @@ const handleConfItemCreationFormSubmit = async () => {
 const handleConfItemEditFormSubmit = async () => {
   const initialValues = JSON.stringify(originalConfItemData);
   submitError.value = '';
+  isLoaderVisible.value = true;
 
   if (coverForUploadingAsLink.value && coverForUploadingAsLink.value !== conferenceData.cover) {
     const initialCover = conferenceData.cover;
@@ -205,10 +212,11 @@ const handleConfItemEditFormSubmit = async () => {
         method: 'delete',
         onResponse({ response }) {
           if (!response.ok) {
+            isLoaderVisible.value = false;
+            submitError.value = `${response._data.statusCode}: ${response._data.message}`;
             notifications.add({
               id: 'news',
-              title: String(response.status),
-              description: response.statusText
+              title: PREVIOUS_IMAGE_REMOVE_ERROR
             });
             return;
           }
@@ -237,10 +245,11 @@ const handleConfItemEditFormSubmit = async () => {
               method: 'delete',
               onResponse({ response }) {
                 if (!response.ok) {
+                  isLoaderVisible.value = false;
+                  submitError.value = `${response._data.statusCode}: ${response._data.message}`;
                   notifications.add({
                     id: 'news',
-                    title: String(response.status),
-                    description: response.statusText
+                    title: PREVIOUS_IMAGE_REMOVE_ERROR
                   });
                   return;
                 }
@@ -248,10 +257,11 @@ const handleConfItemEditFormSubmit = async () => {
             });
           }
         } else {
+          isLoaderVisible.value = false;
+          submitError.value = `${response._data.statusCode}: ${response._data.message}`;
           notifications.add({
             id: 'news',
-            title: String(response.status),
-            description: response.statusText
+            title: IMAGE_LOAD_ERROR
           });
           return;
         }
@@ -279,6 +289,7 @@ const handleConfItemEditFormSubmit = async () => {
       });
       emit('onClose');
     } catch (error: any) {
+      isLoaderVisible.value = false;
       submitError.value = `${error.status}: ${error.data.message}`;
       console.error(error);
     }
@@ -309,8 +320,8 @@ onMounted(() => {
         :cover-error-visibility="coverErrorVisibility"
         :cover-preview="coverPreview"
         v-model="coverForUploadingAsLink"
-        @on-news-cover-input-change="handleConfCoverInputChange"
-        @on-news-cover-link-change="handleConfCoverLinkChange"
+        @on-cover-input-change="handleConfCoverInputChange"
+        @on-cover-link-change="handleConfCoverLinkChange"
       />
       <div class="news-form__header-inputs">
         <DescriptionFormBlock

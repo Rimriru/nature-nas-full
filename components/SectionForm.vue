@@ -5,6 +5,7 @@ import type { FormError, Form } from '#ui/types';
 const sectionValues = defineModel<ISection>('sectionValues');
 defineProps<{
   isEditing: boolean;
+  error?: string;
 }>();
 const emit = defineEmits(['close', 'submit']);
 const form = ref<Form<string> | null>(null);
@@ -29,7 +30,7 @@ const validate = (state: any): FormError[] => {
   <ClientOnly>
     <AppPopup @on-close="onClose" :is-opened="isSectionPopupOpened">
       <UForm
-        :state="sectionValues"
+        :state="sectionValues!"
         :validate="validate"
         class="section-form"
         ref="form"
@@ -50,6 +51,7 @@ const validate = (state: any): FormError[] => {
             <ContentEditor v-model="sectionValues!.content" />
           </ClientOnly>
         </UFormGroup>
+        <span v-if="error" class="error">{{ error }}</span>
         <div class="section-form__btns">
           <MenuButton @click="onClose" :size="'middle'">Отмена</MenuButton>
           <MenuButton :is-active="true" :button-type="'submit'" :size="'middle'"

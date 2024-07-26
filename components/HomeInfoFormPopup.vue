@@ -14,6 +14,7 @@ const props = defineProps<{
 const emit = defineEmits(['close']);
 const homeInfoState = useHomeInfoState();
 const notifications = useToast();
+const isLoaderVisible = useLoaderVisibilityState();
 
 watch(
   () => props.isOpen,
@@ -25,6 +26,7 @@ watch(
       form.value?.clear();
       infoData.id = '';
       infoData.content = '';
+      isLoaderVisible.value = false;
     }
   }
 );
@@ -37,6 +39,7 @@ const validate = (state: any): FormError[] => {
 };
 
 const handleHomeInfoFormSubmit = async () => {
+  isLoaderVisible.value = true;
   const body = {
     content: infoData.content
   };
@@ -50,6 +53,7 @@ const handleHomeInfoFormSubmit = async () => {
     emit('close');
     notifications.add({ id: 'home-info', title: 'Информация о главной была изменена' });
   } catch (error: any) {
+    isLoaderVisible.value = false;
     console.error(error);
     notifications.add({
       id: 'home-info',

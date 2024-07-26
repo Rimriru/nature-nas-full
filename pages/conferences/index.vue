@@ -50,6 +50,7 @@ const onConfirmPopupClose = () => {
   isConfirmPopupOpen.value = false;
   resetConfItemOfInterest();
   isConfRemoveRequestPending.value = false;
+  removeRequestError.value = '';
 };
 
 const onConfirmPopupSubmit = async () => {

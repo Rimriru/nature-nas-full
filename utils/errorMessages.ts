@@ -12,6 +12,8 @@ const IMAGE_LINK_VALIDATION_ERROR =
   'Ссылка на изображение должна начинаться с http или https и оканчиваться форматом (".png"/".jpg"/".jpeg")';
 const PAGE_LINK_VALIDATION_ERROR =
   'Ссылка должна начинаться с / и содержать строчные латинские символы после';
+const IMAGE_LOAD_ERROR = 'При загрузке изображения произошла ошибка!';
+const PREVIOUS_IMAGE_REMOVE_ERROR = 'При удалении предыдущего изображения произошла ошибка!';
 
 export {
   CONFLICT_ROUTE_ERROR_MESSAGE,
@@ -22,5 +24,7 @@ export {
   fileSizeError,
   NEWS_COVER_REQUIRED_ERROR,
   IMAGE_LINK_VALIDATION_ERROR,
-  PAGE_LINK_VALIDATION_ERROR
+  PAGE_LINK_VALIDATION_ERROR,
+  IMAGE_LOAD_ERROR,
+  PREVIOUS_IMAGE_REMOVE_ERROR
 };

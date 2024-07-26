@@ -17,8 +17,8 @@ if (router.currentRoute.value.meta.title) {
 const photoForLoading = ref<File | ''>('');
 const isImageLoadFormOpen = ref(false);
 const notifications = useToast();
-
 const photoState = useMainPhotoState();
+const isLoaderVisible = useLoaderVisibilityState();
 
 const handleEditBtnClick = () => {
   isImageLoadFormOpen.value = true;
@@ -29,11 +29,13 @@ const handlePhotoChange = (file: File | '') => {
 };
 
 const handleFormClose = () => {
+  isLoaderVisible.value = false;
   isImageLoadFormOpen.value = false;
   photoForLoading.value = '';
 };
 
 const handleFormSubmit = async () => {
+  isLoaderVisible.value = true;
   try {
     const body = new FormData();
     body.append('images', photoForLoading.value);
@@ -64,6 +66,7 @@ const handleFormSubmit = async () => {
                     title: 'Главное фото успешно изменено!'
                   });
                 } else {
+                  isLoaderVisible.value = false;
                   notifications.add({
                     id: 'photo',
                     title: String(response.status),
@@ -74,6 +77,7 @@ const handleFormSubmit = async () => {
             });
           }
         } else {
+          isLoaderVisible.value = false;
           notifications.add({
             id: 'photo',
             title: String(response.status),
@@ -84,6 +88,7 @@ const handleFormSubmit = async () => {
     });
   } catch (error: any) {
     console.error(error);
+    isLoaderVisible.value = false;
     notifications.add({
       id: 'photo',
       title: String(error.statusCode),

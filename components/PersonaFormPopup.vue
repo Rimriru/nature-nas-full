@@ -26,6 +26,7 @@ const submitError = ref('');
 
 const personasState = usePersonasState();
 const notifications = useToast();
+const isLoaderVisible = useLoaderVisibilityState();
 
 let originalPersonaData = {
   position: '',
@@ -45,26 +46,27 @@ watch(
       const { _id, position, name, phd, telNumber, faxNumber, email, description, photo } =
         props.personaOfInterest;
       personaId.value = _id;
-      personaData.position = position;
-      personaData.name = name;
-      personaData.phd = phd;
-      personaData.telNumber = telNumber;
-      personaData.faxNumber = faxNumber;
-      personaData.email = email;
-      personaData.description = description;
-      personaData.photo = photo;
+      personaData.position = position!;
+      personaData.name = name!;
+      personaData.phd = phd!;
+      personaData.telNumber = telNumber!;
+      personaData.faxNumber = faxNumber!;
+      personaData.email = email!;
+      personaData.description = description!;
+      personaData.photo = photo!;
 
       originalPersonaData = {
-        position,
-        name,
-        phd,
-        telNumber,
-        faxNumber,
-        email,
-        description,
-        photo
+        position: position ?? '',
+        name: name ?? '',
+        phd: phd ?? '',
+        telNumber: telNumber ?? '',
+        faxNumber: faxNumber ?? '',
+        email: email ?? '',
+        description: description ?? '',
+        photo: photo ?? ''
       };
     } else if (!newValue) {
+      isLoaderVisible.value = false;
       personaId.value = '';
       personaData.position = '';
       personaData.name = '';
@@ -95,6 +97,7 @@ const onPhotoChange = (file: File | '') => {
 };
 
 const handlePersonaFormSubmit = async () => {
+  isLoaderVisible.value = true;
   if (photoForUploading.value) {
     const body = new FormData();
     body.append('images', photoForUploading.value);
@@ -104,9 +107,11 @@ const handlePersonaFormSubmit = async () => {
       body,
       async onResponse({ response }) {
         if (!response.ok) {
+          isLoaderVisible.value = false;
+          submitError.value = `${response._data.statusCode}: ${response._data.message}`;
           notifications.add({
             id: 'images',
-            title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
+            title: IMAGE_LOAD_ERROR
           });
           return;
         } else {
@@ -118,9 +123,11 @@ const handlePersonaFormSubmit = async () => {
               method: 'delete',
               onResponse({ response }) {
                 if (!response.ok) {
+                  isLoaderVisible.value = false;
+                  submitError.value = `${response._data.statusCode}: ${response._data.message}`;
                   notifications.add({
                     id: 'images',
-                    title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
+                    title: PREVIOUS_IMAGE_REMOVE_ERROR
                   });
                   return;
                 }
@@ -154,6 +161,7 @@ const handlePersonaFormSubmit = async () => {
       emit('close');
       notifications.add({ id: 'personas', title: 'Новый контакт добавлен!' });
     } catch (error: any) {
+      isLoaderVisible.value = false;
       submitError.value = `${error.status}: ${error.data.message}`;
       console.error(error);
     }
@@ -173,6 +181,7 @@ const handlePersonaFormSubmit = async () => {
         emit('close');
         notifications.add({ id: 'personas', title: 'Контакт был изменён' });
       } catch (error: any) {
+        isLoaderVisible.value = false;
         submitError.value = `${error.status}: ${error.data.message}`;
         console.error(error);
       }

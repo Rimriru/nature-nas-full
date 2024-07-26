@@ -16,11 +16,12 @@ const whatSectionShown = ref<SectionFromDb>({
 const isEditing = ref(false);
 const isSectionPopupOpened = useSectionPopupOpeningState();
 const isConfirmPopupOpened = ref(false);
-const removalError = '';
+const submitError = ref('');
 const isSectionRemoveRequestPending = ref(false);
 
 const isLoggedIn = useLoggedInState();
 const notifications = useToast();
+const isLoaderVisible = useLoaderVisibilityState();
 
 const props = defineProps<{
   sections: SectionFromDb[];
@@ -34,6 +35,8 @@ let sectionDataBeforeEdit = {
 };
 
 const onClose = () => {
+  isSectionPopupOpened.value = false;
+  isLoaderVisible.value = false;
   sectionIdOfInterest.value = '';
   sectionValues.title = '';
   sectionValues.content = '';
@@ -41,8 +44,8 @@ const onClose = () => {
     title: '',
     content: ''
   };
-  isSectionPopupOpened.value = false;
   isEditing.value = false;
+  submitError.value = '';
 };
 
 const onEditBtnClick = () => {
@@ -66,9 +69,11 @@ const onConfirmPopupClose = () => {
   isConfirmPopupOpened.value = false;
   sectionIdOfInterest.value = '';
   isSectionRemoveRequestPending.value = false;
+  submitError.value = '';
 };
 
 const handleSectionRemoval = async () => {
+  submitError.value = '';
   isSectionRemoveRequestPending.value = true;
   try {
     const { message } = await $fetch(`/api/section/${sectionIdOfInterest.value}`, {
@@ -92,13 +97,16 @@ const handleSectionRemoval = async () => {
     }
     notifications.add({ id: 'remove-sections', title: message });
     onConfirmPopupClose();
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
+    submitError.value = `${error.status}: ${error.data.message}`;
     isSectionRemoveRequestPending.value = false;
   }
 };
 
 const handleSectionsSubmit = async () => {
+  submitError.value = '';
+  isLoaderVisible.value = true;
   const editedSectionData = {
     title: sectionValues.title,
     content: sectionValues.content
@@ -120,7 +128,9 @@ const handleSectionsSubmit = async () => {
       whatSectionShown.value = newSection;
       notifications.add({ id: 'add-sections', title: message });
       onClose();
-    } catch (error) {
+    } catch (error: any) {
+      isLoaderVisible.value = false;
+      submitError.value = `${error.status}: ${error.data.message}`;
       console.error(error);
     }
   } else {
@@ -147,7 +157,9 @@ const handleSectionsSubmit = async () => {
           whatSectionShown.value = updatedSectionFromDb;
         }
         onClose();
-      } catch (error) {
+      } catch (error: any) {
+        isLoaderVisible.value = false;
+        submitError.value = `${error.status}: ${error.data.message}`;
         console.error(error);
       }
     }
@@ -202,6 +214,7 @@ onMounted(() => {
         v-if="isLoggedIn"
         v-model:section-values="sectionValues"
         :is-editing="isEditing"
+        :error="submitError"
         @close="onClose"
         @submit="handleSectionsSubmit"
       />
@@ -211,7 +224,7 @@ onMounted(() => {
         :what-is-removed="'section'"
         :removed-item-title="whatSectionShown.title"
         :is-request-pending="isSectionRemoveRequestPending"
-        :error="removalError"
+        :error="submitError"
         @on-close="onConfirmPopupClose"
         @on-agree="handleSectionRemoval"
       />

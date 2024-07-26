@@ -25,10 +25,10 @@ const imgForUploadingAsFile = ref<File | ''>('');
 const imgInput = ref<HTMLInputElement | null>(null);
 const slideForm = ref<Form<string> | null>(null);
 const submitError = ref('');
-const config = useRuntimeConfig();
 const notifications = useToast();
 
 const slidesState = useHomeSlidesState();
+const isLoaderVisible = useLoaderVisibilityState();
 
 let originalSlideData = {
   img: '',
@@ -94,6 +94,7 @@ const resetFormValues = () => {
 };
 
 const handleClose = () => {
+  isLoaderVisible.value = false;
   resetFormValues();
   setErrorsDefaultValues();
   slideForm.value?.clear();
@@ -136,6 +137,7 @@ const handleImgLinkChange = () => {
 const handleSlideFormSubmit = async () => {
   const initialValues = JSON.stringify(originalSlideData);
   submitError.value = '';
+  isLoaderVisible.value = true;
 
   if (imgForUploadingAsLink.value && imgForUploadingAsLink.value !== slideEditedInfo.img) {
     const initialImg = slideEditedInfo.img;
@@ -147,10 +149,11 @@ const handleSlideFormSubmit = async () => {
         method: 'delete',
         onResponse({ response }) {
           if (!response.ok) {
+            isLoaderVisible.value = false;
+            submitError.value = `${response._data.statusCode}: ${response._data.message}`;
             notifications.add({
               id: 'slides',
-              title: String(response.status),
-              description: response.statusText
+              title: PREVIOUS_IMAGE_REMOVE_ERROR
             });
             return;
           }
@@ -179,10 +182,11 @@ const handleSlideFormSubmit = async () => {
               method: 'delete',
               onResponse({ response }) {
                 if (!response.ok) {
+                  isLoaderVisible.value = false;
+                  submitError.value = `${response._data.statusCode}: ${response._data.message}`;
                   notifications.add({
                     id: 'slides',
-                    title: String(response.status),
-                    description: response.statusText
+                    title: PREVIOUS_IMAGE_REMOVE_ERROR
                   });
                   return;
                 }
@@ -190,10 +194,11 @@ const handleSlideFormSubmit = async () => {
             });
           }
         } else {
+          isLoaderVisible.value = false;
+          submitError.value = `${response._data.statusCode}: ${response._data.message}`;
           notifications.add({
             id: 'slides',
-            title: String(response.status),
-            description: response.statusText
+            title: IMAGE_LOAD_ERROR
           });
           return;
         }
@@ -222,7 +227,8 @@ const handleSlideFormSubmit = async () => {
       });
       handleClose();
     } catch (error: any) {
-      submitError.value = `${error.statusCode}: ${error.data.message}`;
+      isLoaderVisible.value = false;
+      submitError.value = `${error.status}: ${error.data.message}`;
       console.error(error);
     }
   }

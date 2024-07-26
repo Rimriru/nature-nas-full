@@ -25,6 +25,7 @@ const emit = defineEmits(['close']);
 
 const filesState = useFilesState();
 const notifications = useToast();
+const isLoaderVisible = useLoaderVisibilityState();
 
 watch(
   () => props.fileData,
@@ -50,10 +51,12 @@ watch(
 const handlePopupClose = () => {
   fileForm.value?.clear();
   fileName.name = '';
+  isLoaderVisible.value = false;
   emit('close');
 };
 
 const handleEditFileFormSubmit = async () => {
+  isLoaderVisible.value = true;
   const originalName = fileDataForEditing.value.name;
   const editedFileBody = {
     name: fileName.name
@@ -77,6 +80,7 @@ const handleEditFileFormSubmit = async () => {
       });
     }
   } catch (error: any) {
+    isLoaderVisible.value = false;
     notifications.add({ id: 'file', title: `${error.statusCode}: ${error.data.message}` });
     console.error(error);
   }

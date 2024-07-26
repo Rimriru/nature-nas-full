@@ -14,6 +14,7 @@ const form = ref(null);
 const routesFromDb = useRoutesState();
 const notifications = useToast();
 const router = useRouter();
+const isLoaderVisible = useLoaderVisibilityState();
 
 const validate = (state: any): FormError[] => {
   const errors = [];
@@ -27,6 +28,7 @@ const validate = (state: any): FormError[] => {
 };
 
 const handleCreatePageFormSubmit = async () => {
+  isLoaderVisible.value = true;
   const newRouteBody = {
     name: newRouteValues.route.slice(1),
     path: newRouteValues.route,
@@ -34,6 +36,7 @@ const handleCreatePageFormSubmit = async () => {
   };
 
   if (router.hasRoute(newRouteBody.name)) {
+    isLoaderVisible.value = false;
     return notifications.add({
       id: 'route-create',
       title: 'Такая страница уже существует!'
@@ -56,11 +59,14 @@ const handleCreatePageFormSubmit = async () => {
         }
       });
 
+      isLoaderVisible.value = false;
       notifications.add({ id: 'route-create', title: 'Страница создана!' });
       newRouteValues.route = '';
       newRouteValues.canvas = 'CanvasOne';
       (form.value as unknown as Form<string>).clear();
     } catch (error: any) {
+      isLoaderVisible.value = false;
+      console.error(error);
       notifications.add({ id: 'route-create', title: error.data.message });
     }
   }

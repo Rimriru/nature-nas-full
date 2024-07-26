@@ -17,6 +17,7 @@ const contactsFormState = reactive({
 const form = ref<Form<string> | null>(null);
 const contactsState = useContactsState();
 const notifications = useToast();
+const isLoaderVisible = useLoaderVisibilityState();
 
 let originalContactsData = {
   address: '',
@@ -43,6 +44,7 @@ watch(
       originalContactsData.email = contactsState.value.email;
       originalContactsData.content = contactsState.value.content;
     } else {
+      isLoaderVisible.value = false;
       contactsFormState._id = '';
       contactsFormState.address = '';
       contactsFormState.telNumber = '';
@@ -74,6 +76,7 @@ const validate = (state: any): FormError[] => {
 };
 
 const handleContactsFormSubmit = async () => {
+  isLoaderVisible.value = true;
   const initialContactsData = JSON.stringify(originalContactsData);
   const { address, telNumber, faxNumber, email, content } = contactsFormState;
   const contactsBody = { address, telNumber, faxNumber, email, content };
@@ -91,6 +94,7 @@ const handleContactsFormSubmit = async () => {
       emit('close');
       notifications.add({ id: 'contacts', title: 'Контактные данные были изменены' });
     } catch (error: any) {
+      isLoaderVisible.value = false;
       notifications.add({
         id: 'contacts',
         title: error.statusCode,

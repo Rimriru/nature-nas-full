@@ -25,7 +25,7 @@ const newsCover = ref<DefineComponent | null>(null);
 const submitError = ref('');
 const notifications = useToast();
 const newsState = useNewsState();
-const config = useRuntimeConfig();
+const isLoaderVisible = useLoaderVisibilityState();
 
 let originalNewsItemData = {
   title: '',
@@ -115,6 +115,7 @@ const setErrorsDefaultValues = () => {
 };
 
 const handleResetFormFields = () => {
+  isLoaderVisible.value = false;
   newsData._id = '';
   newsData.title = '';
   newsData.description = '';
@@ -135,10 +136,13 @@ const handleResetFormFields = () => {
 };
 
 const handleNewsItemCreationFormSubmit = async () => {
+  submitError.value = '';
   if (!coverForUploadingAsFile.value && !coverForUploadingAsLink.value) {
     coverErrorVisibility.value.requiredError = true;
     return;
   }
+
+  isLoaderVisible.value = true;
 
   const date = new Date();
   const creationDate = date.toLocaleDateString();
@@ -165,10 +169,11 @@ const handleNewsItemCreationFormSubmit = async () => {
           newsData.cover = response._data[0];
           coverForUploadingAsFile.value = '';
         } else {
+          isLoaderVisible.value = false;
+          submitError.value = `${response._data.statusCode}: ${response._data.message}`;
           notifications.add({
             id: 'news',
-            title: String(response.status),
-            description: response.statusText
+            title: IMAGE_LOAD_ERROR
           });
           return;
         }
@@ -193,6 +198,7 @@ const handleNewsItemCreationFormSubmit = async () => {
     handleResetFormFields();
     notifications.add({ id: 'news', title: 'Новость создана!' });
   } catch (error: any) {
+    isLoaderVisible.value = false;
     submitError.value = `${error.status}: ${error.data.message}`;
     console.error(error);
   }
@@ -201,6 +207,7 @@ const handleNewsItemCreationFormSubmit = async () => {
 const handleNewsItemEditFormSubmit = async () => {
   const initialValues = JSON.stringify(originalNewsItemData);
   submitError.value = '';
+  isLoaderVisible.value = true;
 
   if (coverForUploadingAsLink.value && coverForUploadingAsLink.value !== newsData.cover) {
     const initialCover = newsData.cover;
@@ -212,10 +219,11 @@ const handleNewsItemEditFormSubmit = async () => {
         method: 'delete',
         onResponse({ response }) {
           if (!response.ok) {
+            isLoaderVisible.value = false;
+            submitError.value = `${response._data.statusCode}: ${response._data.message}`;
             notifications.add({
               id: 'news',
-              title: String(response.status),
-              description: response.statusText
+              title: PREVIOUS_IMAGE_REMOVE_ERROR
             });
             return;
           }
@@ -242,10 +250,11 @@ const handleNewsItemEditFormSubmit = async () => {
               method: 'delete',
               onResponse({ response }) {
                 if (!response.ok) {
+                  isLoaderVisible.value = false;
+                  submitError.value = `${response._data.statusCode}: ${response._data.message}`;
                   notifications.add({
                     id: 'news',
-                    title: String(response.status),
-                    description: response.statusText
+                    title: PREVIOUS_IMAGE_REMOVE_ERROR
                   });
                   return;
                 }
@@ -253,10 +262,11 @@ const handleNewsItemEditFormSubmit = async () => {
             });
           }
         } else {
+          isLoaderVisible.value = false;
+          submitError.value = `${response._data.statusCode}: ${response._data.message}`;
           notifications.add({
             id: 'news',
-            title: String(response.status),
-            description: response.statusText
+            title: IMAGE_LOAD_ERROR
           });
           return;
         }
@@ -283,6 +293,7 @@ const handleNewsItemEditFormSubmit = async () => {
       });
       emit('onClose');
     } catch (error: any) {
+      isLoaderVisible.value = false;
       submitError.value = `${error.status}: ${error.data.message}`;
       console.error(error);
     }

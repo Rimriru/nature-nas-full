@@ -43,6 +43,7 @@ const emit = defineEmits(['close']);
 const journalState = useJournalState();
 const filesState = useFilesState();
 const notifications = useToast();
+const isLoaderVisible = useLoaderVisibilityState();
 
 const selectedAuthorRules = ref(filesState.value[0]);
 const selectedEditorialPolicy = ref(filesState.value[0]);
@@ -136,6 +137,7 @@ watch(
       journalCoverAsFile.value = '';
       journalCoverAsLink.value = '';
       resetErrors();
+      isLoaderVisible.value = false;
       originalJournalData = {
         description: '',
         cover: '',
@@ -215,6 +217,7 @@ const onJournalCoverLinkChange = () => {
 
 const onJournalFormSubmit = async () => {
   submitError.value = '';
+  isLoaderVisible.value = true;
 
   if (journalCoverAsLink.value && journalCoverAsLink.value !== journalData.cover) {
     const initialCover = journalData.cover;
@@ -226,10 +229,11 @@ const onJournalFormSubmit = async () => {
         method: 'delete',
         onResponse({ response }) {
           if (!response.ok) {
+            isLoaderVisible.value = false;
+            submitError.value = `${response._data.statusCode}: ${response._data.message}`;
             notifications.add({
               id: 'news',
-              title: String(response.status),
-              description: response.statusText
+              title: PREVIOUS_IMAGE_REMOVE_ERROR
             });
             return;
           }
@@ -258,10 +262,11 @@ const onJournalFormSubmit = async () => {
               method: 'delete',
               onResponse({ response }) {
                 if (!response.ok) {
+                  isLoaderVisible.value = false;
+                  submitError.value = `${response._data.statusCode}: ${response._data.message}`;
                   notifications.add({
                     id: 'mgraphs',
-                    title: String(response.status),
-                    description: response.statusText
+                    title: PREVIOUS_IMAGE_REMOVE_ERROR
                   });
                   return;
                 }
@@ -269,10 +274,11 @@ const onJournalFormSubmit = async () => {
             });
           }
         } else {
+          isLoaderVisible.value = false;
+          submitError.value = `${response._data.statusCode}: ${response._data.message}`;
           notifications.add({
             id: 'journal',
-            title: String(response.status),
-            description: response.statusText
+            title: IMAGE_LOAD_ERROR
           });
           resetCoverFileInputValue();
           return;
@@ -305,6 +311,7 @@ const onJournalFormSubmit = async () => {
       notifications.add({ id: 'journal', title: 'Данные журнала были изменены!' });
       emit('close');
     } catch (error: any) {
+      isLoaderVisible.value = false;
       notifications.add({ id: 'journal', title: error.status, description: error.data.message });
       submitError.value = `${error.status}: ${error.data.message}`;
       console.error(error);
