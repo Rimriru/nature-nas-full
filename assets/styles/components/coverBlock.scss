@@ -1,6 +1,9 @@
 @use '~/assets/styles/variables.scss' as *;
 
 .cover {
+  max-width: 400px;
+  width: 100%;
+
   &_centered {
     margin: 0 auto;
   }
@@ -10,7 +13,6 @@
     row-gap: 10px;
     padding: 10px;
     margin-bottom: 5px;
-    max-width: 400px;
 
     &_required {
       border: $required 1px solid;
