@@ -32,12 +32,12 @@ const isRequestPending = ref(false);
 const monographsLinks = computed(() => monographsLinkGroup?.links);
 
 const router = useRouter();
-router.push({
-  path: `/monographs${
-    monographsLinks.value && monographsLinks.value.length ? monographsLinks.value[0].to : ''
-  }`,
-  replace: true
-});
+if (monographsLinks.value && monographsLinks.value.length) {
+  router.push({
+    path: `/monographs${monographsLinks.value[0].to}`,
+    replace: true
+  });
+}
 const notifications = useToast();
 const isLoggedIn = useLoggedInState();
 
@@ -114,12 +114,12 @@ const handleAddLinkFormSubmit = async () => {
       (group) => group._id === monographsLinkGroup?._id
     );
     linkGroupsState.value[linkGroupIndex].links.push(newLink.newLinkTyped);
-    if (linkGroupsState.value[linkGroupIndex].links.length === 1) {
-      router.push({
-        path: `/monographs${monographsLinks.value ? monographsLinks.value[0].to : ''}`,
-        replace: true
-      });
-    }
+    router.push({
+      path: `/monographs${
+        monographsLinks.value ? monographsLinks.value[monographsLinks.value.length - 1].to : ''
+      }`,
+      replace: true
+    });
     onCloseLinkFormPopup();
     notifications.add({ id: 'mgraphs', title: `Новая ссылка "${newLinkBody.title}" создана!` });
   } catch (error: any) {
@@ -216,11 +216,13 @@ const addOrEditLinkHandlersForSubmit = computed(() =>
 
 <template>
   <main class="main">
-    <div class="monographs">
+    <div class="responsive-flex">
       <NuxtPage keepalive />
       <Sidebar
         :links="modifiedLinksArray"
         :is-icon-present="true"
+        :is-for-monographs="true"
+        :parent-route="'monographs'"
         @on-add-link-button-click="onAddLinkButtonClick"
         @on-edit-link-button-click="onEditLinkButtonClick"
         @on-remove-link-button-click="onRemoveLinkButtonClick"
@@ -249,18 +251,4 @@ const addOrEditLinkHandlersForSubmit = computed(() =>
   </main>
 </template>
 
-<style lang="scss">
-.monographs {
-  display: flex;
-  gap: 50px;
-  margin: 0 auto;
-}
-
-@media screen and (max-width: 900px) {
-  .monographs {
-    flex-direction: column;
-    align-items: center;
-    width: calc(100% - 20px * 2);
-  }
-}
-</style>
+<style lang="scss"></style>

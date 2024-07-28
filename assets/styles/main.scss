@@ -1,5 +1,6 @@
 @use './variables.scss' as *;
 @import url('./components/_carousel.scss');
+@import url('./components/_responsive-flex.scss');
 
 .main {
   max-width: 1300px;

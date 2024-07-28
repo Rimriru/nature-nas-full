@@ -86,7 +86,7 @@ const handleMonographRemoval = async () => {
 </script>
 
 <template>
-  <div class="monographs__container">
+  <div class="monographs">
     <ul class="monographs__items shadow-border">
       <li v-for="graph of selectedYearMonographs" :key="graph._id" class="monographs__item">
         <MgraphCard
@@ -127,7 +127,7 @@ const handleMonographRemoval = async () => {
 </template>
 
 <style lang="scss">
-.monographs__container {
+.monographs {
   flex-grow: 1;
 
   .monographs__items {
