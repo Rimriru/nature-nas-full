@@ -157,7 +157,7 @@ const handleMonographRemoval = async () => {
 }
 
 @media screen and (max-width: 900px) {
-  .monographs__container {
+  .monographs {
     width: calc(100% - 20px * 2);
   }
 }

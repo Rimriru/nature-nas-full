@@ -3,6 +3,7 @@ interface ILink {
   to: string;
   route?: string;
   couldBeEdited: boolean;
+  type?: 'param' | '';
 }
 
 interface Link extends ILink {
@@ -16,4 +17,8 @@ interface LinkGroup {
   links: Link[];
 }
 
-export type { ILink, Link, LinkGroup };
+interface SidebarLink extends Link {
+  linkMgraphs?: number;
+}
+
+export type { ILink, Link, LinkGroup, SidebarLink };
