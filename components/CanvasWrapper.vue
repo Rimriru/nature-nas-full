@@ -239,8 +239,8 @@ const uploadPersonaPhoto = async (
         if (!response.ok) {
           isLoaderVisible.value = false;
           notifications.add({
-            id: 'file-upload',
-            title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
+            id: 'route',
+            title: IMAGE_LOAD_ERROR
           });
           return;
         } else {
@@ -258,8 +258,8 @@ const uploadPersonaPhoto = async (
                 isLoaderVisible.value = false;
                 if (!response.ok) {
                   notifications.add({
-                    id: 'file-delete',
-                    title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
+                    id: 'route',
+                    title: PREVIOUS_IMAGE_REMOVE_ERROR
                   });
                   return;
                 }
@@ -284,8 +284,8 @@ const uploadPersonaPhoto = async (
           if (!response.ok) {
             isLoaderVisible.value = false;
             notifications.add({
-              id: 'file-delete',
-              title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
+              id: 'route',
+              title: PREVIOUS_IMAGE_REMOVE_ERROR
             });
             return;
           }
@@ -320,7 +320,7 @@ const handleCanvasFormSubmit = async () => {
           isLoaderVisible.value = false;
           notifications.add({
             id: 'file-delete',
-            title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
+            title: PREVIOUS_IMAGE_REMOVE_ERROR
           });
           return;
         } else {
@@ -342,8 +342,8 @@ const handleCanvasFormSubmit = async () => {
         if (!response.ok) {
           isLoaderVisible.value = false;
           notifications.add({
-            id: 'file-upload',
-            title: `Ошибка ${response._data.statusCode}: ${response._data.message}`
+            id: 'route',
+            title: IMAGE_LOAD_ERROR
           });
           return;
         } else {
@@ -393,6 +393,10 @@ const handleCanvasFormSubmit = async () => {
       body: contentBody
     });
     isLoaderVisible.value = false;
+    notifications.add({
+      id: 'route',
+      title: 'Страница отредактирована успешно!'
+    });
     disableEditMode();
   } catch (error) {
     isLoaderVisible.value = false;

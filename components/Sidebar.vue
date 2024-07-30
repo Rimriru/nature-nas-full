@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Компонент бокового меню с ссылками
-import type { Link } from '~/types/LinkDataFromDb';
-const props = defineProps<{
+import type { Link, SidebarLink } from '~/types/LinkDataFromDb';
+defineProps<{
   links?: SidebarLink[];
   isForMonographs: boolean;
   isIconPresent: boolean;
@@ -15,27 +15,12 @@ const emit = defineEmits([
 ]);
 
 const isLoggedIn = useLoggedInState();
-
-const linksSorted = computed(() => {
-  if (props.links) {
-    return props.links.sort((a, b) => b.title.localeCompare(a.title));
-  }
-  return [];
-});
-
-interface SidebarLink extends Link {
-  linkMgraphs?: number;
-}
 </script>
 
 <template>
   <aside class="sidebar">
     <ul>
-      <li
-        v-for="{ _id: id, title, to, linkMgraphs } of linksSorted"
-        :key="id"
-        class="sidebar__item"
-      >
+      <li v-for="{ _id: id, title, to, linkMgraphs } of links" :key="id" class="sidebar__item">
         <NuxtLink :to="`/${parentRoute}${to}`" class="sidebar__link">
           <UIcon
             v-if="isForMonographs && isIconPresent && $route.fullPath === `/monographs${to}`"
