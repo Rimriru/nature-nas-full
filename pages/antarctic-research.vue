@@ -10,7 +10,6 @@ const ANTARCTIC_PAGE = 'antarctic-research';
 
 if (antarResLinks.value && antarResLinks.value.length) {
   router.push({
-    // mon-res
     path: `/${ANTARCTIC_PAGE}${antarResLinks.value[0].to}`,
     replace: true
   });

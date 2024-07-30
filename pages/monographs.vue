@@ -19,16 +19,6 @@ const linkGroupsState = useLinkGroupsState();
 const monographsLinkGroup = linkGroupsState.value.find((group) => group.group === MONOGRAPHS_PAGE);
 const monographsLinks = computed(() => monographsLinkGroup?.links);
 
-const router = useRouter();
-if (monographsLinks.value && monographsLinks.value.length) {
-  router.push({
-    path: `/monographs${monographsLinks.value[0].to}`,
-    replace: true
-  });
-}
-const notifications = useToast();
-const isLoggedIn = useLoggedInState();
-
 const modifiedLinksArray = computed(() => {
   return monographsLinks.value
     ?.map((link) => {

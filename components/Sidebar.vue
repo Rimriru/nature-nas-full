@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Компонент бокового меню с ссылками
-import type { Link } from '~/types/LinkDataFromDb';
-const props = defineProps<{
+import type { Link, SidebarLink } from '~/types/LinkDataFromDb';
+defineProps<{
   links?: SidebarLink[];
   isForMonographs: boolean;
   isIconPresent: boolean;
