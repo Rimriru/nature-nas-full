@@ -9,7 +9,7 @@ const props = defineProps([
   'linkValue',
   'isOpened',
   'groupingLinkTitle',
-  'isForMonographs',
+  'parentRoute',
   'isEditing',
   'isRequestPending',
   'error'
@@ -22,12 +22,12 @@ const validate = (state: any): FormError[] => {
     errors.push({ path: 'title', message: 'Поле "Название" является обязательным' });
   if (!state.to)
     errors.push({ path: 'to', message: 'Поле "Ссылка на страницу" является обязательным' });
-  if (!props.isForMonographs && !PAGE_LINK_REG_EXP.test(state.to))
+  if (props.parentRoute !== '/monographs' && !PAGE_LINK_REG_EXP.test(state.to))
     errors.push({
       path: 'to',
       message: PAGE_LINK_VALIDATION_ERROR
     });
-  if (props.isForMonographs && !/^\/\w/.test(state.to)) {
+  if (props.parentRoute === '/monographs' && !/^\/\w/.test(state.to)) {
     errors.push({
       path: 'to',
       message: 'Ссылка должна начинаться с / и иметь символы после'
@@ -67,17 +67,16 @@ const handleClose = () => {
           />
         </UFormGroup>
         <UFormGroup name="to" :eager-validation="true">
-          Ссылка ({{ $config.public.prodDomen
-          }}{{ isForMonographs === true ? '/monographs' : '' }}*ссылка*)
+          Ссылка ({{ $config.public.prodDomen }}{{ parentRoute ?? '' }}*ссылка*)
           <span class="required">*</span>
           <UInput
             color="blue"
-            :disabled="isForMonographs && isEditing"
-            :class="{ 'link-form__input': isForMonographs && isEditing }"
+            :disabled="parentRoute === '/monographs' && isEditing"
+            :class="{ 'link-form__input': parentRoute === '/monographs' && isEditing }"
             v-model.trim="linkValue.to"
             placeholder="Введите ссылку: /..."
           />
-          <div v-if="isForMonographs && !isEditing" class="link-form__message">
+          <div v-if="parentRoute === '/monographs' && !isEditing" class="link-form__message">
             <UIcon name="i-material-symbols-info-outline-rounded" class="icon" />
             <div>
               <span class="info">Можно ввести произвольную ссылку.</span>

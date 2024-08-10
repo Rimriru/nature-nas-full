@@ -199,7 +199,7 @@ const handleRemoveLinkFormSubmit = async () => {
       :is-editing="isEditing"
       :grouping-link-title="isEditing ? '' : group?.title"
       :is-request-pending="isRequestPending"
-      :is-for-monographs="page === 'monographs'"
+      :parent-route="`/${page}`"
       @on-close="onLinkFormPopupClose"
       @on-submit="submitHandler"
     />
