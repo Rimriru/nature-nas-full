@@ -55,6 +55,8 @@ const files = computed(() => {
         file: file.file,
         number: index + 1,
         link: `${
+          props.isForImages && config.public.process === 'production' ? 'http://' : 'https://'
+        }${
           config.public.process === 'production' ? config.public.prodDomen : config.public.devDomen
         }/${props.isForImages ? 'image' : 'file'}/${file.file}`
       };
