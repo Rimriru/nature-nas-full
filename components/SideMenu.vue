@@ -466,6 +466,7 @@ onMounted(() => {
         :is-editing="isEditing"
         :is-request-pending="isGroupLinkRequestPending"
         :error="requestError"
+        :parent-route="`/labs-and-centers`"
         @on-submit="addOrEditHandlersForLinkFormSubmit"
         @on-close="handleLinkFormClose"
       >
