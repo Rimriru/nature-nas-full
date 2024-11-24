@@ -49,8 +49,16 @@ const contentSchema: Schema<IContent> = new Schema(
       }
     },
     personaTwo: {
+      position: {
+        type: String,
+        default: ''
+      },
       name: {
         type: String
+      },
+      phd: {
+        type: String,
+        default: ''
       },
       telNumber: {
         type: String

@@ -28,7 +28,8 @@ const publications = computed(() => {
     .map((item) => {
       return {
         label: item.name,
-        to: `/file/${item.file}`
+        to: `/file/${item.file}`,
+        target: '_blank'
       };
     })
     .sort((a, b) => b.label.localeCompare(a.label));
@@ -105,10 +106,10 @@ const onFileLoadFormPopupClose = () => {
               trailing-icon="i-heroicons-chevron-down-20-solid"
               :class="['button-border', 'button', { 'button-active': open }]"
             >
-              Публикации
+              Выпуски номеров
             </UButton>
             <template #item="{ item }">
-              <NuxtLink class="journal__menu-item" :to="item.to" target="_blank">{{
+              <NuxtLink class="journal__menu-item" :to="item.to" :target="item.target">{{
                 item.label
               }}</NuxtLink>
             </template>
