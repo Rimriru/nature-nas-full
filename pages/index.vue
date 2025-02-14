@@ -7,7 +7,7 @@ const slideItemOfInterest = ref<Slide | ''>('');
 const isHomeInfoFormOpen = ref(false);
 
 const news = useNewsState();
-const reversedNews = computed(() => (news.value ? news.value.slice(0, 15).reverse() : news.value));
+const reversedNews = computed(() => (news.value ? news.value.slice(-15).reverse() : []));
 
 const slides = await useHomeSlides();
 const slidesState = useHomeSlidesState();
