@@ -164,6 +164,7 @@ export default defineNuxtConfig({
     }
   },
   experimental: {
-    asyncContext: true
+    asyncContext: true,
+    appManifest: false
   }
 });
