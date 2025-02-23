@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Form, FormError } from '#ui/types';
 import type { DefineComponent } from 'vue';
+import type { FileDataFromDb } from '~/types/FilesDataFromDb';
 
 const journalData = reactive({
   description: '',
@@ -8,16 +9,8 @@ const journalData = reactive({
   editChief: '',
   editBoard: '',
   editInternatBoard: '',
-  authorRules: {
-    _id: '',
-    name: '',
-    file: ''
-  },
-  editorialPolicy: {
-    _id: '',
-    name: '',
-    file: ''
-  },
+  authorRules: null as FileDataFromDb | null,
+  editorialPolicy: null as FileDataFromDb | null,
   contacts: {
     address: '',
     telNumber: '',
@@ -45,31 +38,10 @@ const filesState = useFilesState();
 const notifications = useToast();
 const isLoaderVisible = useLoaderVisibilityState();
 
-const selectedAuthorRules = ref(filesState.value[0]);
-const selectedEditorialPolicy = ref(filesState.value[0]);
+const selectedAuthorRules = ref<FileDataFromDb | undefined>(undefined);
+const selectedEditorialPolicy = ref<FileDataFromDb | undefined>(undefined);
 
-let originalJournalData = {
-  description: '',
-  cover: '',
-  editChief: '',
-  editBoard: '',
-  editInternatBoard: '',
-  authorRules: {
-    _id: '',
-    name: '',
-    file: ''
-  },
-  editorialPolicy: {
-    _id: '',
-    name: '',
-    file: ''
-  },
-  contacts: {
-    address: '',
-    telNumber: '',
-    email: ''
-  }
-};
+let originalJournalData: string = '';
 
 const resetErrors = () => {
   submitError.value = '';
@@ -106,10 +78,10 @@ watch(
       journalData.editBoard = editBoard;
       journalData.editInternatBoard = editInternatBoard;
       journalData.authorRules = authorRules;
-      selectedAuthorRules.value = authorRules;
+      selectedAuthorRules.value = authorRules ?? undefined;
 
       journalData.editorialPolicy = editorialPolicy;
-      selectedEditorialPolicy.value = editorialPolicy;
+      selectedEditorialPolicy.value = editorialPolicy ?? undefined;
 
       journalData.contacts.address = address;
       journalData.contacts.telNumber = telNumber;
@@ -118,7 +90,7 @@ watch(
       journalData.cover = cover;
       journalCoverForPreview.value = IMAGE_LINK_REG_EXP.test(cover) ? cover : `/image/${cover}`;
 
-      originalJournalData = {
+      originalJournalData = JSON.stringify({
         description,
         cover,
         editChief,
@@ -131,35 +103,14 @@ watch(
           telNumber,
           email
         }
-      };
+      });
     } else {
       resetCoverFileInputValue();
       journalCoverAsFile.value = '';
       journalCoverAsLink.value = '';
       resetErrors();
       isLoaderVisible.value = false;
-      originalJournalData = {
-        description: '',
-        cover: '',
-        editChief: '',
-        editBoard: '',
-        editInternatBoard: '',
-        authorRules: {
-          _id: '',
-          name: '',
-          file: ''
-        },
-        editorialPolicy: {
-          _id: '',
-          name: '',
-          file: ''
-        },
-        contacts: {
-          address: '',
-          telNumber: '',
-          email: ''
-        }
-      };
+      originalJournalData = '';
     }
   }
 );
@@ -287,17 +238,25 @@ const onJournalFormSubmit = async () => {
     });
   }
 
-  if (JSON.stringify(journalData.authorRules) !== JSON.stringify(selectedAuthorRules.value)) {
+  if (
+    selectedAuthorRules.value &&
+    JSON.stringify(journalData.authorRules) !== JSON.stringify(selectedAuthorRules.value)
+  ) {
     journalData.authorRules = selectedAuthorRules.value;
   }
 
   if (
+    selectedEditorialPolicy.value &&
     JSON.stringify(journalData.editorialPolicy) !== JSON.stringify(selectedEditorialPolicy.value)
   ) {
     journalData.editorialPolicy = selectedEditorialPolicy.value;
   }
 
-  if (JSON.stringify(originalJournalData) === JSON.stringify(journalData)) {
+  console.log(originalJournalData);
+  console.log(JSON.stringify(journalData));
+  console.log(originalJournalData === JSON.stringify(journalData));
+
+  if (originalJournalData === JSON.stringify(journalData)) {
     emit('close');
   } else {
     const journalId = journalState.value?._id;
@@ -383,10 +342,10 @@ const onJournalFormSubmit = async () => {
           Правила для авторов
           <span class="required">*</span>
         </p>
-        <div>
+        <div v-if="journalData.authorRules">
           <p class="journal-form__file-current">Что установлено сейчас:</p>
           <p class="journal-form__file-data">
-            {{ `название: ${journalData.authorRules.name}` }}
+            {{ `название: ${journalData.authorRules?.name}` }}
           </p>
           <p class="journal-form__file-data">
             {{
@@ -394,7 +353,7 @@ const onJournalFormSubmit = async () => {
                 $config.public.process === 'production'
                   ? $config.public.prodDomen
                   : $config.public.devDomen
-              }/file/${journalData.authorRules.file}`
+              }/file/${journalData.authorRules?.file}`
             }}
           </p>
         </div>
@@ -406,6 +365,8 @@ const onJournalFormSubmit = async () => {
               :options="filesState"
               by="_id"
               option-attribute="name"
+              placeholder="Файл не выбран"
+              nullable
               :search-attributes="['name']"
             />
           </UFormGroup>
@@ -416,10 +377,10 @@ const onJournalFormSubmit = async () => {
           Редакционная политика
           <span class="required">*</span>
         </p>
-        <div>
+        <div v-if="journalData.editorialPolicy">
           <p class="journal-form__file-current">Что установлено сейчас:</p>
           <p class="journal-form__file-data">
-            {{ `название: ${journalData.editorialPolicy.name}` }}
+            {{ `название: ${journalData.editorialPolicy?.name}` }}
           </p>
           <p class="journal-form__file-data">
             {{
@@ -427,7 +388,7 @@ const onJournalFormSubmit = async () => {
                 $config.public.process === 'production'
                   ? $config.public.prodDomen
                   : $config.public.devDomen
-              }/file/${journalData.editorialPolicy.file}`
+              }/file/${journalData.editorialPolicy?.file}`
             }}
           </p>
         </div>
@@ -439,6 +400,8 @@ const onJournalFormSubmit = async () => {
               :options="filesState"
               by="_id"
               option-attribute="name"
+              placeholder="Файл не выбран"
+              nullable
               :search-attributes="['name']"
             />
           </UFormGroup>

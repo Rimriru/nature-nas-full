@@ -72,14 +72,16 @@ const onFileLoadFormPopupClose = () => {
         />
         <div class="journal__info-container">
           <NuxtLink
-            :to="`/file/${journalState?.authorRules.file}`"
+            v-if="journalState?.authorRules"
+            :to="`/file/${journalState?.authorRules?.file}`"
             :external="true"
             class="button-border"
             target="_blank"
             >Правила для авторов</NuxtLink
           >
           <NuxtLink
-            :to="`/file/${journalState?.editorialPolicy.file}`"
+            v-if="journalState?.editorialPolicy"
+            :to="`/file/${journalState?.editorialPolicy?.file}`"
             :external="true"
             class="button-border"
             target="_blank"
