@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type Slide from '~/types/SlideDataFromDb';
+import expoImg from '~/assets/images/eco-expo-banner.jpg';
 
 const isSlideFormOpen = ref(false);
 const slideItemOfInterest = ref<Slide | ''>('');
@@ -50,6 +51,9 @@ const onHomeInfoFormClose = () => {
 <template>
   <main class="home">
     <section class="main-news" aria-label="Новости">
+      <NuxtLink href="http://ecologyexpo.by" target="_blank" external class="home__banner">
+        <img :src="expoImg" alt="Баннер" />
+      </NuxtLink>
       <h2 class="news-title">Новости</h2>
       <ClientOnly>
         <UCarousel

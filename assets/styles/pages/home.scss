@@ -2,6 +2,15 @@
 
 .home {
   padding-block: 40px 80px;
+
+  &__banner {
+    display: block;
+    margin: 0 auto 32px;
+
+    img {
+      width: 100%;
+    }
+  }
 }
 
 .title {
