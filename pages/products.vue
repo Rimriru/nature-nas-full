@@ -2,35 +2,33 @@
 import SidebarLinkEditor from '~/components/SidebarLinkEditor.vue';
 import type { Link } from '~/types/LinkDataFromDb';
 
-const ANTARCTIC_PAGE = 'antarctic-research';
-const ANTARCTIC_GROUP = 'antarctic-res';
+const PRODUCTS_PAGE = 'products';
 const linkGroupsState = useLinkGroupsState();
-const antarResLinkGroup = linkGroupsState.value.find((group) => group.group === ANTARCTIC_GROUP);
-const antarResLinks = computed(() => antarResLinkGroup?.links);
+const productsLinkGroup = linkGroupsState.value.find((group) => group.group === PRODUCTS_PAGE);
+const productsLinks = computed(() => productsLinkGroup?.links);
 const router = useRouter();
 
-if (antarResLinks.value?.length) {
+if (productsLinks.value?.length) {
   router.push({
-    path: `/${ANTARCTIC_PAGE}${antarResLinks.value[0].to}`,
+    path: `/${PRODUCTS_PAGE}${productsLinks.value[0].to}`,
     replace: true
   });
 }
 
 const onAddNewLink = (newLink: Link) => {
   const linkGroupIndex = linkGroupsState.value.findIndex(
-    (group) => group._id === antarResLinkGroup?._id
+    (group) => group._id === productsLinkGroup?._id
   );
   linkGroupsState.value[linkGroupIndex].links.push(newLink);
   router.push({
-    path: `/${ANTARCTIC_PAGE}${
-      antarResLinks.value ? antarResLinks.value[antarResLinks.value.length - 1].to : ''
-    }`,
-    replace: true
+    path: `/${PRODUCTS_PAGE}${
+      productsLinks.value ? productsLinks.value[productsLinks.value.length - 1].to : ''
+    }`
   });
 };
 
 const onEditLink = (editedLinkId: string, editedLink: Link) => {
-  const groupIndex = linkGroupsState.value.findIndex((group) => group.group === ANTARCTIC_GROUP);
+  const groupIndex = linkGroupsState.value.findIndex((group) => group.group === PRODUCTS_PAGE);
   const linkIndex = linkGroupsState.value[groupIndex].links.findIndex(
     (link) => link._id === editedLinkId
   );
@@ -38,15 +36,13 @@ const onEditLink = (editedLinkId: string, editedLink: Link) => {
 };
 
 const onRemoveLink = (linkId: string, linkTo: string) => {
-  const groupIndex = linkGroupsState.value.findIndex((group) => group.group === ANTARCTIC_GROUP);
+  const groupIndex = linkGroupsState.value.findIndex((group) => group.group === PRODUCTS_PAGE);
   linkGroupsState.value[groupIndex].links = linkGroupsState.value[groupIndex].links.filter(
     (link) => link._id !== linkId
   );
   if (linkTo === `/${router.currentRoute.value.params.route}`) {
     router.push({
-      path: `/${ANTARCTIC_PAGE}${
-        antarResLinks.value && antarResLinks.value.length ? antarResLinks.value[0].to : ''
-      }`,
+      path: `/${PRODUCTS_PAGE}${productsLinks.value?.length ? productsLinks.value[0].to : ''}`,
       replace: true
     });
   }
@@ -55,9 +51,9 @@ const onRemoveLink = (linkId: string, linkTo: string) => {
 
 <template>
   <SidebarLinkEditor
-    :page="ANTARCTIC_PAGE"
-    :links="antarResLinks"
-    :group="antarResLinkGroup"
+    :page="PRODUCTS_PAGE"
+    :links="productsLinks"
+    :group="productsLinkGroup"
     @on-add-new-link="onAddNewLink"
     @on-edit-link="onEditLink"
     @on-remove-link="onRemoveLink"

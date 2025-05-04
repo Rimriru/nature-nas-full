@@ -16,7 +16,7 @@ let originalLinkValues = {
   to: ''
 };
 
-type Page = 'monographs' | 'antarctic-research';
+type Page = 'monographs' | 'antarctic-research' | 'products';
 
 const props = defineProps<{
   page: Page;
@@ -104,6 +104,10 @@ const handleAddLinkFormSubmit = async () => {
     console.error(error);
     isRequestPending.value = false;
     requestError.value = `${error.status}: ${error.data.message}`;
+    notifications.add({
+      id: 'sidebar-editor',
+      title: requestError.value
+    });
   }
 };
 
@@ -141,6 +145,10 @@ const handleEditLinkFormSubmit = async () => {
       console.error(error);
       isRequestPending.value = false;
       requestError.value = `${error.status}: ${error.data.message}`;
+      notifications.add({
+        id: 'sidebar-editor',
+        title: requestError.value
+      });
     }
   }
 };
@@ -173,6 +181,10 @@ const handleRemoveLinkFormSubmit = async () => {
     console.error(error);
     isRequestPending.value = false;
     requestError.value = `${error.status}: ${error.data.message}`;
+    notifications.add({
+      id: 'sidebar-editor',
+      title: requestError.value
+    });
   }
 };
 </script>
