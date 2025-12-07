@@ -51,9 +51,9 @@ const onHomeInfoFormClose = () => {
 <template>
   <main class="home">
     <section class="main-news" aria-label="Новости">
-      <NuxtLink href="http://ecologyexpo.by" target="_blank" external class="home__banner">
+      <!-- <NuxtLink href="http://ecologyexpo.by" target="_blank" external class="home__banner">
         <img :src="expoImg" alt="Баннер" />
-      </NuxtLink>
+      </NuxtLink> -->
       <h2 class="news-title">Новости</h2>
       <ClientOnly>
         <UCarousel
