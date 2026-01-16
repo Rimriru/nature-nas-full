@@ -53,6 +53,7 @@ export default defineNuxtConfig({
       interval: 10000
     },
     headers: {
+      referrerPolicy: 'strict-origin-when-cross-origin',
       crossOriginEmbedderPolicy: 'unsafe-none',
       crossOriginResourcePolicy: 'cross-origin',
       contentSecurityPolicy: {
